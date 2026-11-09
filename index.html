@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LettFagprøve – øv til teorieksamen i elektrikerfaget</title>
+  <meta name="description" content="Øv til teorieksamen før fagprøven i elektrikerfaget: flervalg, regneoppgaver og prøveeksamen.">
+  <meta name="theme-color" content="#e6e6e1">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="ikoner/ikon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="ikoner/ikon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="LettFagprøve">
+  <link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+  <header class="topp">
+    <button class="tilbake" id="tilbake" aria-label="Tilbake" hidden>‹</button>
+    <a class="logo" href="#/" aria-label="LettFagprøve – til forsiden"><svg viewBox="78 108 352 282" aria-hidden="true"><path d="M118,262 L212,356 L338.7,217.4" fill="none" stroke="currentColor" stroke-width="68" stroke-linejoin="round"/><path d="M334.7,221.8 L404,146" fill="none" stroke="var(--kobber)" stroke-width="30"/></svg></a>
+    <h1 id="tittel">LettFagprøve</h1>
+    <button class="tema" id="tema" aria-label="Bytt lyst/mørkt tema" title="Lyst/mørkt"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M10 3a7 7 0 0 0 0 14z" fill="currentColor"/></svg></button>
+  </header>
+  <main id="app" tabindex="-1"></main>
+  <noscript>LettFagprøve trenger JavaScript.</noscript>
+
+  <!-- Innhold: rediger disse filene for å endre spørsmål og oppgaver -->
+  <script src="data/innstillinger.js"></script>
+  <script src="data/symboler.js"></script>
+  <script src="data/bilder.js"></script>
+  <script src="data/sporsmal.js"></script>
+  <script src="data/regneoppgaver.js"></script>
+  <script src="data/formler.js"></script>
+  <script src="data/kurs.js"></script>
+  <script src="data/forsta.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#e6e6e1"/>
+  <g transform="translate(256 256) scale(1) translate(-256 -306)">
+  <path d="M118,262 L212,356 L338.7,217.4" fill="none" stroke="#151515" stroke-width="68" stroke-linejoin="round" stroke-linecap="butt"/>
+  <path d="M334.7,221.8 L404,146" fill="none" stroke="#b4562a" stroke-width="30" stroke-linecap="butt"/>
+  <defs><pattern id="pe" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+    <rect width="40" height="40" fill="#2e8b3d"/><rect width="20" height="40" fill="#f0c419"/></pattern></defs>
+  <rect x="118" y="432" width="286" height="30" fill="url(#pe)"/></g>
+</svg>
