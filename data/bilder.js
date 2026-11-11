@@ -39,7 +39,7 @@ window.BILDER = {
     kilde: "https://commons.wikimedia.org/wiki/File:Cable_tray_fire_sweden.jpg" },
 
   // ---------- Egne foto fra jobb (LettFagprøve eier rettighetene) ----------
-  "egen-tavle-jordfeilautomater.jpg": { alt: "Fordelingstavle med 3-polet OV (kurs 1) og jordfeilautomater merket PKPM2-10/2/C/003-A og PKPM2-16/2/C/003-A", fotograf: "LettFagprøve" },
+  "egen-tavle-jordfeilautomater.jpg": { alt: "Fordelingstavle med 3-polet OV (kurs 1) og jordfeilautomater merket PKPM2-10/…/C/003-A og PKPM2-16/…/C/003-A", fotograf: "LettFagprøve" },
   "egen-gammel-tavle-isolasjonsduk.jpg": { alt: "Eldre tavle med porselens skrusikringer, og en oransje isolerende gummiduk klemt fast over en del av tavla", fotograf: "LettFagprøve" },
   "egen-tavle-jfb-og-f.jpg": { alt: "Stor tavle med rader av automatsikringer merket F101–F231 og jordfeilbrytere merket J.F.B. 203–229", fotograf: "LettFagprøve" },
   "egen-maling-zline.jpg": { alt: "Installasjonstester som viser Z-line: Z 1,01 Ω, Ik 174 A, C16, 0,4 s, Ik-grense 160 A, IT-system, godkjent", fotograf: "LettFagprøve" },

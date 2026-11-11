@@ -9,7 +9,6 @@ window.FORSTA = {
     { sym: "In", re: /\bIn\b/, tekst: "Merkestrømmen til vernet. En B16 eller C16 har In = 16 A." },
     { sym: "Iz", re: /\bI[zZ]\b/, tekst: "Kabelens strømføringsevne: hvor mye strøm kabelen tåler over tid uten å bli for varm, etter korreksjon for forlegning og temperatur." },
     { sym: "I2", re: /\bI2\b/, tekst: "Strømmen som sikrer at vernet løser ut innen en fastsatt tid ved overbelastning. Produsenten oppgir den, ofte som et tall ganger In." },
-    { sym: "I5", re: /\bI5\b/, tekst: "Strømmen som gir sikker, rask utløsning av vernet. For automatsikringer brukes øvre grense for momentan utløsning." },
     { sym: "Ia", re: /\bIa\b/, tekst: "Strømmen som får vernet til å koble ut automatisk innen tiden NEK 400 krever, for eksempel 0,4 s for en sluttkurs i TN 230 V." },
     { sym: "IΔn", re: /IΔn/, tekst: "Merkeutløsestrømmen til jordfeilvernet, for eksempel 30 mA (0,03 A) eller 300 mA." },
     { sym: "Ik", re: /\bIk\b/, tekst: "Kortslutningsstrømmen: strømmen som går ved kortslutning eller jordfeil. Den er minst ytterst på kursen, og det er den verdien som er interessant ved kontroll av vernet." },
