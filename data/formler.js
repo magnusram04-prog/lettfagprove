@@ -62,7 +62,7 @@ window.FORMLER = [
   { gruppe: "Motor", formler: [
     { id: "turtall", navn: "Synkront turtall", formel: "n = 60 · f / p", symboler: "f = frekvens (Hz), p = antall polpar (poler / 2), n = o/min" },
     { id: "slipp", navn: "Slipp", formel: "s = (n_s − n) / n_s · 100 %", symboler: "n_s = synkront turtall, n = målt turtall" },
-    { id: "motorstrom", navn: "Strøm til 3-fase motor", formel: "I = P_ut / (η · √3 · U · cos φ)", symboler: "P_ut = merkeeffekt (W)" }
+    { id: "motorstrom", navn: "Strøm til 3-fase motor", formel: "I = P_ut / (η · √3 · U · cos φ)", symboler: "P_ut = merkeeffekt på akselen (W), η = virkningsgrad, U = linjespenning (V), cos φ = effektfaktor" }
   ]},
   { gruppe: "Bolig", formler: [
     { id: "uttak", navn: "Stikkontakter i oppholdsrom", formel: "2 uttak per påbegynt 4 m²",

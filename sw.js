@@ -1,6 +1,6 @@
 // Service worker: gjør at appen virker uten nett etter første besøk.
 // Øk versjonsnummeret når du endrer filer, så mobilene henter den nye versjonen.
-const VERSJON = "elproven-v26";
+const VERSJON = "elproven-v27";
 const FILER = [
   "./", "index.html", "css/stil.css", "js/app.js",
   "data/innstillinger.js", "data/symboler.js", "data/bilder.js", "data/sporsmal.js", "data/regneoppgaver.js", "data/formler.js", "data/kurs.js", "personvern.html", "data/forsta.js", "fonter/ibm-plex-mono-latin-400-normal.woff2", "fonter/ibm-plex-mono-latin-600-normal.woff2", "fonter/ibm-plex-mono-latin-700-normal.woff2", "fonter/schibsted-grotesk-latin-400-normal.woff2", "fonter/schibsted-grotesk-latin-600-normal.woff2", "fonter/schibsted-grotesk-latin-700-normal.woff2", "fonter/schibsted-grotesk-latin-800-normal.woff2",
@@ -20,9 +20,9 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(
     fetch(e.request).then((svar) => {
-      const kopi = svar.clone();
-      caches.open(VERSJON).then((c) => c.put(e.request, kopi));
+      // Bare gyldige svar fra egen side lagres, så en 404 eller feilside aldri havner i cachen.
+      if (svar.ok && svar.type === "basic") { const kopi = svar.clone(); caches.open(VERSJON).then((c) => c.put(e.request, kopi)).catch(() => {}); }
       return svar;
-    }).catch(() => caches.match(e.request).then((m) => m || caches.match("index.html")))
+    }).catch(() => caches.match(e.request).then((m) => m || (e.request.mode === "navigate" ? caches.match("index.html") : Response.error())))
   );
 });

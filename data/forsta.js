@@ -10,7 +10,7 @@ window.FORSTA = {
     { sym: "Iz", re: /\bI[zZ]\b/, tekst: "Kabelens strømføringsevne: hvor mye strøm kabelen tåler over tid uten å bli for varm, etter korreksjon for forlegning og temperatur." },
     { sym: "I2", re: /\bI2\b/, tekst: "Strømmen som sikrer at vernet løser ut innen en fastsatt tid ved overbelastning. Produsenten oppgir den, ofte som et tall ganger In." },
     { sym: "Ia", re: /\bIa\b/, tekst: "Strømmen som får vernet til å koble ut automatisk innen tiden NEK 400 krever, for eksempel 0,4 s for en sluttkurs i TN 230 V." },
-    { sym: "IΔn", re: /IΔn/, tekst: "Merkeutløsestrømmen til jordfeilvernet, for eksempel 30 mA (0,03 A) eller 300 mA." },
+    { sym: "IΔn", re: /IΔn/, tekst: "Merkeutløsestrømmen til jordfeilvernet: lekkasjestrømmen vernet er laget for å løse ut ved, for eksempel 30 mA (0,03 A)." },
     { sym: "Ik", re: /\bIk\b/, tekst: "Kortslutningsstrømmen: strømmen som går ved kortslutning eller jordfeil. Den er minst ytterst på kursen, og det er den verdien som er interessant ved kontroll av vernet." },
     { sym: "Zs", re: /\bZs\b/, tekst: "Impedansen i hele feilsløyfa: fra transformatoren, gjennom faselederen til feilstedet og tilbake gjennom beskyttelseslederen (PE)." },
     { sym: "Z-line", re: /Z-line/, tekst: "Måling av impedansen i sløyfa fase–PE (Zs). Instrumentet regner om til kortslutningsstrøm Ik." },

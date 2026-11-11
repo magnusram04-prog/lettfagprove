@@ -21,12 +21,13 @@
   --linje-sterk: #151515;
   --primar: #151515;      /* knapper: svart */
   --primar-tekst: #fbfbf8;
+  --knapp-tekst: #fff;     /* tekst på grønn, rød og kobber */
   --kobber: #b4562a;      /* aksent: kobberleder */
   --kobber-svak: #f3e3d8;
   --lenke: #94431d;
   --gul: #f0c419;         /* PE-gul */
   --gronn: #2e8b3d;       /* PE-grønn */
-  --riktig: #2b7a3c;
+  --riktig: #287236;
   --riktig-bg: #e3efe1;
   --feil: #bf3128;
   --feil-bg: #f6e1de;
@@ -41,7 +42,7 @@
 /* Mørkt tema bare når brukeren velger det med knappen (lyst er standard). */
 :root[data-theme="dark"] {
   --bg: #141515; --flate: #1c1d1d; --flate-2: #252626; --tekst: #ecebe5; --dempet: #a09f98;
-  --linje: #34352f; --linje-sterk: #ecebe5; --primar: #ecebe5; --primar-tekst: #141515;
+  --linje: #34352f; --linje-sterk: #ecebe5; --primar: #ecebe5; --primar-tekst: #141515; --knapp-tekst: #141515;
   --kobber: #e08a5c; --kobber-svak: #3a2519; --lenke: #eea27a;
   --riktig: #73c47f; --riktig-bg: #18291a; --feil: #f0857b; --feil-bg: #2e1715;
   --topp: #1c1d1d; --topp-tekst: #ecebe5;
@@ -138,7 +139,7 @@ a.knapp.primar { color: var(--primar-tekst); }
 .start-eksamen strong { display: block; font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em; }
 .start-eksamen .pil {
   font: 700 1.2rem var(--mono); width: 40px; height: 40px; border-radius: var(--r-s);
-  display: grid; place-items: center; background: var(--kobber); color: #fff; transition: transform .15s;
+  display: grid; place-items: center; background: var(--kobber); color: var(--knapp-tekst); transition: transform .15s;
 }
 .start-eksamen:hover .pil { transform: translateX(3px); }
 
@@ -150,7 +151,7 @@ a.knapp.primar { color: var(--primar-tekst); }
 }
 .kurs-rad:first-child { border-top: 0; }
 .kurs-rad:hover { background: var(--flate-2); }
-.kurs-rad:hover .kurs-nr { background: var(--kobber); border-color: var(--kobber); color: #fff; }
+.kurs-rad:hover .kurs-nr { background: var(--kobber); border-color: var(--kobber); color: var(--knapp-tekst); }
 .kurs-rad[aria-disabled="true"] { opacity: .5; pointer-events: none; }
 .kurs-nr {
   font: 700 .78rem/1 var(--mono); text-align: center; padding: 7px 0;
@@ -207,8 +208,8 @@ a.knapp.primar { color: var(--primar-tekst); }
   font: 700 .8rem var(--mono); color: var(--tekst); margin-top: -1px;
 }
 .alternativ.valgt .bokstav { background: var(--primar); border-color: var(--primar); color: var(--primar-tekst); }
-.alternativ.riktig .bokstav { background: var(--riktig); border-color: var(--riktig); color: #fff; }
-.alternativ.feil .bokstav { background: var(--feil); border-color: var(--feil); color: #fff; }
+.alternativ.riktig .bokstav { background: var(--riktig); border-color: var(--riktig); color: var(--knapp-tekst); }
+.alternativ.feil .bokstav { background: var(--feil); border-color: var(--feil); color: var(--knapp-tekst); }
 
 .forklaring { border-left: 4px solid var(--linje-sterk); padding: 10px 12px; margin-top: 12px; background: var(--flate-2); }
 .forklaring.riktig { border-color: var(--riktig); }
@@ -265,7 +266,7 @@ code, .formel { font-family: var(--mono); background: var(--flate-2); padding: 1
 .klar-rad { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1.5px solid var(--linje); }
 .klar-rad:first-of-type { border-top: 0; }
 .boks { width: 18px; height: 18px; border: 1.5px solid var(--linje-sterk); border-radius: 2px; display: grid; place-items: center; font-size: .75rem; }
-.klar-rad.ok .boks { background: var(--riktig); border-color: var(--riktig); color: #fff; }
+.klar-rad.ok .boks { background: var(--riktig); border-color: var(--riktig); color: var(--knapp-tekst); }
 .klar-rad .teller { font: 600 .8rem var(--mono); color: var(--dempet); }
 .klar-rad .stolpe { grid-column: 2 / 4; margin-top: 2px; }
 
@@ -330,3 +331,6 @@ code, .formel { font-family: var(--mono); background: var(--flate-2); padding: 1
 .forsta dl div { display: grid; grid-template-columns: 4.2em 1fr; gap: 10px; align-items: baseline; }
 .forsta dt { font: 700 .9rem var(--mono); color: var(--tekst); background: var(--flate); border: 1px solid var(--linje-sterk); border-radius: var(--r-s); text-align: center; padding: 1px 4px; }
 .forsta dd { margin: 0; line-height: 1.45; }
+/* Lange fagord (f.eks. «referanseinstallasjonsmetode») skal brytes på smale skjermer i stedet for å gi sideveis scroll. */
+.sporsmal, .kurs-del h3, .forklaring, .alternativ span { overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }

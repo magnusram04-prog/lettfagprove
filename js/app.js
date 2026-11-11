@@ -32,7 +32,16 @@
   function hent() {
     try { return JSON.parse(localStorage.getItem(NOKKEL)) || {}; } catch (e) { return {}; }
   }
-  let data = Object.assign({ svar: {}, regning: {}, lest: {}, eksamener: [], rekord: 0 }, hent());
+  // Standardverdier brukes både ved oppstart og ved «Nullstill fremgang». Ødelagte felt erstattes.
+  const erObj = (x) => x && typeof x === "object" && !Array.isArray(x);
+  function normaliser(d) {
+    const ut = erObj(d) ? d : {};
+    ["svar", "regning", "lest"].forEach((k) => { if (!erObj(ut[k])) ut[k] = {}; });
+    if (!Array.isArray(ut.eksamener)) ut.eksamener = [];
+    if (typeof ut.rekord !== "number") ut.rekord = 0;
+    return ut;
+  }
+  let data = normaliser(hent());
   function lagre() {
     try { localStorage.setItem(NOKKEL, JSON.stringify(data)); } catch (e) { /* privat modus o.l. */ }
   }
@@ -51,11 +60,15 @@
   const boksAv = (s) => (s.boks !== undefined ? s.boks : (s.sistRiktig ? 1 : 0));
   const forfaller = (s) => s.neste || dag();
   function registrerSvar(id, riktig) {
-    const s = data.svar[id] || { forsok: 0, riktige: 0, sistRiktig: false, boks: 0 };
+    const s = erObj(data.svar[id]) ? data.svar[id] : { forsok: 0, riktige: 0, sistRiktig: false, boks: 0 };
     const forrige = boksAv(s); // før sistRiktig endres
+    // Riktig svar før spørsmålet har forfalt flytter det ikke opp, ellers kunne «lært» nås på én dag.
+    const forTidlig = riktig && s.sistRiktig && s.neste && s.neste > dag();
     s.forsok++; if (riktig) s.riktige++; s.sistRiktig = riktig;
-    s.boks = riktig ? Math.min(forrige + 1, INTERVALL.length - 1) : 1;
-    s.neste = dag(INTERVALL[s.boks]);
+    if (!forTidlig) {
+      s.boks = riktig ? Math.min(forrige + 1, INTERVALL.length - 1) : 1;
+      s.neste = dag(INTERVALL[s.boks]);
+    }
     data.svar[id] = s; lagre();
   }
   // Spørsmål som skal repeteres i dag: de mest forfalte og svakeste først, så nye hvis det er få.
@@ -123,7 +136,10 @@
     const tekst = (o.s.figur ? "Se på symbolet. " : "") + o.s.sporsmal + " " +
       o.rekkefolge.map((orig, v) => `${BOKSTAV[v]}: ${o.s.alternativer[orig]}.`).join(" ");
     const ren = tekst.replace(/·/g, " ganger ").replace(/≤/g, " mindre enn eller lik ").replace(/≥/g, " større enn eller lik ")
-      .replace(/Ω/g, " ohm").replace(/mm²/g, " kvadrat").replace(/m²/g, " kvadratmeter").replace(/√3/g, " rot tre ");
+      .replace(/Ω/g, " ohm").replace(/mm²/g, " kvadratmillimeter").replace(/m²/g, " kvadratmeter").replace(/√3/g, " rot tre ")
+      .replace(/I²t/g, "I i andre t").replace(/²/g, " i andre").replace(/×/g, " ganger ").replace(/°C/g, " grader").replace(/°/g, " grader")
+      .replace(/IΔn/g, "I delta n").replace(/ΔU/g, "delta U").replace(/Δ/g, "delta ").replace(/φ/g, "fi").replace(/ρ/g, "ro")
+      .replace(/≈/g, " omtrent ").replace(/→/g, " til ").replace(/§/g, " paragraf ");
     const u = new SpeechSynthesisUtterance(ren);
     u.lang = "nb-NO"; u.rate = 0.95;
     const stemme = speechSynthesis.getVoices().find((v) => /^(nb|no|nn)/i.test(v.lang));
@@ -151,6 +167,8 @@
   document.addEventListener("keydown", (ev) => {
     if (!tast || ev.altKey || ev.ctrlKey || ev.metaKey) return;
     if (ev.target && /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) return;
+    // Enter/mellomrom på en knapp, lenke eller «Forstå»-boksen skal gjøre det elementet gjør, ikke hoppe videre.
+    if ((ev.key === "Enter" || ev.key === " ") && ev.target && /^(BUTTON|A|SUMMARY)$/.test(ev.target.tagName) && ev.target.id !== "neste") return;
     tast(ev);
   });
   // Gir indeks for tastene 1–6 eller A–F, ellers -1.
@@ -164,7 +182,11 @@
 
   // ---------- Tema ----------
   const TEMA = "elproven-tema";
-  function brukTema(t) { if (t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme"); }
+  function brukTema(t) {
+    if (t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme");
+    const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", t === "dark" ? "#141515" : "#e6e6e1");
+    const k = document.getElementById("tema"); if (k) k.setAttribute("aria-pressed", t === "dark" ? "true" : "false");
+  }
   try { brukTema(localStorage.getItem(TEMA)); } catch (e) {}
   document.getElementById("tema").addEventListener("click", () => {
     const naa = document.documentElement.getAttribute("data-theme") || "light";
@@ -196,7 +218,7 @@
     const e = INN.eksamen;
     // Menyen er satt opp som en kursfortegnelse: K1, K2 …
     const rep = repetisjonsListe();
-    const repTekst = rep.forfalt ? `${Math.min(rep.forfalt, REPETISJON.maks)} spm` : rep.liste.length ? `${rep.liste.length} nye` : "ferdig";
+    const repTekst = rep.forfalt ? `${rep.liste.length} spm` : rep.liste.length ? `${rep.liste.length} nye` : "ferdig";
     const kurser = [
       { href: "#/ov/repeter", navn: "Repeter i dag", under: "Smart repetisjon: det du er i ferd med å glemme, kommer igjen akkurat i tide", hoyre: repTekst, av: !rep.liste.length },
       { href: "#/ov/alle", navn: "Øv på alt", under: "Tilfeldig rekkefølge, forklaring etter hvert svar", hoyre: `${SP.length} spm` },
@@ -269,11 +291,12 @@
     // Repetisjonen holder rekkefølgen (mest forfalt først); ellers tilfeldig.
     const oppgaver = (rep ? utvalg : stokk(utvalg)).map(lagOppgave);
     const tattOpp = new Set(); // i repetisjon kommer feil svar én gang til senere i samme økt
-    let i = 0, poeng = 0, besvart = false;
+    let i = 0, poeng = 0, besvart = false, klarFra = 0;
 
     function vis() {
       const o = oppgaver[i];
       besvart = false;
+      klarFra = Date.now() + 400; // et dobbeltklikk på «Neste» skal ikke svare på det nye spørsmålet
       app.innerHTML = `
         <div class="fremdrift dempet liten"><span>Spørsmål ${i + 1} av ${oppgaver.length}</span><span>${poeng} riktige</span></div>
         <section class="kort">
@@ -284,7 +307,7 @@
           <div id="etter"></div>
           <div class="spm-id">ID ${esc(o.s.id)}</div>
         </section>${tips}`;
-      app.querySelectorAll(".alternativ").forEach((b) => b.addEventListener("click", () => svar(+b.dataset.v)));
+      app.querySelectorAll(".alternativ").forEach((b) => b.addEventListener("click", () => { if (Date.now() >= klarFra) svar(+b.dataset.v); }));
       koblLyd(o);
       app.focus();
     }
@@ -307,11 +330,11 @@
         else if (idx === v) b.classList.add("feil");
       });
       const siste = i === oppgaver.length - 1;
-      const dager = INTERVALL[data.svar[o.s.id].boks];
+      const dager = Math.max(1, Math.round((new Date(data.svar[o.s.id].neste + "T12:00") - new Date(dag() + "T12:00")) / 864e5));
       const nar = igjen ? "Kommer igjen i morgen." : !riktig ? (rep ? "Du får det én gang til om litt, og igjen i morgen." : "Kommer igjen i morgen.")
         : `Kommer igjen ${dager === 1 ? "i morgen" : `om ${dager} dager`}${data.svar[o.s.id].boks >= SITTER ? " (lært)" : ""}.`;
       document.getElementById("etter").innerHTML = `
-        <div class="forklaring ${riktig ? "riktig" : "feil"}"><strong>${riktig ? "Riktig!" : "Feil."}</strong> ${esc(o.s.forklaring)}</div>
+        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> ${esc(o.s.forklaring)}</div>
         <p class="dempet liten" style="margin:8px 0 0">↻ ${nar}</p>
         <button class="knapp primar" id="neste">${siste ? "Se resultat" : "Neste spørsmål"}</button>`;
       const neste = document.getElementById("neste");
@@ -363,9 +386,18 @@
     startSide({ type: "symbol", tittel: "Symbolprøve", ikon: "⊸", pool: SYMBOLSPM, antall: SYMBOLPROVE.antall, minutter: SYMBOLPROVE.minutter, bestattProsent: INN.eksamen.bestattProsent });
   }
 
+  // Prøveeksamen: minst ett spørsmål fra hvert tema, resten tilfeldig, så ingen temaer faller helt ut.
+  function utvalgPerTema(pool, antall) {
+    const temaer = stokk([...new Set(pool.map((s) => s.kategori))]);
+    const valgt = temaer.map((k) => stokk(pool.filter((s) => s.kategori === k))[0]).slice(0, antall);
+    const rest = stokk(pool.filter((s) => !valgt.includes(s)));
+    return stokk(valgt.concat(rest.slice(0, antall - valgt.length)));
+  }
+  let aktivProve = null; // hash for prøven som pågår, så rute() kan spørre før den forlates
   function kjorProve(cfg) {
     const antall = cfg.antall;
-    const oppgaver = stokk(cfg.pool).slice(0, antall).map(lagOppgave);
+    const oppgaver = (cfg.type === "eksamen" ? utvalgPerTema(cfg.pool, antall) : stokk(cfg.pool).slice(0, antall)).map(lagOppgave);
+    aktivProve = location.hash || "#/";
     const valg = new Array(antall).fill(null);
     let i = 0, ferdig = false;
     const slutt = Date.now() + cfg.minutter * 60000;
@@ -382,7 +414,7 @@
     }
     function velg(v) {
       valg[i] = v;
-      app.querySelectorAll(".alternativ").forEach((x, idx) => x.classList.toggle("valgt", idx === v));
+      app.querySelectorAll(".alternativ").forEach((x, idx) => { x.classList.toggle("valgt", idx === v); x.setAttribute("aria-pressed", idx === v ? "true" : "false"); });
       const nr = app.querySelector(`.nr[data-k="${i}"]`); if (nr) nr.classList.add("besvart");
       const teller = document.getElementById("besvart-teller"); if (teller) teller.textContent = valg.filter((x) => x !== null).length;
     }
@@ -394,7 +426,7 @@
         <section class="kort">
           <div class="spm-topp"><span></span>${lydKnapp}</div>
           ${figur(o.s)}<p class="sporsmal">${esc(o.s.sporsmal)}</p>
-          ${o.rekkefolge.map((_, v) => alternativKnapp(o, v, valg[i] === v ? "valgt" : "")).join("")}
+          ${o.rekkefolge.map((_, v) => alternativKnapp(o, v, valg[i] === v ? "valgt" : "").replace("<button ", `<button aria-pressed="${valg[i] === v}" `)).join("")}
           <div class="spm-id">ID ${esc(o.s.id)}</div>
         </section>
         <div class="meny">
@@ -421,8 +453,9 @@
         const ubesvart = valg.filter((v) => v === null).length;
         if (ubesvart && !confirm(`Du har ${ubesvart} ubesvarte spørsmål. Vil du levere likevel?`)) return;
       }
-      ferdig = true; tast = null; stopLyd();
+      ferdig = true; tast = null; stopLyd(); aktivProve = null;
       clearInterval(proveTimer); proveTimer = null;
+      const ubesvartTotalt = valg.filter((v) => v === null).length;
       let poeng = 0;
       const tema = {};
       oppgaver.forEach((o, idx) => {
@@ -433,23 +466,24 @@
         t[1]++; if (r) t[0]++;
       });
       const pst = prosent(poeng, antall);
-      const bestatt = pst >= cfg.bestattProsent;
+      const bestatt = poeng * 100 >= cfg.bestattProsent * antall; // uten avrunding: 79,5 % er ikke bestått
       data.eksamener.push({ dato: new Date().toISOString(), prosent: pst, bestatt, type: cfg.type, tema });
       lagre();
       const temaListe = Object.entries(tema).sort((a, b) => a[1][0] / a[1][1] - b[1][0] / b[1][1]);
-      const svake = temaListe.filter(([, [r, t]]) => r / t < cfg.bestattProsent / 100).slice(0, 3);
+      // Bare temaer med minst 3 spørsmål i prøven vurderes som svake; med 1–2 spørsmål sier resultatet lite.
+      const svake = temaListe.filter(([, [r, t]]) => t >= 3 && r / t < cfg.bestattProsent / 100).slice(0, 3);
       app.innerHTML = `
-        <section class="kort helt">
+        <section class="kort helt" role="status">
           ${tidenUte ? '<p class="dempet">Tiden er ute.</p>' : ""}
           <div class="stor">${pst} %</div>
           <p><span class="merke ${bestatt ? "riktig" : "feil"}">${bestatt ? "Bestått" : "Ikke bestått"}</span></p>
-          <p class="dempet">${poeng} av ${antall} riktige · krav ${cfg.bestattProsent} %</p>
-          <a class="knapp primar" href="#/ov/feil" style="text-decoration:none">Repeter feilene</a>
+          <p class="dempet">${poeng} av ${antall} riktige · krav ${cfg.bestattProsent} %${ubesvartTotalt ? ` · ${ubesvartTotalt} ubesvarte (teller som feil)` : ""}</p>
+          <a class="knapp primar" href="#/ov/feil" style="text-decoration:none">Repeter alle feil</a>
           <a class="knapp" href="#/" style="text-decoration:none">Til forsiden</a>
         </section>
         ${cfg.type === "eksamen" ? `<section class="kort"><strong>Resultat per tema</strong>
           ${temaListe.map(([k, [r, t]]) => `<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span>${esc(kategoriNavn(k))}</span><span class="dempet">${r}/${t}</span></div>
-            <div class="stolpe ${r / t < cfg.bestattProsent / 100 ? "svak" : ""}"><span style="width:${prosent(r, t)}%"></span></div></div>`).join("")}
+            <div class="stolpe ${t >= 3 && r / t < cfg.bestattProsent / 100 ? "svak" : ""}"><span style="width:${prosent(r, t)}%"></span></div></div>`).join("")}
           ${svake.length ? `<p style="margin:14px 0 6px"><strong>Anbefalt å øve mer på:</strong></p>
             ${svake.map(([k]) => `<a class="knapp" href="#/ov/${k}" style="text-decoration:none">${esc(kategoriNavn(k))} ›</a>`).join("")}` : `<p class="dempet" style="margin-top:12px">Ingen svake temaer i denne prøven. Bra jobbet!</p>`}
         </section>` : ""}
@@ -480,7 +514,7 @@
   }
 
   // ---------- Symbolspill: så mange riktige som mulig på tid ----------
-  let spillTimer = null;
+  let spillTimer = null, spillPause = null;
   function spill() {
     sett("Symbolspill", true);
     app.innerHTML = `<section class="kort helt">
@@ -518,10 +552,14 @@
       app.querySelectorAll(".alternativ").forEach((b, idx) => {
         if (idx === o.riktigVisning) b.classList.add("riktig"); else if (idx === v) b.classList.add("feil");
       });
-      setTimeout(() => { if (spillTimer) nytt(); }, riktig ? 250 : 900);
+      // Feil svar flytter slutten 3 s fram, men aldri forbi nå (da avsluttes runden ved neste tikk).
+      if (!riktig) slutt = Math.max(slutt, Date.now());
+      clearTimeout(spillPause);
+      spillPause = setTimeout(() => { spillPause = null; if (spillTimer) nytt(); }, riktig ? 250 : 900);
     }
     function ferdig() {
       clearInterval(spillTimer); spillTimer = null; tast = null;
+      clearTimeout(spillPause); spillPause = null;
       const ny = poeng > (data.rekord || 0);
       if (ny) { data.rekord = poeng; lagre(); }
       app.innerHTML = `<section class="kort helt">
@@ -532,7 +570,7 @@
       document.getElementById("igjen").addEventListener("click", kjorSpill);
     }
     tast = (ev) => { const v = valgFraTast(ev, o ? o.rekkefolge.length : 0); if (v >= 0) svar(v); };
-    clearInterval(spillTimer);
+    clearInterval(spillTimer); clearTimeout(spillPause); spillPause = null;
     spillTimer = setInterval(tid, 250);
     nytt();
   }
@@ -543,7 +581,7 @@
       const st = data.regning[r.id];
       return `<a class="kategori" href="#/regning/${r.id}" style="text-decoration:none">
         <span class="ikon">∑</span>
-        <span class="navn">${esc(r.tittel)}<div class="dempet liten">${st ? (st.sistRiktig ? "✓ Løst" : "Prøv igjen") : "Ikke prøvd"}</div></span>
+        <span class="navn">${esc(r.tittel)}<div class="dempet liten">${st ? (st.sistRiktig || st.lost ? "✓ Løst" : "Prøv igjen") : "Ikke prøvd"}</div></span>
         <span aria-hidden="true">›</span></a>`;
     }).join("");
   }
@@ -575,16 +613,24 @@
     });
     function sjekk(ev) {
       if (ev) ev.preventDefault();
-      const tall = parseFloat(inp.value.replace(/\s/g, "").replace(",", "."));
-      if (isNaN(tall)) { inp.focus(); return; }
-      const riktig = Math.abs(tall - r.svar) <= r.toleranse;
+      // Godta «1 000», «1000», «8,7», «8.7» og en enhet til slutt. «1.000» med tre siffer etter punktum er tusenskille.
+      let raa = inp.value.trim().replace(/\s/g, "");
+      if (r.enhet) raa = raa.replace(new RegExp(r.enhet.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s/g, "") + "$", "i"), "");
+      if (/^-?\d{1,3}(\.\d{3})+$/.test(raa)) raa = raa.replace(/\./g, "");
+      raa = raa.replace(",", ".");
+      if (!/^-?\d+(\.\d+)?$/.test(raa)) {
+        document.getElementById("etter").innerHTML = `<p class="forklaring feil" role="alert">${inp.value.trim() ? "Skriv svaret som et tall, for eksempel 8,7." : "Skriv inn et tall først."}</p>`;
+        inp.focus(); return;
+      }
+      const tall = parseFloat(raa);
+      const riktig = Math.abs(tall - r.svar) <= r.toleranse + 1e-9;
       const st = data.regning[r.id] || { forsok: 0, riktige: 0 };
-      st.forsok++; if (riktig) st.riktige++; st.sistRiktig = riktig;
+      st.forsok++; if (riktig) { st.riktige++; st.lost = true; } st.sistRiktig = riktig;
       data.regning[r.id] = st; lagre();
       const idx = RO.indexOf(r);
       const neste = RO[idx + 1];
       document.getElementById("etter").innerHTML = `
-        <div class="forklaring losning ${riktig ? "riktig" : "feil"}">
+        <div class="forklaring losning ${riktig ? "riktig" : "feil"}" role="status">
           <strong>${riktig ? "Riktig!" : "Ikke helt."}</strong> Fasit: <span class="formel">${String(r.svar).replace(".", ",")} ${esc(r.enhet)}</span>
           <ol>${r.losning.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
         </div>
@@ -726,15 +772,23 @@
       </section>
       <button class="knapp" id="nullstill">Nullstill fremgang</button>`;
     document.getElementById("nullstill").addEventListener("click", () => {
-      if (confirm("Slette all fremgang på denne enheten?")) { data = { svar: {}, regning: {}, eksamener: [], rekord: 0 }; lagre(); statistikk(); }
+      if (confirm("Slette all fremgang på denne enheten?")) { data = normaliser({}); lagre(); statistikk(); }
     });
   }
 
   // ---------- Ruting ----------
+  let ignorerRute = false;
   function rute() {
+    if (ignorerRute) { ignorerRute = false; return; }
+    // En prøve som pågår, avbrytes bare hvis brukeren bekrefter. Ellers går vi tilbake til prøven uten å tegne den på nytt.
+    if (aktivProve && location.hash !== aktivProve) {
+      if (!confirm("Vil du avbryte prøven? Svarene blir ikke lagret.")) { ignorerRute = true; location.hash = aktivProve; return; }
+      aktivProve = null;
+    }
     tast = null; stopLyd();
-    if (proveTimer && !/^#\/(eksamen|symbolprove)/.test(location.hash)) { clearInterval(proveTimer); proveTimer = null; }
+    if (proveTimer) { clearInterval(proveTimer); proveTimer = null; }
     if (spillTimer) { clearInterval(spillTimer); spillTimer = null; }
+    clearTimeout(spillPause); spillPause = null;
     const deler = (location.hash.replace(/^#\/?/, "") || "").split("/");
     window.scrollTo(0, 0);
     switch (deler[0]) {
@@ -751,6 +805,7 @@
     }
   }
   window.addEventListener("hashchange", rute);
+  window.addEventListener("beforeunload", (ev) => { if (aktivProve) { ev.preventDefault(); ev.returnValue = ""; } });
   rute();
 
   // ---------- Installerbar app (offline) ----------

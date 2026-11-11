@@ -83,7 +83,7 @@ window.SPORSMAL = [
   { id: "v8", kategori: "vekselstrom",
     sporsmal: "I et 230 V IT-nett: hva er spenningen mellom to faser?",
     alternativer: ["230 V", "400 V", "133 V", "0 V"], riktig: 0,
-    forklaring: "I et 230 V IT-system er 230 V spenningen mellom fasene (linjespenningen). Begge lederne til en 1-fase kurs er faser, også den blå. Det er ingen nøytralleder slik som i TN 400/230 V." },
+    forklaring: "I et 230 V IT-system er 230 V spenningen mellom fasene (linjespenningen). Begge lederne til en 1-fase kurs er faser, så ingen av dem er spenningsløse mot jord slik nøytrallederen i TN er. Det er ingen nøytralleder slik som i TN 400/230 V." },
 
   // ===== Vern og jordfeilbrytere =====
   { id: "r1", kategori: "vern",
@@ -105,7 +105,7 @@ window.SPORSMAL = [
   { id: "r4", kategori: "vern",
     sporsmal: "Hvilken type jordfeilbryter registrerer også glatte DC-feilstrømmer (aktuelt f.eks. ved elbillading)?",
     alternativer: ["Type B", "Type AC", "Type A", "Alle typer gjør dette"], riktig: 0,
-    forklaring: "Type B registrerer AC, pulserende DC og glatt DC. Ved elbillader brukes type B, eller type A kombinert med DC-deteksjon (6 mA) i laderen." },
+    forklaring: "Type B registrerer AC, pulserende DC og glatt DC. Ved elbillader brukes type B, eller type A/F kombinert med DC-deteksjon (RDC-DD) som gir minst like god beskyttelse (NEK 400-7-722, 722.531.2.3 s. 466)." },
   { id: "r5", kategori: "vern",
     sporsmal: "Hva måler en jordfeilbryter?",
     alternativer: [
@@ -235,7 +235,7 @@ window.SPORSMAL = [
       "Å koble ut anlegget ved overlast",
       "Å måle spenningsfall",
       "Å styre lys"], riktig: 0,
-    forklaring: "Der første jordfeil ikke kobles ut (forbrukerkurser og hovedkurser nedstrøms hovedfordelingen), skal feilen gi et hørbart og/eller synlig signal så lenge den varer. En ny feil på en annen fase kan gi kortslutning via jord. (NEK 400-4-41, 411.6 s. 102)" },
+    forklaring: "Der første jordfeil ikke kobles ut (i IT-anlegg der det er tillatt; i installasjoner tilknyttet et allment IT-nett skal forbrukerkurser kobles ut), skal feilen gi et hørbart og/eller synlig signal så lenge den varer. En ny feil på en annen fase kan gi kortslutning via jord. (NEK 400-4-41, 411.6 s. 102)" },
 
   // ===== Installasjon og kabler =====
   { id: "i1", kategori: "installasjon",
@@ -415,7 +415,7 @@ window.SPORSMAL = [
   { id: "k11", kategori: "sikkerhet",
     sporsmal: "Hvor lenge skal den som utsteder en samsvarserklæring oppbevare en kopi?",
     alternativer: ["Minst 5 år", "Minst 1 år", "Minst 10 år", "Til anlegget rives"], riktig: 0,
-    forklaring: "Eieren skal oppbevare erklæringen og oppdatert dokumentasjon så lenge anlegget finnes. (FEL § 13)" },
+    forklaring: "Den som utsteder samsvarserklæringen, skal oppbevare en kopi i minst 5 år. Eieren skal i tillegg ta vare på erklæringen og oppdatert dokumentasjon så lenge anlegget finnes. (FEL § 13)" },
   { id: "k12", kategori: "sikkerhet",
     sporsmal: "Hva sier FEL § 16 om planlegging av et anlegg?",
     alternativer: [
@@ -711,7 +711,7 @@ window.SPORSMAL = [
       "Trykknapp med indikatorlampe",
       "Trykknappbryter",
       "Stikkontakt, topolet uten jord"], riktig: 0,
-    forklaring: "Ring i sirkel, uten arm: knappen går tilbake når du slipper (én stabil stilling)." },
+    forklaring: "Ring i sirkel, uten arm: knappen fjærer tilbake når du slipper, altså bare én stabil stilling." },
   { id: "sym12", kategori: "symboler", figur: "trykknapp-lampe",
     sporsmal: "Hva betyr dette installasjonssymbolet?",
     alternativer: [
@@ -942,8 +942,8 @@ window.SPORSMAL = [
     forklaring: "Ellers vil feilstrømmen være for liten til at vernet løser ut. (NEK 400-5-53, 531.2.3.6.3.1 s. 236)" },
   { id: "fp19", kategori: "fagprove",
     sporsmal: "Produsenten oppgir I2 = 1,3 · In for en automatsikring. Kabelen i en bolig har Iz = 20 A (≤ 4 mm²). Hvilken merkestrøm kan du høyst bruke?",
-    alternativer: ["15 A", "16 A", "20 A", "13 A"], riktig: 0,
-    forklaring: "I bolig gjelder I2 ≤ Iz. 1,3 · 15 = 19,5 A ≤ 20 A er OK. 1,3 · 16 = 20,8 A er for mye. Bruk alltid I2 fra databladet til vernet du faktisk velger. (NEK 400-8-823, 823.431.3.1 s. 506)" },
+    alternativer: ["13 A", "16 A", "20 A", "10 A"], riktig: 0,
+    forklaring: "I bolig gjelder I2 ≤ Iz, så In ≤ 20 / 1,3 ≈ 15,4 A. 16 A gir 1,3 · 16 = 20,8 A, som er for mye. Største standard merkestrøm under grensen er 13 A. Bruk alltid I2 fra databladet til vernet du faktisk velger. (NEK 400-8-823, 823.431.3.1 s. 506)" },
   { id: "fp20", kategori: "fagprove",
     sporsmal: "En kurs har 6 mm² kabel i en bolig. Hvilke krav til overbelastningsvern gjelder?",
     alternativer: [
@@ -1117,7 +1117,7 @@ window.SPORSMAL = [
   { id: "n41-15", kategori: "nek-sjokk",
     sporsmal: "I en installasjon tilknyttet et allment IT-distribusjonsnett: hva gjelder for forbrukerkurser ved første jordfeil?",
     alternativer: [
-      "De skal kobles ut innen kravtiden, eller ha 30 mA jordfeilvern",
+      "De skal kobles ut innen kravtiden, eller ha 30 mA jordfeilvern når vilkårene for det er oppfylt",
       "De skal aldri kobles ut",
       "Det holder med en lampe som lyser",
       "De skal kobles ut etter 24 timer"], riktig: 0,
@@ -1515,7 +1515,7 @@ window.SPORSMAL = [
       "Fordi Z er over 1 Ω",
       "Fordi 174 A er under 16 A",
       "Fordi målingen er gjort i et IT-system, der alt er godkjent"], riktig: 0,
-    forklaring: "Instrumentet regner om den målte impedansen til kortslutningsstrøm og sammenligner med grensen du har stilt inn. For C-karakteristikk regner man 10 × In for sikker momentan utløsning. Merk at instrumentet her står på IT, og NEK har egne krav til verifikasjon i IT-anlegg. (NEK 400-6, 6.4.3.7 s. 334–336)" },
+    forklaring: "Instrumentet regner om den målte impedansen til kortslutningsstrøm og sammenligner med grensen du har stilt inn. For C-karakteristikk regner man 10 × In for sikker momentan utløsning (verdien kommer fra produktstandarden). Instrumentet regner om etter sine egne innstillinger, så Ik på skjermen er ikke nødvendigvis 230 / Z. Merk at instrumentet her står på IT, og NEK har egne krav til verifikasjon i IT-anlegg. (NEK 400-6, 6.4.3.7 s. 334–336)" },
   { id: "e9", kategori: "nek-kontroll", bilde: "egen-maling-rcd.jpg",
     sporsmal: "En 30 mA jordfeilbryter løste ut ved 19,5 mA etter 13 ms. Er det i orden?",
     alternativer: [
