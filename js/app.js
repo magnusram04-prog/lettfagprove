@@ -237,7 +237,7 @@
           <span>${esc(k.navn)}</span><span class="teller">${k.naa}/${k.maal}</span>
           <div class="stolpe"><span style="width:${prosent(k.naa, k.maal)}%"></span></div></div>`).join("")}
       </section>
-      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave.</p>`;
+      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave. <a href="personvern.html">Personvern</a></p>`;
   }
 
   function kategorier() {
