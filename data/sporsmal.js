@@ -1227,7 +1227,7 @@ window.SPORSMAL = [
   { id: "n43-14", kategori: "nek-overstrom",
     sporsmal: "Utenfor boliger: hvilket vern kan du høyst bruke på en PVC-isolert 1,5 mm² kurs forlagt i isolert vegg (A1/A2)?",
     alternativer: ["10 A", "13 A", "16 A", "20 A"], riktig: 0,
-    forklaring: "Særnorske regler for PVC-kabler inntil 4 mm²: 1,5 mm² gir 10 A i isolert vegg og 13 A ellers, 2,5 mm² gir 16 A, og 4 mm² gir 20 A i isolert vegg og 25 A ellers. I boliger gjelder i stedet kravet I2 ≤ Iz (8-823 fra s. 504). (NEK 400-5-53, 533.2 s. 240)" },
+    forklaring: "Særnorske regler for PVC-kabler inntil 4 mm²: 1,5 mm² gir 10 A i isolert vegg og 13 A ellers, 2,5 mm² gir 16 A, og 4 mm² gir 20 A i isolert vegg og 25 A ellers. I boliger gjelder de ikke. Der gjelder IB ≤ In og I2 ≤ Iz for ledere inntil 4 mm² Cu (NEK 400-8-823, 823.431.3.1 s. 506). (NEK 400-5-53, 533.2 s. 240)" },
   { id: "n43-15", kategori: "nek-overstrom",
     sporsmal: "Utenfor boliger: hvilket vern kan du høyst bruke på en PVC-isolert 2,5 mm² kurs?",
     alternativer: ["16 A", "20 A", "25 A", "32 A"], riktig: 0,
