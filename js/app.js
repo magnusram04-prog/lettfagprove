@@ -23,7 +23,7 @@
   const tilbakeEl = document.getElementById("tilbake");
 
   // Mål for «Klar for eksamen?» (egne mål, endre her).
-  const KLAR = { prover: 15, bestattAvSiste10: 5, symbolprover: 3 };
+  const KLAR = { prover: 15, bestattAvSiste10: 5, symbolprover: 3, regning: 10 };
   const SYMBOLPROVE = { antall: 10, minutter: 5 };
   const SPILL_SEKUNDER = 60;
 
@@ -202,7 +202,8 @@
     return [
       { navn: `Fullfør ${KLAR.prover} prøveeksamener`, naa: Math.min(eks.length, KLAR.prover), maal: KLAR.prover },
       { navn: `Bestå ${KLAR.bestattAvSiste10} av de 10 siste prøveeksamenene`, naa: Math.min(eks.slice(-10).filter((e) => e.bestatt).length, KLAR.bestattAvSiste10), maal: KLAR.bestattAvSiste10 },
-      { navn: `Bestå ${KLAR.symbolprover} symbolprøver`, naa: Math.min(sym.filter((e) => e.bestatt).length, KLAR.symbolprover), maal: KLAR.symbolprover }
+      { navn: `Bestå ${KLAR.symbolprover} symbolprøver`, naa: Math.min(sym.filter((e) => e.bestatt).length, KLAR.symbolprover), maal: KLAR.symbolprover },
+      { navn: `Løs ${Math.min(KLAR.regning, RO.length)} regneoppgaver riktig`, naa: Math.min(RO.filter((r) => data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)).length, KLAR.regning), maal: Math.min(KLAR.regning, RO.length) }
     ];
   }
 
@@ -259,7 +260,7 @@
           <span>${esc(k.navn)}</span><span class="teller">${k.naa}/${k.maal}</span>
           <div class="stolpe"><span style="width:${prosent(k.naa, k.maal)}%"></span></div></div>`).join("")}
       </section>
-      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave. <a href="personvern.html">Personvern</a></p>`;
+      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Den ekte eksamenen er skriftlig (5 timer) med utregninger og begrunnelser. Her drilles kunnskapen med flervalg, regneoppgaver og teori, så husk også å regne gamle eksamensoppgaver for hånd. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave. <a href="personvern.html">Personvern</a></p>`;
   }
 
   function kategorier() {
@@ -613,17 +614,19 @@
     });
     function sjekk(ev) {
       if (ev) ev.preventDefault();
-      // Godta «1 000», «1000», «8,7», «8.7» og en enhet til slutt. «1.000» med tre siffer etter punktum er tusenskille.
+      // Godta «1 000», «1000», «8,7», «8.7», «0.583» og en enhet til slutt.
+      // «1.000» kan bety både tusen og én; svaret godtas hvis en av tolkningene er riktig.
       let raa = inp.value.trim().replace(/\s/g, "");
       if (r.enhet) raa = raa.replace(new RegExp(r.enhet.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s/g, "") + "$", "i"), "");
-      if (/^-?\d{1,3}(\.\d{3})+$/.test(raa)) raa = raa.replace(/\./g, "");
+      const tusen = /^-?[1-9]\d{0,2}(\.\d{3})+$/.test(raa) ? parseFloat(raa.replace(/\./g, "")) : null;
+      if (/^-?\d{1,3}(\.\d{3}){2,}$/.test(raa)) raa = raa.replace(/\./g, ""); // «1.000.000» er alltid tusenskille
       raa = raa.replace(",", ".");
       if (!/^-?\d+(\.\d+)?$/.test(raa)) {
         document.getElementById("etter").innerHTML = `<p class="forklaring feil" role="alert">${inp.value.trim() ? "Skriv svaret som et tall, for eksempel 8,7." : "Skriv inn et tall først."}</p>`;
         inp.focus(); return;
       }
-      const tall = parseFloat(raa);
-      const riktig = Math.abs(tall - r.svar) <= r.toleranse + 1e-9;
+      const naer = (x) => x !== null && Math.abs(x - r.svar) <= r.toleranse + 1e-9;
+      const riktig = naer(parseFloat(raa)) || naer(tusen);
       const st = data.regning[r.id] || { forsok: 0, riktige: 0 };
       st.forsok++; if (riktig) { st.riktige++; st.lost = true; } st.sistRiktig = riktig;
       data.regning[r.id] = st; lagre();

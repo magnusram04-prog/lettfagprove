@@ -2,7 +2,7 @@
 // "svar" er riktig tallsvar. "toleranse" er hvor mye svaret kan avvike (samme enhet).
 // "losning" er stegene som vises etter at man har svart.
 // "formler" er id-er i data/formler.js som vises som hint.
-// ⚠ Kontroller alle oppgaver før appen selges.
+// Alle fasiter er regnet ut på nytt og kontrollert (11.11.2026). Kontroller nye oppgaver før de publiseres.
 window.REGNEOPPGAVER = [
   { id: "r-1", tittel: "Strøm i varmeovn", formler: ["effekt-dc"],
     oppgave: "En varmeovn på 2000 W kobles til 230 V. Hvor stor strøm trekker den?",

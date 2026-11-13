@@ -30,7 +30,14 @@ window.FORSTA = {
     { sym: "U", re: /· U\b|\/ U\b|\bU ·|\bU \//, tekst: "Spenning i volt. I 3-fase er det spenningen mellom to faser, for eksempel 400 V." },
     { sym: "I", re: /\bI [=·\/]|· I\b|= I\b/, tekst: "Strøm i ampere (A)." },
     { sym: "cc", re: /\bcc\b/, tekst: "Senteravstanden: avstanden fra midten av én kabelsløyfe til midten av den neste." },
-    { sym: "×", re: / × In/, tekst: "«× In» betyr ganger merkestrømmen. «2 × In» er for eksempel 32 A for et 16 A-vern." }
+    { sym: "×", re: / × In/, tekst: "«× In» betyr ganger merkestrømmen. «2 × In» er for eksempel 32 A for et 16 A-vern." },
+    { sym: "IMD", re: /\bIMD\b|isolasjonsovervåk/i, tekst: "Isolasjonsovervåker: et apparat som måler isolasjonen mot jord hele tiden og varsler med lys eller lyd når det blir en jordfeil." },
+    { sym: "⏚", re: /⏚/, tekst: "Symbolet for jord (beskyttelsesleder, PE)." },
+    { sym: "Tilsynelatende effekt", re: /tilsynelatende/i, tekst: "S, målt i VA: spenning ganger strøm, uten å ta hensyn til faseforskyvning. Den aktive effekten (W) er S ganger cos φ." },
+    { sym: "RDC-DD", re: /RDC-DD/, tekst: "Et apparat som oppdager likestrøms-lekkasje (DC) og kobler ut. Brukes sammen med jordfeilvern type A eller F ved elbillading." },
+    { sym: "PEN", re: /\bPEN\b/, tekst: "En leder som er både beskyttelsesleder (PE) og nøytralleder (N) samtidig. Brukes i TN-C-delen av anlegget." },
+    { sym: "Klokkeposisjon", re: /klokkeposisjon|\b\d{1,2}h\b/i, tekst: "Hvor jordpinnen sitter på en industrikontakt, sagt som timene på en klokke. Den hindrer at kontakter for ulik spenning passer sammen." },
+    { sym: "Eca", re: /\bEca\b/, tekst: "Brannklasse for kabler. Eca er minstekravet for kabler i fast installasjon." }
   ],
 
   TOLKNING: {
@@ -46,7 +53,7 @@ window.FORSTA = {
     "fp19": "Samme tankegang som i bolig: I2 skal ikke være større enn Iz. Her er I2 = 1,3 · In, så regn ut den største In som holder, og velg standardstørrelsen som ikke går over.",
     "fp20": "Boligreglene i NEK 400-8-823 gjelder bare opp til et visst tverrsnitt. Sjekk om 6 mm² er innenfor eller utenfor den grensen.",
     "fp21": "Ved kortslutning skal automatsikringen løse ut momentant (magnetisk). Det skjer først når strømmen er et visst antall ganger merkestrømmen, og antallet avhenger av karakteristikken (B eller C).",
-    "d6": "Momentan (magnetisk) utløsning skjer først når strømmen er et visst antall ganger merkestrømmen. For sikker utløsning bruker du øvre grense for karakteristikken.",
+    "d6": "Momentan (magnetisk) utløsning skjer først når strømmen er et visst antall ganger merkestrømmen. Tenk over hvor stort spennet for momentan utløsning er for denne karakteristikken, og hvilken del av spennet du kan stole på.",
     "e8": "Instrumentet sammenligner målt kortslutningsstrøm med strømmen som trengs for at C16-vernet skal løse ut momentant.",
     "n6-10": "Regn først ut kortslutningsstrømmen med Ohms lov: Ik = U0 / Zs. Sammenlign så med strømmen som gir momentan utløsning for en B16.",
     "fp22": "Spenningsfallet er strømmen ganger resistansen i lederne. Resistansen regnes ut fra ρ, lengde og tverrsnitt. Tenk over hvor mange ledere strømmen går gjennom på en 1-fase kurs.",
@@ -62,5 +69,5 @@ window.FORSTA = {
     "n52-14": "Under drift er lederen varmere enn 20 °C, og varm kobber har høyere resistans. Spørsmålet er hvilken verdi NEK 400 bruker da."
   },
 
-  UTEN_SYMBOLER: ["n43-1", "n43-2", "n43-5", "d1", "bf1", "i3", "d7"]
+  UTEN_SYMBOLER: ["n43-1", "n43-2", "n43-5", "d1", "bf1", "i3", "d7", "v5", "v6", "s7", "e16", "n722-15", "j18"]
 };
