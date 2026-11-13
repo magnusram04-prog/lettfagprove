@@ -241,7 +241,8 @@
     // Høyst 15 nye om dagen, så planen holder seg rundt 15–20 minutter.
     const nyePerDag = ikkeOvd ? Math.min(ikkeOvd, 15, Math.max(5, igjen && igjen > 0 ? Math.ceil(ikkeOvd / Math.max(1, igjen - 3)) : 10)) : 0;
     const nesteKurs = kursIder().find((k) => !data.lest[k]);
-    const nesteOppg = SKR.find((o) => !(data.skriftlig[o.id] && data.skriftlig[o.id].ferdig)) || RO.find((r) => !(data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)));
+    // Korteste oppgave først, så dagsplanen holder seg rundt 20 minutter.
+    const nesteOppg = [...SKR].sort((x, y) => (x.tid || 10) - (y.tid || 10)).find((o) => !(data.skriftlig[o.id] && data.skriftlig[o.id].ferdig)) || RO.find((r) => !(data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)));
     const oppgHref = nesteOppg ? (nesteOppg.deler ? `#/skriftlig/${nesteOppg.id}` : `#/regning/${nesteOppg.id}`) : "#/skriftlig";
     const punkter = [];
     if (rep.forfalt) punkter.push({ href: "#/ov/repeter", tekst: `Repeter ${Math.min(rep.forfalt, REPETISJON.maks)} spørsmål du er i ferd med å glemme`, ferdig: false });
@@ -249,8 +250,8 @@
     if (nesteKurs) punkter.push({ href: `#/kurs/${nesteKurs}`, tekst: `Les teori: ${kategoriNavn(nesteKurs)}`, ferdig: logg.lest > 0 });
     punkter.push(logg.oppgaver > 0 ? { href: oppgHref, tekst: "Regn én oppgave", ferdig: true }
       : { href: oppgHref, tekst: nesteOppg ? `Regn én oppgave: ${nesteOppg.tittel}` : "Regn en skriftlig oppgave på nytt", ferdig: false });
-    // Grovt anslag: ca. 30 s per spørsmål, 5 min per tema i teorikurset, 10 min per oppgave.
-    const minutter = Math.round(punkter.filter((p) => !p.ferdig).reduce((n, p) => n + (p.href === "#/ov/repeter" ? Math.min(rep.forfalt, REPETISJON.maks) * 0.5 : p.href === "#/ov/nye" ? Math.max(0, nyePerDag - logg.nye) * 0.5 : p.href.startsWith("#/kurs") ? 5 : 10), 0));
+    // Grovt anslag: ca. 30 s per spørsmål, 5 min per tema i teorikurset, og oppgavens egen tid (ellers 10 min).
+    const minutter = Math.round(punkter.filter((p) => !p.ferdig).reduce((n, p) => n + (p.href === "#/ov/repeter" ? Math.min(rep.forfalt, REPETISJON.maks) * 0.5 : p.href === "#/ov/nye" ? Math.max(0, nyePerDag - logg.nye) * 0.5 : p.href.startsWith("#/kurs") ? 5 : (nesteOppg && nesteOppg.tid) || 10), 0));
     const tidTekst = igjen === null ? "Legg inn eksamensdatoen, så fordeles spørsmålene på dagene du har igjen."
       : igjen > 0 ? `Eksamen om ${igjen} ${igjen === 1 ? "dag" : "dager"}. ${ikkeOvd} spørsmål er ikke øvd ennå.`
       : igjen === 0 ? "Eksamen i dag. Lykke til!" : "Eksamensdatoen har passert. Legg inn en ny dato hvis du skal opp igjen.";
@@ -408,7 +409,7 @@
       const nar = igjen ? "Kommer igjen i morgen." : !riktig ? (rep ? "Du får det én gang til om litt, og igjen i morgen." : "Kommer igjen i morgen.")
         : `Kommer igjen ${dager === 1 ? "i morgen" : `om ${dager} dager`}${data.svar[o.s.id].boks >= SITTER ? " (lært)" : ""}.`;
       document.getElementById("etter").innerHTML = `
-        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> ${esc(o.s.forklaring)}</div>
+        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}</div>
         <p class="dempet liten" style="margin:8px 0 0">↻ ${nar}</p>
         <button class="knapp primar" id="neste">${siste ? "Se resultat" : "Neste spørsmål"}</button>`;
       const neste = document.getElementById("neste");

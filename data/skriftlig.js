@@ -123,7 +123,7 @@ window.SKRIFTLIG = [
         losning: ["RA ≤ 50 / 0,3 ≈ 166,7 Ω"] },
       { sporsmal: "Er den målte jordelektroden god nok? Forklar hvorfor TT-anlegg trenger jordfeilvern.",
         punkter: ["120 Ω er under både 1667 Ω og 166,7 Ω, så den er god nok", "I TT går feilstrømmen gjennom jorda, så den blir liten", "En liten feilstrøm løser ikke ut en automatsikring raskt nok", "Derfor brukes jordfeilvern, som løser ut på mA"],
-        losning: ["120 Ω er lavere enn begge grensene, så elektroden er god nok.", "I TT går feilstrømmen tilbake gjennom jorda via to jordelektroder. Strømmen blir for liten til at en vanlig automatsikring løser ut raskt. Jordfeilvern løser ut på noen få milliampere, så det kobler ut likevel."] }
+        losning: ["120 Ω er lavere enn begge grensene, så elektroden er god nok.", "I TT går feilstrømmen tilbake gjennom jorda via to jordelektroder. Strømmen blir for liten til at en vanlig automatsikring løser ut raskt. Et 30 mA jordfeilvern løser ut når feilstrømmen er over 30 mA, så det kobler ut likevel."] }
     ] },
 
   { id: "s-9", tittel: "Motor i trekant", tid: 15,
@@ -213,7 +213,7 @@ window.SKRIFTLIG = [
     gitt: ["Kursen er 230 V", "Overspenningsvern er montert i tavla", "Målt isolasjonsresistans: 0,8 MΩ"],
     deler: [
       { sporsmal: "Hvilken prøvespenning bruker du (V DC)?", svar: 500, toleranse: 0, enhet: "V",
-        losning: ["For kurser opp til 1000 V (unntatt SELV og PELV) er prøvespenningen 500 V DC (NEK 400-6, tabell 6A s. 332)"] },
+        losning: ["For kurser over SELV/PELV og opp til 500 V er prøvespenningen 500 V DC. Over 500 V brukes 1000 V DC (NEK 400-6, tabell 6A s. 332)"] },
       { sporsmal: "Hva er minste godkjente isolasjonsresistans?", svar: 1, toleranse: 0, enhet: "MΩ",
         losning: ["Kravet er ≥ 1 MΩ ved 500 V DC (NEK 400-6, tabell 6A s. 332)"] },
       { sporsmal: "Er 0,8 MΩ godkjent? Hva gjør du, og hva må du passe på før du måler?",
