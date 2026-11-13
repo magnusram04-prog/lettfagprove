@@ -349,3 +349,8 @@ code, .formel { font-family: var(--mono); background: var(--flate-2); padding: 1
 .sjekk-punkt { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0; cursor: pointer; }
 .sjekk-punkt input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
 #flytt .knapp { margin-top: 6px; }
+.ordliste { margin: 0; }
+.ordliste div { padding: 10px 0; border-top: 1.5px solid var(--linje); }
+.ordliste div:first-child { border-top: 0; }
+.ordliste dt { font-weight: 700; }
+.ordliste dd { margin: 2px 0 0; }

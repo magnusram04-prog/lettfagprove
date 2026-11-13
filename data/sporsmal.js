@@ -91,7 +91,7 @@ window.SPORSMAL = [
   { id: "v8", kategori: "vekselstrom",
     sporsmal: "I et 230 V IT-nett: hva er spenningen mellom to faser?",
     alternativer: ["230 V", "400 V", "133 V", "0 V"], riktig: 0,
-    forklaring: "I et 230 V IT-system er 230 V spenningen mellom fasene (linjespenningen). Begge lederne til en 1-fase kurs er faser, så ingen av dem er spenningsløse mot jord slik nøytrallederen i TN er. Det er ingen nøytralleder slik som i TN 400/230 V." },
+    forklaring: "I et 230 V IT-system er 230 V spenningen mellom fasene (linjespenningen). Det finnes ingen nøytralleder slik som i TN 400/230 V. Derfor går en 1-fase kurs mellom to faser, og begge lederne kan ha spenning mot jord." },
 
   // ===== Vern og jordfeilbrytere =====
   { id: "r1", kategori: "vern",
@@ -101,7 +101,7 @@ window.SPORSMAL = [
   { id: "r2", kategori: "vern",
     sporsmal: "En automatsikring med B-karakteristikk har momentan (magnetisk) utløsning ved ca.:",
     alternativer: ["3–5 × In", "5–10 × In", "10–20 × In", "1,13 × In"], riktig: 0,
-    forklaring: "B-karakteristikk løser ut momentant ved 3–5 × In, C-karakteristikk ved 5–10 × In og D-karakteristikk ved 10–20 × In. 1,13 × In er strømmen der vernet ikke skal løse ut ved overlast. Verdiene kommer fra produktstandarden for automatsikringer." },
+    forklaring: "B-karakteristikk løser ut momentant ved 3–5 × In, C-karakteristikk ved 5–10 × In og D-karakteristikk ved 10–20 × In. 1,13 × In er strømmen vernet skal tåle i lang tid uten å løse ut, altså en grense for overlast og ikke for momentan utløsning. Verdiene kommer fra produktstandarden for automatsikringer." },
   { id: "r3", kategori: "vern",
     sporsmal: "Hva er hovedoppgaven til et overstrømsvern (sikring/automatsikring) på en kurs?",
     alternativer: [
@@ -345,7 +345,7 @@ window.SPORSMAL = [
       "Tre stikkontakter med jord, 16 A hver, drift i 6 timer for 230 V mellom faser",
       "Tre faser og nøytral med jord, 16 A, jordkontakten i klokkeposisjon 6, for 400 V",
       "Tre faser og jord (uten nøytral), 6 A, jordkontakten i klokkeposisjon 9, for 230 V"], riktig: 0,
-    forklaring: "Rød farge betyr 380–480 V. Klokkeposisjonen til jordkontakten hindrer at feil spenning kobles sammen. En kontakt med N er merket 3P+N+⏚. (NEK EN 60309)" },
+    forklaring: "Skiltet på denne kontakten sier 380–415 V. Det ligger innenfor området for rød farge, som er 380–480 V. Klokkeposisjonen til jordkontakten hindrer at feil spenning kobles sammen. En kontakt med N er merket 3P+N+⏚. (NEK EN 60309)" },
   { id: "e17", kategori: "installasjon", bilde: "egen-lampeklemme.jpg",
     sporsmal: "Hvilken leder skal til den midterste klemmen med jordsymbolet i lampeklemmen?",
     alternativer: [
@@ -455,7 +455,7 @@ window.SPORSMAL = [
       "Alle anlegg i boliger, også de som har en installert effekt over 16 kVA",
       "Alle anlegg under 400 V, uansett om de ligger i eksplosjonsfarlig område eller ikke",
       "Ingen anlegg er unntatt fra melding, heller ikke små anlegg på lav spenning og mindre endringer"], riktig: 0,
-    forklaring: "Mindre endringer krever heller ikke melding. (FEL § 14)" },
+    forklaring: "Små anlegg med lav risiko er unntatt fra meldeplikten, for eksempel anlegg på høyst 50 V AC / 120 V DC, campingvogner og aggregater på høyst 10 kVA. Mindre endringer krever heller ikke melding. (FEL § 14)" },
   { id: "k14", kategori: "sikkerhet",
     sporsmal: "Hva krever FEL om ytre påvirkninger?",
     alternativer: [
@@ -569,7 +569,7 @@ window.SPORSMAL = [
       "Strømprisene i området, fordelt på dager og måneder over et år",
       "Hvem som eier boligen og hvilke lån som er tinglyst på eiendommen",
       "Byggetegninger med alle vegger, dører og vinduer i målestokk 1:100"], riktig: 0,
-    forklaring: "Kursfortegnelsen viser hver kurs: vern, kabel/tverrsnitt og hva kursen forsyner. Den hører til dokumentasjonen av tavla, som skal oppbevares i eller like ved tavla. (NEK 400-6, 6.4.2.3 i) s. 330 og NEK 400-8-810, 810.514.5.301 s. 499)" },
+    forklaring: "Kursfortegnelsen viser hver kurs: vern, kabel/tverrsnitt og hva kursen forsyner. Den hører til dokumentasjonen av tavla, som skal oppbevares i eller like ved tavla. (NEK 400-6, 6.4.2.3 punkt i, s. 330 og NEK 400-8-810, 810.514.5.301 s. 499)" },
   { id: "m6", kategori: "maling",
     sporsmal: "Hva kontrolleres med kontinuitetsmåling av beskyttelseslederen?",
     alternativer: [
@@ -883,7 +883,7 @@ window.SPORSMAL = [
       "Fem sikringer i serie på samme strømtilførsel, som alle løser ut samtidig ved overlast i en bolig, og som skiftes av elektrikeren etter hver utløsning",
       "Fem regler for arbeid under spenning (AUS) som NEK 400 krever før man åpner en kapsling, og som gjelder ved alt arbeid i anlegg over 1000 V",
       "En type jordfeilbryter med fem poler og 300 mA utløsestrøm, som brukes i industrianlegg der det ikke finnes annen jordfeilbeskyttelse i det hele tatt"], riktig: 0,
-    forklaring: "Skjemaene dekker blant annet risikovurdering, kursfortegnelse, sluttkontroll, samsvarserklæring og utstyrsdokumentasjon. Det henger sammen med FEL § 12 og kravene til dokumentasjon i 8-823." },
+    forklaring: "Skjemaene dekker blant annet risikovurdering, kursfortegnelse, sluttkontroll, samsvarserklæring og utstyrsdokumentasjon. Det henger sammen med FEL § 12 og kravene til dokumentasjon i 8-823. Ikke forveksle det med stegene for arbeid på frakoblet anlegg (frakoble, sikre, kontrollere osv.), som er noe annet." },
   { id: "fp4", kategori: "fagprove",
     sporsmal: "Hvilket minste tverrsnitt kreves for en jordingsleder av kobber som ligger direkte i jord?",
     alternativer: ["25 mm² Cu", "6 mm² Cu", "10 mm² Cu", "2,5 mm² Cu"], riktig: 0,
@@ -979,7 +979,7 @@ window.SPORSMAL = [
   { id: "fp17", kategori: "fagprove",
     sporsmal: "Et IT-anlegg (230 V) forsynes fra en trafo på 150 kVA. Omtrent hvor stor er minste jordfeilstrøm ved første jordfeil etter hjelperegelen i NEK 400?",
     alternativer: ["Ca. 75 mA", "Ca. 300 mA", "Ca. 15 mA", "Ca. 1,5 A"], riktig: 0,
-    forklaring: "Hjelperegel: minste lekkstrøm i mA ≈ 0,5 × trafostørrelsen i kVA, største ≈ 2 × kVA. 0,5 · 150 = 75 mA, så en 30 mA jordfeilbryter vil løse ut ved første feil. (NEK 400-5-53, 531.2.3.6.3.1 s. 236 og NEK 400-6 s. 336)" },
+    forklaring: "Hjelperegel: minste lekkstrøm i mA ≈ 0,5 × trafostørrelsen i kVA, største ≈ 2 × kVA. 0,5 · 150 = 75 mA, så en 30 mA jordfeilbryter vil løse ut allerede ved første feil. Er feilstrømmen ved første feil under 30 mA, løser vernet først ut ved andre feil. Det er også en godkjent løsning for forbrukerkurser når berøringsspenningen holder seg innenfor kravet (NEK 400-4-41, 411.6.2.1 s. 101). (NEK 400-5-53, 531.2.3.6.3.1 s. 236 og NEK 400-6 s. 336)" },
   { id: "fp18", kategori: "fagprove",
     sporsmal: "Hva er kravet til et jordfeilvern som skal koble ut første jordfeil i et IT-anlegg?",
     alternativer: [
@@ -1069,8 +1069,8 @@ window.SPORSMAL = [
   // NEK 400-BASERTE SPØRSMÅL
   // Skrevet med egne ord og kontrollert mot NEK 400:2022 (7. utgave) 2026-11-08.
   // Ingen tekst er kopiert fra NEK. Henvisningene peker til den delen av
-  // NEK 400 som omhandler temaet. ⚠ Få en fagperson til å lese gjennom alt
-  // før appen selges, og sjekk på nytt når en ny utgave av NEK 400 kommer.
+  // NEK 400 som omhandler temaet. Alle spørsmål ble kontrollert mot NEK 400:2022-teksten
+  // 11.11.2026. Sjekk på nytt når en ny utgave av NEK 400 kommer.
   // =================================================================
 
   // ===== NEK 400-4-41: Vern mot elektrisk sjokk =====
@@ -1209,9 +1209,9 @@ window.SPORSMAL = [
       "Startstrømmen til en motor, som er ca. 6 ganger merkestrømmen"], riktig: 0,
     forklaring: "For automatsikringer etter produktstandarden er kravet automatisk oppfylt når In ≤ IZ. I2 kan også stå som If eller It i datablad. (NEK 400-5-53, 533.2 s. 240)" },
   { id: "n43-3", kategori: "nek-overstrom",
-    sporsmal: "En kurs har belastning IB = 13 A, og kabelen har IZ = 17 A etter korreksjon. Hvilken automatsikring passer?",
+    sporsmal: "En kurs i et næringsbygg har belastning IB = 13 A, og kabelen har IZ = 17 A etter korreksjon. Hvilken automatsikring passer?",
     alternativer: ["16 A", "20 A", "10 A", "25 A"], riktig: 0,
-    forklaring: "Vernet må ligge mellom 13 A og 17 A. 16 A er riktig standardstørrelse. 20 A ville ikke beskyttet kabelen. (NEK 400-4-43 fra s. 124)" },
+    forklaring: "Vernet må ligge mellom 13 A og 17 A. 16 A er riktig standardstørrelse. 20 A ville ikke beskyttet kabelen. Her gjelder den generelle regelen. I en bolig med leder på 4 mm² eller mindre gjelder i tillegg I2 ≤ Iz, og da holder ikke 16 A (I2 = 1,45 · 16 = 23,2 A er mer enn 17 A). (NEK 400-4-43 fra s. 124)" },
   { id: "n43-4", kategori: "nek-overstrom",
     sporsmal: "Hva må bryteevnen til et kortslutningsvern minst være?",
     alternativer: [
@@ -1555,7 +1555,7 @@ window.SPORSMAL = [
       "Høyst 10 % fra leveringspunktet til utstyret",
       "Høyst 1 % fra leveringspunktet til utstyret",
       "Ingen anbefaling for spenningsfall i normen"], riktig: 0,
-    forklaring: "Det er en anbefaling i verifikasjonsdelen. De veiledende tabellverdiene i 5-52 er 3 % for lys og 5 % for annen bruk. (NEK 400-6, 6.4.3.10 s. 337)" },
+    forklaring: "Det er en anbefaling i verifikasjonsdelen, for når du ikke vet hvor mye spenningsfall utstyret tåler. Ved prosjektering brukes i tillegg de veiledende tabellverdiene i 5-52: 3 % for lys og 5 % for annen bruk. Holder du deg under 3 % for lys og 4 % for annet, oppfyller du begge. (NEK 400-6, 6.4.3.10 s. 337)" },
   { id: "n6-18", kategori: "nek-kontroll",
     sporsmal: "Hva gjelder for nøytrallederen under isolasjonsmåling?",
     alternativer: [
@@ -1621,7 +1621,7 @@ window.SPORSMAL = [
   { id: "n701-2", kategori: "nek-bad",
     sporsmal: "Hvor bred er sone 2 ved et badekar, regnet fra yttergrensen av sone 1?",
     alternativer: ["0,6 m", "1,2 m", "0,3 m", "2,25 m"], riktig: 0,
-    forklaring: "Ved badekar er sone 2 et 60 cm bredt område utenfor sone 1. En dusj uten kar har ingen sone 2, men en større sone 1 (1,2 m). (NEK 400-7-701 fra s. 342)" },
+    forklaring: "Ved badekar er sone 2 et 60 cm bredt område utenfor sone 1. En dusj uten kar har ingen sone 2, men en større sone 1 (1,2 m). (NEK 400-7-701 s. 343–344)" },
   { id: "n701-3", kategori: "nek-bad",
     sporsmal: "Hvilken minste kapslingsgrad kreves for utstyr i sone 1 og sone 2?",
     alternativer: ["IPX4", "IPX7", "IPX0", "IPX1"], riktig: 0,
@@ -1917,7 +1917,7 @@ window.SPORSMAL = [
       "IB ≤ In ≤ Iz og I2 ≤ 1,45 · Iz",
       "In ≤ 2 · Iz",
       "Bare IB ≤ In"], riktig: 0,
-    forklaring: "Kravet I2 ≤ Iz er strengere enn den generelle regelen (I2 ≤ 1,45 · Iz) og skal hindre brann fra langvarig varmgang. (NEK 400-8-823, 823.431.3.1 s. 506)" },
+    forklaring: "Med den generelle regelen (I2 ≤ 1,45 · Iz) kan kabelen i lang tid få opptil 1,45 ganger strømmen den er laget for, uten at vernet løser ut. Små ledere blir da for varme. I bolig er det ikke lov: vernet skal sikkert løse ut (I2) før strømmen går over Iz. Det reduserer faren for brann fra langvarig varmgang. (NEK 400-8-823, 823.431.3.1 s. 506)" },
   { id: "n823-3", kategori: "nek-bolig",
     sporsmal: "I en bolig har en 2,5 mm² kurs Iz = 20 A. Automatsikringen har I2 = 1,45 · In. Hva er største standard merkestrøm du kan bruke?",
     alternativer: ["13 A", "16 A", "20 A", "10 A"], riktig: 0,

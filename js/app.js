@@ -23,7 +23,7 @@
   const tilbakeEl = document.getElementById("tilbake");
 
   // Mål for «Klar for eksamen?» (egne mål, endre her).
-  const KLAR = { prover: 15, bestattAvSiste10: 5, symbolprover: 3, regning: 10 };
+  const KLAR = { prover: 8, bestattAvSiste10: 5, symbolprover: 3, regning: 10, skriftlig: 5, skriftligProsent: 70 };
   const SYMBOLPROVE = { antall: 10, minutter: 5 };
   const SPILL_SEKUNDER = 60;
 
@@ -136,6 +136,7 @@
   }
 
   // ---------- Lyd (opplesning med nettleserens norske stemme) ----------
+  let lydVarslet = false;
   const kanLyd = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
   function stopLyd() { if (kanLyd) try { speechSynthesis.cancel(); } catch (e) {} }
   function lesOpp(o) {
@@ -152,6 +153,12 @@
     u.lang = "nb-NO"; u.rate = 0.95;
     const stemme = speechSynthesis.getVoices().find((v) => /^(nb|no|nn)/i.test(v.lang));
     if (stemme) u.voice = stemme;
+    else if (!lydVarslet && speechSynthesis.getVoices().length) {
+      // Uten norsk stemme leser enheten med en annen stemme. Si fra én gang, så brukeren skjønner hvorfor det høres rart ut.
+      lydVarslet = true;
+      const k = document.getElementById("lyd");
+      if (k) k.insertAdjacentHTML("afterend", `<p class="dempet liten" role="status" style="margin:4px 0 0">Fant ingen norsk stemme på denne enheten. Opplesningen bruker en annen stemme. Du kan legge til norsk tale i innstillingene på telefonen.</p>`);
+    }
     speechSynthesis.speak(u);
   }
   const lydKnapp = kanLyd ? `<button class="lyd" id="lyd" aria-label="Les opp spørsmålet" title="Les opp (L)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9"/></svg>Les opp</button>` : "";
@@ -162,11 +169,17 @@
     const tekst = [s.sporsmal, ...s.alternativer, tolk || ""].join(" | ");
     const sym = FORSTA.UTEN_SYMBOLER.includes(s.id) ? [] : FORSTA.SYMBOLER.filter((x) => x.re.test(tekst));
     if (!tolk && !sym.length) return "";
-    return `<details class="forsta">
+    // Boksen er åpen til brukeren lukker den, og husker valget.
+    return `<details class="forsta" ${data.forstaLukket ? "" : "open"}>
       <summary>Forstå spørsmålet${sym.length ? " og symbolene" : ""}</summary>
       ${tolk ? `<p>${esc(tolk)}</p>` : ""}
       ${sym.length ? `<dl>${sym.map((x) => `<div><dt>${esc(x.sym)}</dt><dd>${esc(x.tekst)}</dd></div>`).join("")}</dl>` : ""}
+      ${(window.ORDLISTE || []).length ? `<p class="liten" style="margin:6px 0 0"><a href="#/ordliste">Ordliste med fagord ›</a></p>` : ""}
     </details>`;
+  }
+  function koblForsta() {
+    const d = app.querySelector("details.forsta");
+    if (d) d.addEventListener("toggle", () => { data.forstaLukket = !d.open; lagre(); });
   }
   function koblLyd(o) { const b = document.getElementById("lyd"); if (b) b.addEventListener("click", () => lesOpp(o)); }
 
@@ -211,7 +224,8 @@
       { navn: `Fullfør ${KLAR.prover} prøveeksamener`, naa: Math.min(eks.length, KLAR.prover), maal: KLAR.prover },
       { navn: `Bestå ${KLAR.bestattAvSiste10} av de 10 siste prøveeksamenene`, naa: Math.min(eks.slice(-10).filter((e) => e.bestatt).length, KLAR.bestattAvSiste10), maal: KLAR.bestattAvSiste10 },
       { navn: `Bestå ${KLAR.symbolprover} symbolprøver`, naa: Math.min(sym.filter((e) => e.bestatt).length, KLAR.symbolprover), maal: KLAR.symbolprover },
-      { navn: `Løs ${Math.min(KLAR.regning, RO.length)} regneoppgaver riktig`, naa: Math.min(RO.filter((r) => data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)).length, KLAR.regning), maal: Math.min(KLAR.regning, RO.length) }
+      { navn: `Løs ${Math.min(KLAR.regning, RO.length)} regneoppgaver riktig`, naa: Math.min(RO.filter((r) => data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)).length, KLAR.regning), maal: Math.min(KLAR.regning, RO.length) },
+      ...(SKR.length ? [{ navn: `Få minst ${KLAR.skriftligProsent} % på ${Math.min(KLAR.skriftlig, SKR.length)} skriftlige oppgaver`, naa: Math.min(SKR.filter((o) => { const st = data.skriftlig[o.id]; return st && st.ferdig && st.poeng * 100 >= KLAR.skriftligProsent * st.maks; }).length, KLAR.skriftlig), maal: Math.min(KLAR.skriftlig, SKR.length) }] : [])
     ];
   }
 
@@ -224,7 +238,8 @@
     const rep = repetisjonsListe();
     const ikkeOvd = SP.filter((s) => !data.svar[s.id]).length;
     const igjen = data.eksamensdato ? dagerTil(data.eksamensdato) : null;
-    const nyePerDag = ikkeOvd ? Math.min(ikkeOvd, Math.max(5, igjen && igjen > 0 ? Math.ceil(ikkeOvd / Math.max(1, igjen - 3)) : 10)) : 0;
+    // Høyst 15 nye om dagen, så planen holder seg rundt 15–20 minutter.
+    const nyePerDag = ikkeOvd ? Math.min(ikkeOvd, 15, Math.max(5, igjen && igjen > 0 ? Math.ceil(ikkeOvd / Math.max(1, igjen - 3)) : 10)) : 0;
     const nesteKurs = kursIder().find((k) => !data.lest[k]);
     const nesteOppg = SKR.find((o) => !(data.skriftlig[o.id] && data.skriftlig[o.id].ferdig)) || RO.find((r) => !(data.regning[r.id] && (data.regning[r.id].lost || data.regning[r.id].sistRiktig)));
     const oppgHref = nesteOppg ? (nesteOppg.deler ? `#/skriftlig/${nesteOppg.id}` : `#/regning/${nesteOppg.id}`) : "#/skriftlig";
@@ -234,10 +249,12 @@
     if (nesteKurs) punkter.push({ href: `#/kurs/${nesteKurs}`, tekst: `Les teori: ${kategoriNavn(nesteKurs)}`, ferdig: logg.lest > 0 });
     punkter.push(logg.oppgaver > 0 ? { href: oppgHref, tekst: "Regn én oppgave", ferdig: true }
       : { href: oppgHref, tekst: nesteOppg ? `Regn én oppgave: ${nesteOppg.tittel}` : "Regn en skriftlig oppgave på nytt", ferdig: false });
+    // Grovt anslag: ca. 30 s per spørsmål, 5 min per tema i teorikurset, 10 min per oppgave.
+    const minutter = Math.round(punkter.filter((p) => !p.ferdig).reduce((n, p) => n + (p.href === "#/ov/repeter" ? Math.min(rep.forfalt, REPETISJON.maks) * 0.5 : p.href === "#/ov/nye" ? Math.max(0, nyePerDag - logg.nye) * 0.5 : p.href.startsWith("#/kurs") ? 5 : 10), 0));
     const tidTekst = igjen === null ? "Legg inn eksamensdatoen, så fordeles spørsmålene på dagene du har igjen."
       : igjen > 0 ? `Eksamen om ${igjen} ${igjen === 1 ? "dag" : "dager"}. ${ikkeOvd} spørsmål er ikke øvd ennå.`
       : igjen === 0 ? "Eksamen i dag. Lykke til!" : "Eksamensdatoen har passert. Legg inn en ny dato hvis du skal opp igjen.";
-    return `<div class="seksjon-tittel"><h2>Plan for i dag</h2><span class="etikett">${punkter.filter((p) => p.ferdig).length}/${punkter.length} gjort</span></div>
+    return `<div class="seksjon-tittel"><h2>Plan for i dag</h2><span class="etikett">${minutter ? `ca. ${minutter} min igjen · ` : ""}${punkter.filter((p) => p.ferdig).length}/${punkter.length} gjort</span></div>
       <section class="kort dagsplan">
         ${punkter.map((p) => `<a class="klar-rad plan-rad ${p.ferdig ? "ok" : ""}" href="${p.href}">
           <span class="boks" aria-hidden="true">${p.ferdig ? "✓" : ""}</span><span>${esc(p.tekst)}</span><span class="teller">${p.teller ? p.teller : p.ferdig ? "gjort" : "›"}</span></a>`).join("")}
@@ -273,6 +290,7 @@
       { href: "#/kategorier", navn: "Velg tema", under: "NEK 400, FEL/FSE, dimensjonering, symboler", hoyre: `${INN.kategorier.length} temaer` },
       { href: "#/regning", navn: "Regneoppgaver", under: "Skriv inn svaret, få hint og løsningen steg for steg", hoyre: `${RO.length} stk` },
       ...(SKR.length ? [{ href: "#/skriftlig", navn: "Skriftlige oppgaver", under: "Hele oppgaver som på eksamen: dimensjonering med full utregning og løsningsforslag", hoyre: `${SKR.filter((o) => data.skriftlig[o.id] && data.skriftlig[o.id].ferdig).length}/${SKR.length} gjort` }] : []),
+      ...((window.ORDLISTE || []).length ? [{ href: "#/ordliste", navn: "Ordliste", under: "Fagord forklart med enkle ord: kurs, forlegning, sone, momentan og mange flere", hoyre: `${window.ORDLISTE.length} ord` }] : []),
       { href: "#/formler", navn: "Formelsamling", under: "Ohms lov, effekt, spenningsfall, vern, kortslutning, motor", hoyre: `${(window.FORMLER || []).reduce((n, g) => n + g.formler.length, 0)} formler` },
       ...(SYMBOLSPM.length ? [
         { href: "#/symbolprove", navn: "Symbolprøve", under: `${SYMBOLPROVE.antall} installasjonssymboler på ${SYMBOLPROVE.minutter} min`, hoyre: `${proverAvType("symbol").length} tatt` },
@@ -288,13 +306,13 @@
         <div><div class="etikett">Siste prøve</div><div class="verdi">${sisteEks ? `${sisteEks.prosent}<small> %</small>` : "–"}</div></div>
       </div>
       ${pagaendeBoks()}
+      ${dagsplan()}
       <a class="start-eksamen" href="#/eksamen">
         <span class="tekst"><span class="etikett" style="color:inherit;opacity:.8">Prøveeksamen</span><strong>Start en full prøve</strong>
           <span class="liten" style="opacity:.85">${e.antallSporsmal} spørsmål · ${e.minutter} min · bestått ved ${e.bestattProsent} %</span></span>
         <span class="pil" aria-hidden="true">→</span>
       </a>
-      ${dagsplan()}
-      <div class="seksjon-tittel"><h2>Kursfortegnelse</h2><span class="etikett">Øving</span></div>
+      <div class="seksjon-tittel"><h2>Kursfortegnelse</h2><span class="etikett">Alt du kan øve på</span></div>
       <nav class="kurser" aria-label="Hovedmeny">
         ${kurser.map((k, n) => `<a class="kurs-rad" href="${k.href}" ${k.av ? 'aria-disabled="true"' : ""}>
           <span class="kurs-nr">K${n + 1}</span>
@@ -364,7 +382,7 @@
           <div class="spm-id">ID ${esc(o.s.id)}</div>
         </section>${tips}`;
       app.querySelectorAll(".alternativ").forEach((b) => b.addEventListener("click", () => { if (Date.now() >= klarFra) svar(+b.dataset.v); }));
-      koblLyd(o);
+      koblLyd(o); koblForsta();
       app.focus();
     }
     function svar(v) {
@@ -794,11 +812,14 @@
       const etter = document.getElementById("etter-" + n);
       if (d.punkter) {
         app.querySelector(`[data-vis="${n}"]`).addEventListener("click", (ev) => {
+          // Skriv svaret først, slik som på eksamen. Da blir sammenligningen med løsningsforslaget ærlig.
+          const felt = document.getElementById("tekst-" + n);
+          if (felt.value.trim().length < 15) { etter.innerHTML = `<p class="forklaring feil" role="alert">Skriv svaret ditt først (minst én setning), så ser du løsningsforslaget.</p>`; felt.focus(); return; }
           ev.currentTarget.remove();
           document.getElementById("tekst-" + n).readOnly = true;
           etter.innerHTML = `<div class="forklaring losning hint">
             <strong>Løsningsforslag</strong>${losning(d)}
-            <p style="margin:8px 0 4px"><strong>Kryss av for det du fikk med:</strong></p>
+            <p style="margin:8px 0 4px"><strong>Kryss av for det du fikk med.</strong> Sammenlign med det du skrev. Mangler du et punkt, les løsningsforslaget over én gang til.</p>
             ${d.punkter.map((p, k) => `<label class="sjekk-punkt"><input type="checkbox" data-p="${k}"> ${esc(p)}</label>`).join("")}
             <button class="knapp" data-ferdig="${n}" style="margin-top:8px">Ferdig med del ${String.fromCharCode(97 + n)}</button></div>`;
           etter.querySelector("[data-ferdig]").addEventListener("click", (e2) => {
@@ -834,6 +855,23 @@
     });
   }
 
+  // ---------- Ordliste (data/ordliste.js) ----------
+  function ordliste() {
+    sett("Ordliste", true);
+    const ORD = window.ORDLISTE || [];
+    app.innerHTML = `<input class="sok" id="sok" type="search" placeholder="Søk, f.eks. «kurs» eller «sone»" aria-label="Søk i ordlista">
+      <p class="dempet liten" style="margin:8px 0 12px">Fagord forklart med enkle ord. Trykk på «Les opp» i et spørsmål for å høre ordene uttalt.</p>
+      <section class="kort"><dl class="ordliste" id="ord"></dl></section>`;
+    const sok = document.getElementById("sok");
+    const vis = () => {
+      const q = sok.value.trim().toLowerCase();
+      const liste = ORD.filter((o) => !q || (o.ord + " " + o.tekst).toLowerCase().includes(q));
+      document.getElementById("ord").innerHTML = liste.length ? liste.map((o) => `<div><dt>${esc(o.ord)}</dt><dd>${esc(o.tekst)}</dd></div>`).join("") : `<p class="dempet">Fant ingen ord. Prøv et annet søk.</p>`;
+    };
+    sok.addEventListener("input", vis);
+    vis();
+  }
+
   // ---------- Om innholdet ----------
   function omSide() {
     sett("Om innholdet", true);
@@ -848,7 +886,7 @@
         <ul class="gitt">
           <li><strong>11.11.2026:</strong> alle ${SP.length} spørsmål kontrollert punkt for punkt mot NEK 400:2022. Feil og upresise svar ble rettet.</li>
           <li><strong>11.11.2026:</strong> teorikurset for alle ${kursIder().length} temaer kontrollert mot NEK 400:2022.</li>
-          <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så riktig svar ikke kan gjettes ut fra lengden. Fem skriftlige oppgaver lagt til, med utregnede fasiter.</li>
+          <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så riktig svar ikke kan gjettes ut fra lengden. ${SKR.length} skriftlige oppgaver lagt til, med utregnede fasiter, og en ordliste med fagord forklart med enkle ord. Motsigelser mellom kurs, spørsmål og oppgaver er rettet.</li>
         </ul>
         <p>${kontroll} av ${SP.length} forklaringer viser til NEK 400, FEL eller FSE. NEK-henvisningene har sidetall («s. 240»), så du kan slå opp og sjekke selv. Sidetallene gjelder NEK 400:2022 (7. utgave).</p>
         <p class="dempet liten">Teksten er skrevet med egne ord. Ingenting er kopiert fra NEK 400, fordi standarden er opphavsrettsbeskyttet. Verdier som ikke står i NEK 400 (for eksempel B 3–5 × In og C 5–10 × In), er merket med at de kommer fra produktstandarden.</p>
@@ -1058,6 +1096,7 @@
       case "kurs": return deler[1] ? kursSide(deler[1]) : kursListe();
       case "skriftlig": return deler[1] ? skriftligSide(deler[1]) : skriftligListe();
       case "om": return omSide();
+      case "ordliste": return ordliste();
       default: return forside();
     }
   }
