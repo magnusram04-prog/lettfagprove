@@ -146,8 +146,13 @@
   function lesOpp(o) {
     if (!kanLyd) return;
     stopLyd();
-    const tekst = (o.s.figur ? "Se på symbolet. " : "") + o.s.sporsmal + " " +
-      o.rekkefolge.map((orig, v) => `${BOKSTAV[v]}: ${o.s.alternativer[orig]}.`).join(" ");
+    snakk((o.s.figur ? "Se på symbolet. " : "") + o.s.sporsmal + " " +
+      o.rekkefolge.map((orig, v) => `${BOKSTAV[v]}: ${o.s.alternativer[orig]}.`).join(" "));
+  }
+  // Leser opp en tekst med norsk stemme. Brukes for spørsmål og for forklaringen etter svar.
+  function snakk(tekst) {
+    if (!kanLyd) return;
+    stopLyd();
     const ren = tekst.replace(/·/g, " ganger ").replace(/≤/g, " mindre enn eller lik ").replace(/≥/g, " større enn eller lik ")
       .replace(/Ω/g, " ohm").replace(/mm²/g, " kvadratmillimeter").replace(/m²/g, " kvadratmeter").replace(/√3/g, " rot tre ")
       .replace(/I²t/g, "I i andre t").replace(/²/g, " i andre").replace(/×/g, " ganger ").replace(/°C/g, " grader").replace(/°/g, " grader")
@@ -413,9 +418,11 @@
       const nar = igjen ? "Kommer igjen i morgen." : !riktig ? (rep ? "Du får det én gang til om litt, og igjen i morgen." : "Kommer igjen i morgen.")
         : `Kommer igjen ${dager === 1 ? "i morgen" : `om ${dager} dager`}${data.svar[o.s.id].boks >= SITTER ? " (lært)" : ""}.`;
       document.getElementById("etter").innerHTML = `
-        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}</div>
+        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}${kanLyd ? `<br><button class="lyd" id="lyd-forkl" style="margin-top:6px">Les opp forklaringen</button>` : ""}</div>
         <p class="dempet liten" style="margin:8px 0 0">↻ ${nar} · Spørsmål ${esc(o.s.id)}</p>
         <button class="knapp primar" id="neste">${siste ? "Se resultat" : "Neste spørsmål"}</button>`;
+      const lf = document.getElementById("lyd-forkl");
+      if (lf) lf.addEventListener("click", () => snakk(`${riktig ? "Riktig." : "Feil."} Riktig svar er ${o.s.alternativer[o.s.riktig]}. ${o.s.forklaring.replace(/\((NEK|FEL|FSE)[^)]*\)/g, "")}`));
       const neste = document.getElementById("neste");
       neste.addEventListener("click", videre);
       neste.focus();
@@ -866,19 +873,21 @@
   function punktTreff(tekst, punkt) {
     const t = tekst.toLowerCase();
     const tall = punkt.match(/\d+(?:[,.]\d+)?/g) || [];
-    if (tall.some((x) => t.includes(x) || t.includes(x.replace(",", ".")))) return true;
+    // Hele tall må stemme (30 skal ikke treffe 230), og tallet alene er ikke nok: minst ett fagord må også finnes.
+    const tallITekst = t.match(/\d+(?:[,.]\d+)?/g) || [];
+    const tallTreff = tall.some((x) => tallITekst.includes(x) || tallITekst.includes(x.replace(",", ".")));
     const ord = punkt.toLowerCase().replace(/[^a-zæøå0-9]+/g, " ").split(" ").filter((w) => w.length > 3 && !STOPP.has(w));
-    if (!ord.length) return false;
+    if (!ord.length) return tallTreff;
     const treff = ord.filter((w) => t.includes(w.slice(0, Math.max(4, Math.min(6, w.length - 1))))).length;
-    return treff / ord.length >= 0.6;
+    return treff / ord.length >= 0.6 || (tallTreff && treff >= 1);
   }
   function punktListe(d, tekst, n) {
-    return d.punkter.map((p, k) => `<label class="sjekk-punkt"><input type="checkbox" data-p="${k}"${punktTreff(tekst, p) ? " checked" : ""}> ${esc(p)}</label>`).join("");
+    return d.punkter.map((p, k) => `<label class="sjekk-punkt"><input type="checkbox" data-p="${k}"> ${esc(p)}${punktTreff(tekst, p) ? ` <span class="merke liten">funnet i svaret ditt?</span>` : ""}</label>`).join("");
   }
-  const FORSLAG_TEKST = `<p class="liten dempet" style="margin:4px 0">Appen har krysset av der den fant ordene fra punktet i svaret ditt. Det er bare et forslag: se over og rett selv.</p>`;
+  const FORSLAG_TEKST = `<p class="liten dempet" style="margin:4px 0">Kryss av for punktene du faktisk fikk med. «Funnet i svaret ditt?» betyr at appen fant noen av de samme ordene. Det er bare et hint: les det du skrev, og kryss av selv.</p>`;
 
   // ---------- Skriftlig prøve med tid ----------
-  // Tre tilfeldige oppgaver, ca. 45 minutter. Ingen fasit eller hint før du leverer, slik som på eksamen.
+  // Tre tilfeldige oppgaver, 30–55 minutter (summen av oppgavenes tid). Ingen fasit eller hint før du leverer, slik som på eksamen.
   function velgSkriftligProve() {
     const stokk = [...SKR].sort(() => Math.random() - 0.5);
     const valgt = [];
@@ -900,7 +909,7 @@
     const tidligere = data.skrProver || [];
     app.innerHTML = `<section class="kort">
       <h2 style="margin-top:0">Øv på eksamen med klokka</h2>
-      <p>Du får tre hele oppgaver og ca. 45 minutter. Du ser ikke fasit eller hint før du leverer. Regn på papir, skriv inn svarene, og lever når du er ferdig eller tida er ute.</p>
+      <p>Du får tre hele oppgaver. Tida er summen av oppgavenes tid, 30–55 minutter, og klokka viser hvor mye du har igjen. Du ser ikke fasit eller hint før du leverer. Regn på papir, skriv inn svarene, og lever når du er ferdig eller tida er ute.</p>
       <p class="dempet liten">Tallsvar rettes automatisk. Tekstsvar sammenligner du med løsningsforslaget etterpå, og appen foreslår hvilke punkter du fikk med.</p>
       <button class="knapp primar" id="start">Start skriftlig prøve</button></section>
       ${tidligere.length ? `<section class="kort"><div class="etikett">Tidligere prøver</div>${tidligere.slice(-5).reverse().map((r) => `<p class="liten" style="margin:6px 0">${esc(r.dato)}: ${r.prosent} %</p>`).join("")}</section>` : ""}`;
@@ -977,7 +986,7 @@
         });
         lagre();
         document.getElementById("sum").innerHTML = `<section class="kort helt" role="status"><div class="stor">${prosent} %</div>
-          <p class="dempet">${String(Math.round(sum * 10) / 10).replace(".", ",")} av ${deler.length} poeng. ${prosent >= KLAR.skriftligProsent ? "Bra! Det holder til målet på " + KLAR.skriftligProsent + " %." : "Målet er " + KLAR.skriftligProsent + " %. Les løsningsforslagene over og prøv igjen."}</p>
+          <p class="dempet">${String(Math.round(sum * 10) / 10).replace(".", ",")} av ${deler.length} poeng. ${prosent >= KLAR.skriftligProsent ? "Bra! Det holder til appens eget mål på " + KLAR.skriftligProsent + " %." : "Appens eget mål er " + KLAR.skriftligProsent + " % (ikke en offisiell grense). Les løsningsforslagene over og prøv igjen."}</p>
           <a class="knapp primar" href="#/skriftligprove">Ny skriftlig prøve</a></section>`;
         document.getElementById("sum").scrollIntoView({ behavior: "smooth" });
       });
@@ -1008,10 +1017,10 @@
     sett("Pris og tilgang", true);
     const t = data.tilgang;
     app.innerHTML = `<section class="kort">
-      <h2 style="margin-top:0">${BETALING.pris} kr – én gang, ${BETALING.maaneder} måneder</h2>
-      <p>Du betaler én gang og får tilgang til alt i ${BETALING.maaneder} måneder, nok til å øve fram til eksamen. Ingen abonnement som fornyes av seg selv.</p>
+      <h2 style="margin-top:0">${BETALING.aktiv ? `${BETALING.pris} kr – én gang, ${BETALING.maaneder} måneder` : "Gratis i testperioden"}</h2>
+      <p>${BETALING.aktiv ? `Du betaler én gang og får tilgang til alt i ${BETALING.maaneder} måneder, nok til å øve fram til eksamen. Ingen abonnement som fornyes av seg selv.` : `Nå er alt gratis. Når appen lanseres, blir prisen ${BETALING.pris} kr én gang for ${BETALING.maaneder} måneder, uten abonnement. De første ${BETALING.provedager} dagene blir gratis, og fremgangen din blir med videre.`}</p>
       <ul class="gitt"><li>Alle ${SP.length} spørsmål med forklaring og NEK-henvisning</li><li>${SKR.length} skriftlige oppgaver og skriftlig prøve med tid</li><li>Prøveeksamen, symbolprøve, teorikurs, regneoppgaver og dagsplan</li></ul>
-      <p class="dempet liten">${BETALING.aktiv ? `De første ${BETALING.provedager} dagene er gratis.` : "Appen er gratis mens den er i testperioden. Fremgangen din blir med videre."}</p>
+      <p class="dempet liten">${BETALING.aktiv ? `De første ${BETALING.provedager} dagene er gratis.` : "Du trenger ingen kjøpskode i testperioden."}</p>
       ${t ? `<p class="forklaring riktig">Du har tilgang til og med ${esc(t.utloper.split("-").reverse().join("."))}.</p>` : ""}
       ${BETALING.aktiv && BETALING.kjopUrl ? `<a class="knapp primar" href="${esc(BETALING.kjopUrl)}" target="_blank" rel="noopener">Kjøp tilgang</a>` : ""}
     </section>
@@ -1044,7 +1053,7 @@
     const sok = document.getElementById("sok");
     const vis = () => {
       const q = sok.value.trim().toLowerCase();
-      const liste = ORD.filter((o) => !q || (o.ord + " " + o.tekst).toLowerCase().includes(q));
+      const liste = ORD.filter((o) => !q || (o.ord + " " + o.tekst).toLowerCase().includes(q)).sort((a, b) => a.ord.localeCompare(b.ord, "nb", { sensitivity: "base" }));
       document.getElementById("ord").innerHTML = liste.length ? liste.map((o) => `<div><dt>${esc(o.ord)}</dt><dd>${esc(o.tekst)}</dd></div>`).join("") : `<p class="dempet">Fant ingen ord. Prøv et annet søk.</p>`;
     };
     sok.addEventListener("input", vis);
@@ -1067,14 +1076,15 @@
       </section>
       <section class="kort">
         <div class="etikett">Slik er innholdet kontrollert</div>
-        <p>Hvert spørsmål, hver forklaring og hver oppgave er sjekket mot teksten i NEK 400:2022 med søkeverktøy, og hvert krav har fått sidetall. Utregningene i oppgavene er regnet om med datamaskin. Simulerte lærlinger har testet appen i flere runder, og påstandene deres er sjekket mot NEK før noe ble endret.</p>
+        <p>Svarene er sjekket mot teksten i NEK 400:2022 med søkeverktøy. Forklaringer som bygger på NEK, har sidetall. Spørsmål om grunnleggende elektroteknikk (Ohms lov, effekt o.l.) og om FEL/FSE viser ikke til NEK. Utregningene i de skriftlige oppgavene er regnet om med datamaskin.</p>
+        <p class="dempet liten">Appen er også testet av simulerte testbrukere laget med kunstig intelligens, ikke av ekte lærlinger. Påstandene deres er sjekket mot NEK før noe ble endret. Kontrollen er gjort med datamaskinhjelp, og en fagperson med fagbrev bør gå gjennom innholdet før appen brukes til eksamensforberedelse alene.</p>
       </section>
       <section class="kort">
         <div class="etikett">Fagkontroll</div>
         <ul class="gitt">
-          <li><strong>11.11.2026:</strong> alle ${SP.length} spørsmål kontrollert punkt for punkt mot NEK 400:2022. Feil og upresise svar ble rettet.</li>
+          <li><strong>11.11.2026:</strong> alle ${SP.length} spørsmål sjekket mot NEK 400:2022 med søkeverktøy. Feil og upresise svar ble rettet.</li>
           <li><strong>11.11.2026:</strong> teorikurset for alle ${kursIder().length} temaer kontrollert mot NEK 400:2022.</li>
-          <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så riktig svar ikke kan gjettes ut fra lengden. ${SKR.length} skriftlige oppgaver lagt til, med utregnede fasiter, og en ordliste med fagord forklart med enkle ord. Motsigelser mellom kurs, spørsmål og oppgaver er rettet.</li>
+          <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så lengden sjelden røper riktig svar. ${SKR.length} skriftlige oppgaver lagt til, med utregnede fasiter, og en ordliste med fagord forklart med enkle ord. Motsigelser mellom kurs, spørsmål og oppgaver er rettet.</li>
           <li><strong>13.11.2026 (runde 3 og 4):</strong> gale svaralternativer uten ord som «alltid» og «aldri», som kunne røpe svaret. Forklaringer skrevet om så de sier hvorfor svaret er riktig. Feil i to skriftlige oppgaver rettet, og en regel som ikke står i NEK, fjernet.</li>
         </ul>
         <p>${kontroll} av ${SP.length} forklaringer viser til NEK 400, FEL eller FSE. NEK-henvisningene har sidetall («s. 240»), så du kan slå opp og sjekke selv. Sidetallene gjelder NEK 400:2022 (7. utgave).</p>
@@ -1227,7 +1237,7 @@
       </section>
       <button class="knapp" id="nullstill">Nullstill fremgang</button>`;
     const melding = (t, ok) => { document.getElementById("flytt-melding").innerHTML = `<p class="forklaring ${ok ? "riktig" : "feil"}">${esc(t)}</p>`; };
-    const kode = () => "LFP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const kode = () => "LFP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(utenTilgang()))));
     document.getElementById("send-lenke").addEventListener("click", async () => {
       const url = location.href.split("#")[0] + "#/hent/" + (await pakkFremgang());
       if (navigator.share) { try { await navigator.share({ title: "LettFagprøve – min fremgang", url }); return; } catch (e) { if (e && e.name === "AbortError") return; } }
@@ -1256,20 +1266,22 @@
       pakkUt(tekst).catch(() => null).then((ny) => {
         if (!erObj(ny) || !erObj(ny.svar)) { melding("Koden er ikke gyldig. Sjekk at du fikk med hele koden eller lenken.", false); return; }
         if (!confirm("Erstatte fremgangen på denne enheten med fremgangen fra koden?")) return;
-        data = normaliser(ny); lagre(); statistikk();
+        { const t = data.tilgang; data = normaliser(ny); if (t) data.tilgang = t; } lagre(); statistikk();
         melding(`Fremgangen er hentet: ${Object.keys(data.svar).length} besvarte spørsmål og ${data.eksamener.length} prøver.`, true);
       });
     });
     document.getElementById("nullstill").addEventListener("click", () => {
-      if (confirm("Slette all fremgang på denne enheten?")) { data = normaliser({}); lagre(); statistikk(); }
+      if (confirm("Slette all fremgang på denne enheten?")) { const t = data.tilgang, f = data.forsteDag; data = normaliser({}); if (t) data.tilgang = t; if (f) data.forsteDag = f; lagre(); statistikk(); }
     });
   }
 
   // Fremgang pakket med gzip (LFP2:) for korte lenker. Faller tilbake til LFP1: uten komprimering.
   const tilB64 = (bytes) => { let t = ""; for (let i = 0; i < bytes.length; i += 8192) t += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
   const fraB64 = (s) => { const b = s.replace(/-/g, "+").replace(/_/g, "/"); return Uint8Array.from(atob(b + "=".repeat((4 - (b.length % 4)) % 4)), (c) => c.charCodeAt(0)); };
+  // Kjøpskoden følger ikke med når fremgangen flyttes. Den legges inn på nytt på den andre enheten.
+  const utenTilgang = () => { const k = Object.assign({}, data); delete k.tilgang; return k; };
   async function pakkFremgang() {
-    const json = JSON.stringify(data);
+    const json = JSON.stringify(utenTilgang());
     if (!window.CompressionStream) return "LFP1:" + btoa(unescape(encodeURIComponent(json)));
     const strom = new Blob([json]).stream().pipeThrough(new CompressionStream("gzip"));
     return "LFP2:" + tilB64(new Uint8Array(await new Response(strom).arrayBuffer()));
@@ -1293,7 +1305,7 @@
       <p>Lenken inneholder ${antall} besvarte spørsmål og ${(ny.eksamener || []).length} prøver.</p>
       <p class="dempet liten">Fremgangen på denne enheten blir erstattet.</p>
       <button class="knapp primar" id="hent">Hent fremgangen</button> <a class="knapp" href="#/">Avbryt</a></section>`;
-    document.getElementById("hent").addEventListener("click", () => { data = normaliser(ny); lagre(); history.replaceState(null, "", "#/"); forside(); });
+    document.getElementById("hent").addEventListener("click", () => { { const t = data.tilgang; data = normaliser(ny); if (t) data.tilgang = t; } lagre(); history.replaceState(null, "", "#/"); forside(); });
   }
 
   // ---------- Ruting ----------
