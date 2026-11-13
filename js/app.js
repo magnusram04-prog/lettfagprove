@@ -39,8 +39,12 @@
     ["svar", "regning", "lest", "skriftlig", "logg"].forEach((k) => { if (!erObj(ut[k])) ut[k] = {}; });
     if (!Array.isArray(ut.eksamener)) ut.eksamener = [];
     if (typeof ut.rekord !== "number") ut.rekord = 0;
+    if (!Array.isArray(ut.skrProver)) ut.skrProver = [];
+    if (ut.skrPagaende && !(erObj(ut.skrPagaende) && Array.isArray(ut.skrPagaende.ider) && erObj(ut.skrPagaende.svar))) delete ut.skrPagaende;
     if (ut.pagaende && !(erObj(ut.pagaende) && Array.isArray(ut.pagaende.ider) && Array.isArray(ut.pagaende.valg))) delete ut.pagaende;
     if (ut.eksamensdato && !/^\d{4}-\d{2}-\d{2}$/.test(ut.eksamensdato)) delete ut.eksamensdato;
+    if (ut.tilgang && !(erObj(ut.tilgang) && /^\d{4}-\d{2}-\d{2}$/.test(ut.tilgang.utloper))) delete ut.tilgang;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ut.forsteDag || "")) ut.forsteDag = new Date().toISOString().slice(0, 10);
     return ut;
   }
   let data = normaliser(hent());
@@ -290,7 +294,7 @@
       { href: "#/kurs", navn: "Teorikurs", under: "Kort teori per tema med NEK-henvisninger, så rett til spørsmålene", hoyre: `${kursIder().filter((k) => data.lest[k]).length}/${kursIder().length} lest`, av: !kursIder().length },
       { href: "#/kategorier", navn: "Velg tema", under: "NEK 400, FEL/FSE, dimensjonering, symboler", hoyre: `${INN.kategorier.length} temaer` },
       { href: "#/regning", navn: "Regneoppgaver", under: "Skriv inn svaret, få hint og løsningen steg for steg", hoyre: `${RO.length} stk` },
-      ...(SKR.length ? [{ href: "#/skriftlig", navn: "Skriftlige oppgaver", under: "Hele oppgaver som på eksamen: dimensjonering med full utregning og løsningsforslag", hoyre: `${SKR.filter((o) => data.skriftlig[o.id] && data.skriftlig[o.id].ferdig).length}/${SKR.length} gjort` }] : []),
+      ...(SKR.length ? [{ href: "#/skriftlig", navn: "Skriftlige oppgaver", under: "Hele oppgaver som på eksamen: dimensjonering med full utregning og løsningsforslag", hoyre: `${SKR.filter((o) => data.skriftlig[o.id] && data.skriftlig[o.id].ferdig).length}/${SKR.length} gjort` }, { href: "#/skriftligprove", navn: "Skriftlig prøve med tid", under: "Tre hele oppgaver på ca. 45 minutter, uten fasit før du leverer", hoyre: `${(data.skrProver || []).length} tatt` }] : []),
       ...((window.ORDLISTE || []).length ? [{ href: "#/ordliste", navn: "Ordliste", under: "Fagord forklart med enkle ord: kurs, forlegning, sone, momentan og mange flere", hoyre: `${window.ORDLISTE.length} ord` }] : []),
       { href: "#/formler", navn: "Formelsamling", under: "Ohms lov, effekt, spenningsfall, vern, kortslutning, motor", hoyre: `${(window.FORMLER || []).reduce((n, g) => n + g.formler.length, 0)} formler` },
       ...(SYMBOLSPM.length ? [
@@ -328,7 +332,7 @@
           <span>${esc(k.navn)}</span><span class="teller">${k.naa}/${k.maal}</span>
           <div class="stolpe"><span style="width:${prosent(k.naa, k.maal)}%"></span></div></div>`).join("")}
       </section>
-      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Den ekte eksamenen er skriftlig (5 timer) med utregninger og begrunnelser. Her drilles kunnskapen med flervalg, regneoppgaver og teori, så husk også å regne gamle eksamensoppgaver for hånd. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave. <a href="#/om">Om innholdet og fagkontrollen</a> · <a href="personvern.html">Personvern</a></p>`;
+      <p class="info">Øvingsapp for teorieksamen i elektrikerfaget (Vg3). Ikke en offisiell eksamen. Den ekte eksamenen er skriftlig (5 timer) med utregninger og begrunnelser. Her drilles kunnskapen med flervalg, regneoppgaver og teori, så husk også å regne gamle eksamensoppgaver for hånd. Spørsmålene er kontrollert mot NEK 400:2022, FEL og FSE. Sidetall («s. 240») viser til NEK 400:2022 (7. utgave). Sjekk alltid gjeldende utgave. <a href="#/om">Om innholdet og fagkontrollen</a> · <a href="#/tilgang">Pris</a> · <a href="personvern.html">Personvern</a></p>`;
     const datoFelt = document.getElementById("eksamensdato");
     datoFelt.addEventListener("change", () => {
       if (datoFelt.value) data.eksamensdato = datoFelt.value; else delete data.eksamensdato;
@@ -410,7 +414,7 @@
         : `Kommer igjen ${dager === 1 ? "i morgen" : `om ${dager} dager`}${data.svar[o.s.id].boks >= SITTER ? " (lært)" : ""}.`;
       document.getElementById("etter").innerHTML = `
         <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}</div>
-        <p class="dempet liten" style="margin:8px 0 0">↻ ${nar}</p>
+        <p class="dempet liten" style="margin:8px 0 0">↻ ${nar} · Spørsmål ${esc(o.s.id)}</p>
         <button class="knapp primar" id="neste">${siste ? "Se resultat" : "Neste spørsmål"}</button>`;
       const neste = document.getElementById("neste");
       neste.addEventListener("click", videre);
@@ -762,7 +766,7 @@
   }
   function skriftligListe() {
     sett("Skriftlige oppgaver", true);
-    app.innerHTML = `<p class="dempet" style="margin:0 0 14px">Den ekte eksamenen er skriftlig. Her får du hele oppgaver med flere deler, slik du møter dem på eksamen. Regn på papir først, skriv inn svaret, og sammenlign med løsningsforslaget steg for steg.</p><div>` +
+    app.innerHTML = `<p class="dempet" style="margin:0 0 14px">Den ekte eksamenen er skriftlig. Her får du hele oppgaver med flere deler, slik du møter dem på eksamen. Regn på papir først, skriv inn svaret, og sammenlign med løsningsforslaget steg for steg.</p><a class="knapp primar" href="#/skriftligprove" style="margin:0 0 14px">Skriftlig prøve med tid (ca. 45 min)</a><div>` +
       SKR.map((o) => {
         const st = data.skriftlig[o.id];
         return `<a class="kategori" href="#/skriftlig/${o.id}">
@@ -821,7 +825,7 @@
           etter.innerHTML = `<div class="forklaring losning hint">
             <strong>Løsningsforslag</strong>${losning(d)}
             <p style="margin:8px 0 4px"><strong>Kryss av for det du fikk med.</strong> Sammenlign med det du skrev. Mangler du et punkt, les løsningsforslaget over én gang til.</p>
-            ${d.punkter.map((p, k) => `<label class="sjekk-punkt"><input type="checkbox" data-p="${k}"> ${esc(p)}</label>`).join("")}
+            ${FORSLAG_TEKST}${punktListe(d, felt.value, n)}
             <button class="knapp" data-ferdig="${n}" style="margin-top:8px">Ferdig med del ${String.fromCharCode(97 + n)}</button></div>`;
           etter.querySelector("[data-ferdig]").addEventListener("click", (e2) => {
             const kryss = etter.querySelectorAll("input[type=checkbox]:checked").length;
@@ -856,6 +860,180 @@
     });
   }
 
+  // Foreslår kryss for punkter der viktige ord fra punktet finnes i det eleven skrev.
+  // Bare et forslag: eleven ser over og retter selv.
+  const STOPP = new Set("og i på er en et at det som av for med til den de skal kan ikke har fra eller ved må da så om når ut alle alt bare kun hvis etter under over mer enn mellom også seg sin sitt sine du deg man vi hver hvor hva være blir får gir eller".split(" "));
+  function punktTreff(tekst, punkt) {
+    const t = tekst.toLowerCase();
+    const tall = punkt.match(/\d+(?:[,.]\d+)?/g) || [];
+    if (tall.some((x) => t.includes(x) || t.includes(x.replace(",", ".")))) return true;
+    const ord = punkt.toLowerCase().replace(/[^a-zæøå0-9]+/g, " ").split(" ").filter((w) => w.length > 3 && !STOPP.has(w));
+    if (!ord.length) return false;
+    const treff = ord.filter((w) => t.includes(w.slice(0, Math.max(4, Math.min(6, w.length - 1))))).length;
+    return treff / ord.length >= 0.6;
+  }
+  function punktListe(d, tekst, n) {
+    return d.punkter.map((p, k) => `<label class="sjekk-punkt"><input type="checkbox" data-p="${k}"${punktTreff(tekst, p) ? " checked" : ""}> ${esc(p)}</label>`).join("");
+  }
+  const FORSLAG_TEKST = `<p class="liten dempet" style="margin:4px 0">Appen har krysset av der den fant ordene fra punktet i svaret ditt. Det er bare et forslag: se over og rett selv.</p>`;
+
+  // ---------- Skriftlig prøve med tid ----------
+  // Tre tilfeldige oppgaver, ca. 45 minutter. Ingen fasit eller hint før du leverer, slik som på eksamen.
+  function velgSkriftligProve() {
+    const stokk = [...SKR].sort(() => Math.random() - 0.5);
+    const valgt = [];
+    let tid = 0;
+    for (const o of stokk) { if (valgt.length < 3 && tid + o.tid <= 55) { valgt.push(o); tid += o.tid; } }
+    return valgt;
+  }
+  function skriftligProve() {
+    sett("Skriftlig prøve", true);
+    const p = data.skrPagaende;
+    if (p && Array.isArray(p.ider) && p.ider.every((id) => SKR.find((o) => o.id === id))) {
+      app.innerHTML = `<section class="kort"><h2 style="margin-top:0">Du har en skriftlig prøve på pause</h2>
+        <p class="dempet">${Math.ceil(p.igjenMs / 60000)} minutter igjen.</p>
+        <button class="knapp primar" id="fortsett">Fortsett prøven</button> <button class="knapp" id="ny">Forkast og start en ny</button></section>`;
+      document.getElementById("fortsett").addEventListener("click", () => kjorSkriftligProve(p.ider.map((id) => SKR.find((o) => o.id === id)), p));
+      document.getElementById("ny").addEventListener("click", () => { if (confirm("Forkaste prøven på pause?")) { delete data.skrPagaende; lagre(); skriftligProve(); } });
+      return;
+    }
+    const tidligere = data.skrProver || [];
+    app.innerHTML = `<section class="kort">
+      <h2 style="margin-top:0">Øv på eksamen med klokka</h2>
+      <p>Du får tre hele oppgaver og ca. 45 minutter. Du ser ikke fasit eller hint før du leverer. Regn på papir, skriv inn svarene, og lever når du er ferdig eller tida er ute.</p>
+      <p class="dempet liten">Tallsvar rettes automatisk. Tekstsvar sammenligner du med løsningsforslaget etterpå, og appen foreslår hvilke punkter du fikk med.</p>
+      <button class="knapp primar" id="start">Start skriftlig prøve</button></section>
+      ${tidligere.length ? `<section class="kort"><div class="etikett">Tidligere prøver</div>${tidligere.slice(-5).reverse().map((r) => `<p class="liten" style="margin:6px 0">${esc(r.dato)}: ${r.prosent} %</p>`).join("")}</section>` : ""}`;
+    document.getElementById("start").addEventListener("click", () => kjorSkriftligProve(velgSkriftligProve(), null));
+  }
+  function kjorSkriftligProve(oppg, fra) {
+    const deler = [];
+    oppg.forEach((o, oi) => o.deler.forEach((d, di) => deler.push({ o, d, nr: `${oi + 1}${String.fromCharCode(97 + di)}`, nokkel: `${o.id}-${di}` })));
+    const svar = (fra && fra.svar) || {};
+    const totalMs = oppg.reduce((n, o) => n + o.tid, 0) * 60000;
+    let slutt = Date.now() + (fra ? fra.igjenMs : totalMs);
+    app.innerHTML = `<div class="prove-topp"><span id="klokke" class="etikett" role="timer"></span> <button class="knapp" id="lever-topp">Lever</button></div>` +
+      oppg.map((o, oi) => `<section class="kort"><div class="etikett">Oppgave ${oi + 1} av ${oppg.length} · ca. ${o.tid} min</div>
+        <h2 style="margin:6px 0">${esc(o.tittel)}</h2><p>${esc(o.situasjon)}</p>
+        <div class="etikett" style="margin-top:12px">Gitt</div><ul class="gitt">${o.gitt.map((g) => `<li>${esc(g)}</li>`).join("")}</ul></section>
+        ${o.deler.map((d, di) => { const k = `${o.id}-${di}`; return `<section class="kort skr-del">
+          <div class="etikett">Del ${oi + 1}${String.fromCharCode(97 + di)}</div><p class="sporsmal" style="font-size:1.05rem">${esc(d.sporsmal)}</p>
+          ${d.punkter ? `<textarea class="skr-tekst" data-k="${k}" rows="4" placeholder="Skriv svaret ditt her">${esc(svar[k] || "")}</textarea>`
+            : `<div class="felt"><input data-k="${k}" inputmode="decimal" placeholder="Ditt svar" value="${esc(svar[k] || "")}"><span class="enhet">${esc(d.enhet || "")}</span></div>`}
+        </section>`; }).join("")}`).join("") +
+      `<button class="knapp primar" id="lever">Lever prøven</button>`;
+    app.querySelectorAll("[data-k]").forEach((f) => f.addEventListener("input", () => { svar[f.dataset.k] = f.value; }));
+    const lagreSkr = () => { data.skrPagaende = { ider: oppg.map((o) => o.id), svar, igjenMs: Math.max(0, slutt - Date.now()) }; lagre(); };
+    aktivProve = location.hash; lagrePagaende = lagreSkr;
+    const klokke = document.getElementById("klokke");
+    const tikk = () => {
+      const ms = Math.max(0, slutt - Date.now());
+      klokke.textContent = `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")} igjen`;
+      if (ms <= 0) lever(true);
+    };
+    proveTimer = setInterval(tikk, 1000); tikk();
+    function lever(tidUte) {
+      if (!tidUte && deler.some((x) => !(svar[x.nokkel] || "").trim()) && !confirm("Noen deler er ikke besvart. Vil du levere likevel?")) return;
+      clearInterval(proveTimer); proveTimer = null; aktivProve = null; lagrePagaende = null;
+      delete data.skrPagaende; lagre();
+      retting(tidUte);
+    }
+    document.getElementById("lever").addEventListener("click", () => lever(false));
+    document.getElementById("lever-topp").addEventListener("click", () => lever(false));
+    function retting(tidUte) {
+      window.scrollTo(0, 0);
+      const poeng = deler.map((x) => {
+        if (x.d.punkter) return null;
+        const t = lesTall(svar[x.nokkel] || "", x.d.enhet);
+        const naer = (v) => v !== null && Math.abs(v - x.d.svar) <= x.d.toleranse + 1e-9;
+        return t && (naer(t.tall) || naer(t.tusen)) ? 1 : 0;
+      });
+      app.innerHTML = `${tidUte ? `<p class="forklaring feil" role="alert">Tida er ute. Prøven ble levert automatisk.</p>` : ""}
+        <section class="kort"><h2 style="margin-top:0">Retting</h2><p class="dempet">Tallsvarene er rettet. Gå gjennom tekstsvarene og kryss av for punktene du fikk med, og trykk «Se resultat» nederst.</p></section>` +
+        deler.map((x, i) => `<section class="kort skr-del"><div class="etikett">Del ${x.nr} · ${esc(x.o.tittel)}</div>
+          <p class="sporsmal" style="font-size:1rem">${esc(x.d.sporsmal)}</p>
+          <p class="liten"><strong>Ditt svar:</strong> ${esc(svar[x.nokkel] || "(ikke besvart)")}${x.d.punkter ? "" : ` ${esc(x.d.enhet || "")}`}</p>
+          ${x.d.punkter
+            ? `<div class="forklaring losning hint"><strong>Løsningsforslag</strong><ol>${x.d.losning.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>${FORSLAG_TEKST}<div data-punkter="${i}">${punktListe(x.d, svar[x.nokkel] || "", i)}</div></div>`
+            : `<div class="forklaring losning ${poeng[i] ? "riktig" : "feil"}"><strong>${poeng[i] ? "Riktig!" : "Feil."}</strong> Fasit: <span class="formel">${String(x.d.svar).replace(".", ",")} ${esc(x.d.enhet || "")}</span><ol>${x.d.losning.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></div>`}
+        </section>`).join("") + `<button class="knapp primar" id="resultat">Se resultat</button><div id="sum"></div>`;
+      document.getElementById("resultat").addEventListener("click", (ev) => {
+        deler.forEach((x, i) => {
+          if (!x.d.punkter) return;
+          const boks = app.querySelector(`[data-punkter="${i}"]`);
+          poeng[i] = boks.querySelectorAll("input:checked").length / x.d.punkter.length;
+          boks.querySelectorAll("input").forEach((c) => { c.disabled = true; });
+        });
+        ev.currentTarget.remove();
+        const sum = poeng.reduce((a, b) => a + b, 0);
+        const prosent = Math.round((sum / deler.length) * 100);
+        data.skrProver = (data.skrProver || []).concat({ dato: dag(), prosent, ider: oppg.map((o) => o.id) }).slice(-20);
+        oppg.forEach((o) => {
+          const mine = deler.map((x, i) => (x.o === o ? poeng[i] : null)).filter((v) => v !== null);
+          const p = Math.round(mine.reduce((a, b) => a + b, 0) * 10) / 10;
+          const forrige = data.skriftlig[o.id];
+          if (!(forrige && forrige.ferdig)) idag().oppgaver++;
+          data.skriftlig[o.id] = { ferdig: true, poeng: p, maks: o.deler.length, dato: dag() };
+        });
+        lagre();
+        document.getElementById("sum").innerHTML = `<section class="kort helt" role="status"><div class="stor">${prosent} %</div>
+          <p class="dempet">${String(Math.round(sum * 10) / 10).replace(".", ",")} av ${deler.length} poeng. ${prosent >= KLAR.skriftligProsent ? "Bra! Det holder til målet på " + KLAR.skriftligProsent + " %." : "Målet er " + KLAR.skriftligProsent + " %. Les løsningsforslagene over og prøv igjen."}</p>
+          <a class="knapp primar" href="#/skriftligprove">Ny skriftlig prøve</a></section>`;
+        document.getElementById("sum").scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }
+
+  // ---------- Pris og tilgang ----------
+  // aktiv: false = alt er gratis (testperioden). Slå på når betalingsløsningen (Vipps/Stripe) er klar,
+  // og sett kjopUrl til betalingslenken. Kjøpskoder lages med elproven-android/HEMMELIG/lag-kjopskode.js.
+  const BETALING = { aktiv: false, pris: 149, maaneder: 6, provedager: 7, kjopUrl: "" };
+  // Offentlig nøkkel for å sjekke kjøpskoder. Privatnøkkelen ligger aldri i appen.
+  const KODE_NOKKEL = { kty: "EC", crv: "P-256", x: "99l_ZqnNYQOfXMf7VA-JWWzSZQlr_wIgppMGxxspUOc", y: "lDDpMSGYNgNc6VG38EncmEQPPWDO2wCfJpvs1OFWTF0" };
+  async function sjekkKjopskode(kode) {
+    const m = /^LFP-(\d{8})-([0-9a-f]{10})-([A-Za-z0-9_-]{80,90})$/.exec((kode || "").trim());
+    if (!m || !(window.crypto && crypto.subtle)) return null;
+    try {
+      const nokkel = await crypto.subtle.importKey("jwk", KODE_NOKKEL, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+      const b64 = m[3].replace(/-/g, "+").replace(/_/g, "/");
+      const sig = Uint8Array.from(atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4)), (c) => c.charCodeAt(0));
+      const ok = await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, nokkel, sig, new TextEncoder().encode(`${m[1]}-${m[2]}`));
+      return ok ? `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6)}` : null;
+    } catch (e) { return null; }
+  }
+  const harTilgang = () => !!(data.tilgang && data.tilgang.utloper >= dag());
+  const provedagerIgjen = () => BETALING.provedager - Math.round((new Date(dag() + "T12:00") - new Date((data.forsteDag || dag()) + "T12:00")) / 864e5);
+  const maaBetale = () => BETALING.aktiv && !harTilgang() && provedagerIgjen() <= 0;
+  function tilgangSide(kodeFraLenke) {
+    sett("Pris og tilgang", true);
+    const t = data.tilgang;
+    app.innerHTML = `<section class="kort">
+      <h2 style="margin-top:0">${BETALING.pris} kr – én gang, ${BETALING.maaneder} måneder</h2>
+      <p>Du betaler én gang og får tilgang til alt i ${BETALING.maaneder} måneder, nok til å øve fram til eksamen. Ingen abonnement som fornyes av seg selv.</p>
+      <ul class="gitt"><li>Alle ${SP.length} spørsmål med forklaring og NEK-henvisning</li><li>${SKR.length} skriftlige oppgaver og skriftlig prøve med tid</li><li>Prøveeksamen, symbolprøve, teorikurs, regneoppgaver og dagsplan</li></ul>
+      <p class="dempet liten">${BETALING.aktiv ? `De første ${BETALING.provedager} dagene er gratis.` : "Appen er gratis mens den er i testperioden. Fremgangen din blir med videre."}</p>
+      ${t ? `<p class="forklaring riktig">Du har tilgang til og med ${esc(t.utloper.split("-").reverse().join("."))}.</p>` : ""}
+      ${BETALING.aktiv && BETALING.kjopUrl ? `<a class="knapp primar" href="${esc(BETALING.kjopUrl)}" target="_blank" rel="noopener">Kjøp tilgang</a>` : ""}
+    </section>
+    <section class="kort"><div class="etikett">Har du en kjøpskode?</div>
+      <p class="liten dempet">Du får koden på e-post etter kjøpet. Bytter du telefon, legger du inn samme kode der.</p>
+      <form id="kode-skjema" class="felt" autocomplete="off"><input id="kode" placeholder="LFP-…" aria-label="Kjøpskode" value="${esc(kodeFraLenke || "")}"></form>
+      <button class="knapp primar" id="bruk-kode">Bruk koden</button><div id="kode-melding"></div></section>`;
+    const bruk = async (ev) => {
+      if (ev) ev.preventDefault();
+      const kode = document.getElementById("kode").value.trim();
+      const utloper = await sjekkKjopskode(kode);
+      const melding = document.getElementById("kode-melding");
+      if (!utloper) { melding.innerHTML = `<p class="forklaring feil" role="alert">Koden stemmer ikke. Sjekk at du har med hele koden.</p>`; return; }
+      if (utloper < dag()) { melding.innerHTML = `<p class="forklaring feil" role="alert">Koden gikk ut ${esc(utloper.split("-").reverse().join("."))}.</p>`; return; }
+      data.tilgang = { kode, utloper }; lagre();
+      melding.innerHTML = `<p class="forklaring riktig" role="status">Takk! Du har tilgang til og med ${esc(utloper.split("-").reverse().join("."))}.</p>`;
+    };
+    document.getElementById("kode-skjema").addEventListener("submit", bruk);
+    document.getElementById("bruk-kode").addEventListener("click", bruk);
+    if (kodeFraLenke) bruk();
+  }
+
   // ---------- Ordliste (data/ordliste.js) ----------
   function ordliste() {
     sett("Ordliste", true);
@@ -874,13 +1052,22 @@
   }
 
   // ---------- Om innholdet ----------
+  // Faglig ansvarlig vises bare når feltene er fylt ut av den som faktisk har godkjent innholdet.
+  const FAGANSVARLIG = { navn: "", tittel: "", godkjent: "", kontakt: "" };
   function omSide() {
     sett("Om innholdet", true);
     const kontroll = SP.filter((s) => /NEK 400|FEL|FSE/.test(s.forklaring)).length;
+    const f = FAGANSVARLIG;
     app.innerHTML = `
       <section class="kort">
         <div class="etikett">Hvem som står bak</div>
         <p>LettFagprøve er laget av en elektriker, for lærlinger og praksiskandidater som skal opp til teorieksamen i elektrikerfaget.</p>
+        ${f.navn ? `<p><strong>Faglig ansvarlig:</strong> ${esc(f.navn)}${f.tittel ? `, ${esc(f.tittel)}` : ""}${f.godkjent ? `. Innholdet er gjennomgått og godkjent ${esc(f.godkjent)}.` : ""}</p>` : ""}
+        ${f.kontakt ? `<p class="liten">Fant du en feil? Skriv til <a href="mailto:${esc(f.kontakt)}">${esc(f.kontakt)}</a> og oppgi spørsmålsnummeret (står under hvert spørsmål).</p>` : ""}
+      </section>
+      <section class="kort">
+        <div class="etikett">Slik er innholdet kontrollert</div>
+        <p>Hvert spørsmål, hver forklaring og hver oppgave er sjekket mot teksten i NEK 400:2022 med søkeverktøy, og hvert krav har fått sidetall. Utregningene i oppgavene er regnet om med datamaskin. Simulerte lærlinger har testet appen i flere runder, og påstandene deres er sjekket mot NEK før noe ble endret.</p>
       </section>
       <section class="kort">
         <div class="etikett">Fagkontroll</div>
@@ -888,6 +1075,7 @@
           <li><strong>11.11.2026:</strong> alle ${SP.length} spørsmål kontrollert punkt for punkt mot NEK 400:2022. Feil og upresise svar ble rettet.</li>
           <li><strong>11.11.2026:</strong> teorikurset for alle ${kursIder().length} temaer kontrollert mot NEK 400:2022.</li>
           <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så riktig svar ikke kan gjettes ut fra lengden. ${SKR.length} skriftlige oppgaver lagt til, med utregnede fasiter, og en ordliste med fagord forklart med enkle ord. Motsigelser mellom kurs, spørsmål og oppgaver er rettet.</li>
+          <li><strong>13.11.2026 (runde 3 og 4):</strong> gale svaralternativer uten ord som «alltid» og «aldri», som kunne røpe svaret. Forklaringer skrevet om så de sier hvorfor svaret er riktig. Feil i to skriftlige oppgaver rettet, og en regel som ikke står i NEK, fjernet.</li>
         </ul>
         <p>${kontroll} av ${SP.length} forklaringer viser til NEK 400, FEL eller FSE. NEK-henvisningene har sidetall («s. 240»), så du kan slå opp og sjekke selv. Sidetallene gjelder NEK 400:2022 (7. utgave).</p>
         <p class="dempet liten">Teksten er skrevet med egne ord. Ingenting er kopiert fra NEK 400, fordi standarden er opphavsrettsbeskyttet. Verdier som ikke står i NEK 400 (for eksempel B 3–5 × In og C 5–10 × In), er merket med at de kommer fra produktstandarden.</p>
@@ -1028,6 +1216,8 @@
       </section>
       <section class="kort" id="flytt"><strong>Flytt fremgangen til en annen enhet</strong>
         <p class="dempet liten" style="margin:6px 0 10px">Fremgangen lagres bare på denne enheten. Vil du fortsette på PC eller en ny mobil, kopierer du koden her og limer den inn på den andre enheten.</p>
+        <button class="knapp primar" id="send-lenke">Send lenke til den andre enheten</button>
+        <p class="dempet liten" style="margin:4px 0 10px">Send lenken til deg selv (SMS, e-post eller Messenger) og åpne den på den andre enheten. Da flyttes fremgangen med ett trykk.</p>
         <button class="knapp" id="kopier">Kopier fremgangskode</button>
         <button class="knapp" id="last-ned">Last ned som fil</button>
         <textarea class="skr-tekst" id="kode" rows="3" placeholder="Lim inn fremgangskoden fra den andre enheten" aria-label="Fremgangskode"></textarea>
@@ -1038,6 +1228,13 @@
       <button class="knapp" id="nullstill">Nullstill fremgang</button>`;
     const melding = (t, ok) => { document.getElementById("flytt-melding").innerHTML = `<p class="forklaring ${ok ? "riktig" : "feil"}">${esc(t)}</p>`; };
     const kode = () => "LFP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    document.getElementById("send-lenke").addEventListener("click", async () => {
+      const url = location.href.split("#")[0] + "#/hent/" + (await pakkFremgang());
+      if (navigator.share) { try { await navigator.share({ title: "LettFagprøve – min fremgang", url }); return; } catch (e) { if (e && e.name === "AbortError") return; } }
+      const ok = () => melding("Lenken er kopiert. Lim den inn i en melding til deg selv, og åpne den på den andre enheten.", true);
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, () => { document.getElementById("kode").value = url; melding("Lenken står i feltet. Kopier den selv.", true); });
+      else { document.getElementById("kode").value = url; melding("Lenken står i feltet. Kopier den selv.", true); }
+    });
     document.getElementById("kopier").addEventListener("click", () => {
       const k = kode();
       const ok = () => melding("Koden er kopiert. Lim den inn under Fremgang på den andre enheten.", true);
@@ -1056,16 +1253,47 @@
     });
     document.getElementById("hent-kode").addEventListener("click", () => {
       const tekst = document.getElementById("kode").value.trim();
-      let ny = null;
-      try { if (tekst.startsWith("LFP1:")) ny = JSON.parse(decodeURIComponent(escape(atob(tekst.slice(5))))); } catch (e) { ny = null; }
-      if (!erObj(ny) || !erObj(ny.svar)) { melding("Koden er ikke gyldig. Sjekk at du fikk med hele koden, fra LFP1: til slutten.", false); return; }
-      if (!confirm("Erstatte fremgangen på denne enheten med fremgangen fra koden?")) return;
-      data = normaliser(ny); lagre(); statistikk();
-      melding(`Fremgangen er hentet: ${Object.keys(data.svar).length} besvarte spørsmål og ${data.eksamener.length} prøver.`, true);
+      pakkUt(tekst).catch(() => null).then((ny) => {
+        if (!erObj(ny) || !erObj(ny.svar)) { melding("Koden er ikke gyldig. Sjekk at du fikk med hele koden eller lenken.", false); return; }
+        if (!confirm("Erstatte fremgangen på denne enheten med fremgangen fra koden?")) return;
+        data = normaliser(ny); lagre(); statistikk();
+        melding(`Fremgangen er hentet: ${Object.keys(data.svar).length} besvarte spørsmål og ${data.eksamener.length} prøver.`, true);
+      });
     });
     document.getElementById("nullstill").addEventListener("click", () => {
       if (confirm("Slette all fremgang på denne enheten?")) { data = normaliser({}); lagre(); statistikk(); }
     });
+  }
+
+  // Fremgang pakket med gzip (LFP2:) for korte lenker. Faller tilbake til LFP1: uten komprimering.
+  const tilB64 = (bytes) => { let t = ""; for (let i = 0; i < bytes.length; i += 8192) t += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
+  const fraB64 = (s) => { const b = s.replace(/-/g, "+").replace(/_/g, "/"); return Uint8Array.from(atob(b + "=".repeat((4 - (b.length % 4)) % 4)), (c) => c.charCodeAt(0)); };
+  async function pakkFremgang() {
+    const json = JSON.stringify(data);
+    if (!window.CompressionStream) return "LFP1:" + btoa(unescape(encodeURIComponent(json)));
+    const strom = new Blob([json]).stream().pipeThrough(new CompressionStream("gzip"));
+    return "LFP2:" + tilB64(new Uint8Array(await new Response(strom).arrayBuffer()));
+  }
+  async function pakkUt(tekst) {
+    tekst = decodeURIComponent(tekst.trim()).replace(/^.*#\/hent\//, "");
+    if (tekst.startsWith("LFP1:")) return JSON.parse(decodeURIComponent(escape(atob(tekst.slice(5)))));
+    if (tekst.startsWith("LFP2:") && window.DecompressionStream) {
+      const strom = new Blob([fraB64(tekst.slice(5))]).stream().pipeThrough(new DecompressionStream("gzip"));
+      return JSON.parse(await new Response(strom).text());
+    }
+    return null;
+  }
+  async function hentFraLenke(kode) {
+    sett("Hent fremgang", true);
+    let ny = null;
+    try { ny = await pakkUt(kode); } catch (e) { ny = null; }
+    if (!erObj(ny) || !erObj(ny.svar)) { app.innerHTML = `<p class="forklaring feil" role="alert">Lenken er ikke gyldig. Send en ny lenke fra den andre enheten.</p>`; return; }
+    const antall = Object.keys(ny.svar).length;
+    app.innerHTML = `<section class="kort"><h2 style="margin-top:0">Hent fremgang</h2>
+      <p>Lenken inneholder ${antall} besvarte spørsmål og ${(ny.eksamener || []).length} prøver.</p>
+      <p class="dempet liten">Fremgangen på denne enheten blir erstattet.</p>
+      <button class="knapp primar" id="hent">Hent fremgangen</button> <a class="knapp" href="#/">Avbryt</a></section>`;
+    document.getElementById("hent").addEventListener("click", () => { data = normaliser(ny); lagre(); history.replaceState(null, "", "#/"); forside(); });
   }
 
   // ---------- Ruting ----------
@@ -1085,7 +1313,11 @@
     clearTimeout(spillPause); spillPause = null;
     const deler = (location.hash.replace(/^#\/?/, "") || "").split("/");
     window.scrollTo(0, 0);
+    // Når betaling er slått på og prøvedagene er brukt opp, er bare forsiden, tilgang, om, ordliste og statistikk åpne.
+    if (maaBetale() && !["", "tilgang", "om", "ordliste", "statistikk"].includes(deler[0])) { location.hash = "#/tilgang"; return; }
     switch (deler[0]) {
+      case "tilgang": return tilgangSide(deler.slice(1).join("/"));
+      case "hent": return hentFraLenke(deler.slice(1).join("/"));
       case "ov": return ov(deler[1] || "alle");
       case "kategorier": return kategorier();
       case "eksamen": return eksamen();
@@ -1096,6 +1328,7 @@
       case "formler": return formler();
       case "kurs": return deler[1] ? kursSide(deler[1]) : kursListe();
       case "skriftlig": return deler[1] ? skriftligSide(deler[1]) : skriftligListe();
+      case "skriftligprove": return skriftligProve();
       case "om": return omSide();
       case "ordliste": return ordliste();
       default: return forside();

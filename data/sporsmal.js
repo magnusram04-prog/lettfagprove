@@ -145,7 +145,7 @@ window.SPORSMAL = [
       "Automatsikring på 30 A, som løser ut ved overlast og kortslutning",
       "Overspenningsvern (type 2) som begrenser spenningen ved lynnedslag",
       "Kontaktor for styring av motor, med hjelpekontakter og overlastvern"], riktig: 0,
-    forklaring: "IΔn er merkeutløsestrømmen. 0,03 A = 30 mA, altså personbeskyttelse. I bolig skal hver forbrukerkurs ha det. (NEK 400-8-823, 823.411.3.3 s. 505)" },
+    forklaring: "Merket IΔn med 0,03 A betyr at dette er en jordfeilbryter, som løser ut når lekkasjestrømmen til jord når 30 mA. IΔn er merkeutløsestrømmen. 0,03 A = 30 mA, altså personbeskyttelse. I bolig skal hver forbrukerkurs ha det. (NEK 400-8-823, 823.411.3.3 s. 505)" },
   { id: "bf2", kategori: "vern", bilde: "jordfeilbryter.jpg",
     sporsmal: "En ren jordfeilbryter som den på bildet (uten innebygd automatsikring) står foran flere kurser. Hva beskytter den IKKE mot?",
     alternativer: [
@@ -153,7 +153,7 @@ window.SPORSMAL = [
       "Jordfeil der strøm går gjennom en person som står på jord",
       "Lekkasjestrøm til jord fra et defekt apparat",
       "Jordfeil i en varmekabel i gulvet på badet"], riktig: 0,
-    forklaring: "Den måler bare forskjellen mellom strømmen inn og ut. Kursene trenger i tillegg overstrømsvern. En jordfeilautomat (RCBO) har begge funksjonene. (NEK 400-4-43, 431.1 s. 124)" },
+    forklaring: "Den reagerer bare når strømmen inn og ut ikke er lik, og det skjer ikke ved overbelastning eller kortslutning mellom fase og nøytral. Den måler bare forskjellen mellom strømmen inn og ut. Kursene trenger i tillegg overstrømsvern. En jordfeilautomat (RCBO) har begge funksjonene. (NEK 400-4-43, 431.1 s. 124)" },
   { id: "e1", kategori: "vern", bilde: "egen-tavle-jordfeilautomater.jpg",
     sporsmal: "Hva betyr «16», «C», «003» og «A» i merkingen PKPM2-16/…/C/003-A på vernene 6–11 i tavla?",
     alternativer: [
@@ -177,7 +177,7 @@ window.SPORSMAL = [
       "B løser ut momentant ved 5–10 × In, og C ved 3–5 × In. B tåler høyere innkoblingsstrøm, og B-vernet passer derfor best til motorkurser",
       "B og C løser ut momentant ved samme verdi, 3–5 × In. Forskjellen ligger i merkingen på dekselet, og vernene har samme innkoblingsstrøm og feilstrøm",
       "C løser ut momentant ved 3–5 × In, og B ved 10–20 × In. C er derfor den som tåler minst innkoblingsstrøm av de to, og trenger mindre feilstrøm"], riktig: 0,
-    forklaring: "Med C16 må minste kortslutningsstrøm være over ca. 160 A, med B16 holder det med ca. 80 A. Valget påvirker hvor lang kursen kan være." },
+    forklaring: "B løser ut momentant ved 3–5 × In og C ved 5–10 × In, så C tåler mer innkoblingsstrøm, men må ha større feilstrøm for å løse ut raskt. Med C16 må minste kortslutningsstrøm være over ca. 160 A, med B16 holder det med ca. 80 A. Valget påvirker hvor lang kursen kan være." },
   { id: "e4", kategori: "vern", bilde: "egen-gammel-tavle-isolasjonsduk.jpg",
     sporsmal: "Hva slags vern er de hvite porselenselementene i rader i denne eldre tavla?",
     alternativer: [
@@ -321,7 +321,7 @@ window.SPORSMAL = [
       "Bryteren er beregnet for høyst 250 A og 10 V likespenning",
       "Den tåler 250 A ved 10 V, og skal ikke brukes med vern over 16 A",
       "Den har 10 poler og 250 koblinger, og skal monteres på DIN-skinne"], riktig: 0,
-    forklaring: "«~» betyr vekselspenning. Utstyret må tåle strømmen kursen kan gi, og må velges etter kursens vern." },
+    forklaring: "Tallet 10 er høyeste tillatte strøm i ampere (A), 250 er spenningen i volt (V), og «~» betyr vekselspenning. «~» betyr vekselspenning. Utstyret må tåle strømmen kursen kan gi, og må velges etter kursens vern." },
   { id: "e14", kategori: "installasjon", bilde: "egen-koblingsboks-blank-pe.jpg",
     sporsmal: "I koblingsboksen ligger en blank kobbertråd fra en eldre kabel. Hva er den, og må den fargemerkes?",
     alternativer: [
@@ -353,7 +353,7 @@ window.SPORSMAL = [
       "Den brune faselederen (L), som gir armaturen spenning",
       "Den blå nøytrallederen (N), som går tilbake til tavlen",
       "Ingen, klemmen skal kobles til en faseklemme i lampeholderen"], riktig: 0,
-    forklaring: "N er blå, L er brun. Armaturer i klasse I skal ha PE koblet til jordklemmen." },
+    forklaring: "Jordklemmen skal ha PE-lederen, som er den blanke kobberlederen, og ikke fase (L) eller nøytral (N). N er blå, L er brun. Armaturer i klasse I skal ha PE koblet til jordklemmen." },
 
   // ===== Sikkerhet og forskrifter =====
   { id: "k1", kategori: "sikkerhet",
@@ -419,7 +419,7 @@ window.SPORSMAL = [
       "Arbeid etter at anlegget er frakoblet og jordet, der man kontrollerer at delene er spenningsløse før arbeidet starter",
       "Arbeid i et sikringsskap der man skifter en defekt automatsikring, som kan gjøres av en lærling uten opplæring",
       "Arbeid på anlegg under 50 V, der spenningen er lav nok til at særskilt opplæring ikke er nødvendig"], riktig: 0,
-    forklaring: "AUS krever særskilt opplæring, godkjente prosedyrer og egnet verneutstyr." },
+    forklaring: "AUS betyr at man bevisst berører spenningsførende deler, og det er derfor det krever egen opplæring. AUS krever særskilt opplæring, godkjente prosedyrer og egnet verneutstyr." },
   { id: "k9", kategori: "sikkerhet",
     sporsmal: "Er NEK 400 juridisk bindende?",
     alternativer: [
@@ -435,7 +435,7 @@ window.SPORSMAL = [
       "At kunden har betalt hele fakturaen, og at installatøren har gitt skriftlig garanti i to år",
       "At DLE har godkjent anlegget på stedet, og at det er registrert hos kommunen før det tas i bruk",
       "Ingenting, hvis det er en liten jobb som eieren selv har sjekket at lysene virker"], riktig: 0,
-    forklaring: "Det gjelder også etter hver endring. (FEL § 12)" },
+    forklaring: "Før et nytt anlegg tas i bruk må det kontrolleres og prøves, og eieren må få erklæring om samsvar og dokumentasjon. Det gjelder også etter hver endring. (FEL § 12)" },
   { id: "k11", kategori: "sikkerhet",
     sporsmal: "Hvor lenge skal den som utsteder en samsvarserklæring oppbevare en kopi?",
     alternativer: ["Minst 5 år", "Minst 1 år", "Minst 10 år", "Til anlegget rives"], riktig: 0,
@@ -447,7 +447,7 @@ window.SPORSMAL = [
       "Det skal planlegges og utføres slik at kostnadene blir lavest mulig for eieren, og slik at det kan endres uten godkjenning senere",
       "Det skal planlegges av nettselskapet og godkjennes av kommunen før arbeidet starter, og følge leverandørens standardoppsett for anlegget",
       "Det gjelder bare for næringsbygg og offentlige bygg, og ikke for boliger, fritidshus eller andre bygninger der folk oppholder seg"], riktig: 0,
-    forklaring: "Derfor starter et oppdrag med risikovurdering: hvem bruker anlegget, hvor er det, hva skal det brukes til, og hvilke ytre påvirkninger finnes. 8-823 erstatter ikke denne vurderingen. (FEL § 16)" },
+    forklaring: "FEL § 16 krever at anlegget planlegges og utføres slik at folk, husdyr og eiendom er beskyttet, og at det passer til den forutsatte bruken. Derfor starter et oppdrag med risikovurdering: hvem bruker anlegget, hvor er det, hva skal det brukes til, og hvilke ytre påvirkninger finnes. 8-823 erstatter ikke denne vurderingen. (FEL § 16)" },
   { id: "k13", kategori: "sikkerhet",
     sporsmal: "Hvilke anlegg er unntatt fra melding før arbeidet starter (utenfor eksplosjonsfarlig område)?",
     alternativer: [
@@ -463,7 +463,7 @@ window.SPORSMAL = [
       "Ytre påvirkninger gjelder utendørs, så innendørs anlegg trenger ikke vurderes for fukt, støv eller slag",
       "Det er kundens ansvar alene å vurdere ytre påvirkninger, så installatøren trenger ikke dokumentere valgene sine",
       "Det gjelder høyspenningsanlegg, og lavspenningsanlegg skal dimensjoneres etter strøm og spenningsfall"], riktig: 0,
-    forklaring: "I NEK 400 beskrives ytre påvirkninger med koder (f.eks. AD for vann, AG for slag). På eksamen bør du liste opp de unormale kodene. (FEL § 28 og NEK 400-5-51, 512.2 s. 157 og tabell 51A s. 159–164)" },
+    forklaring: "FEL krever at anlegget og utstyret tåler de ytre påvirkningene det kan utsettes for, eventuelt med ekstra beskyttelse. I NEK 400 beskrives ytre påvirkninger med koder (f.eks. AD for vann, AG for slag). På eksamen bør du liste opp de unormale kodene. (FEL § 28 og NEK 400-5-51, 512.2 s. 157 og tabell 51A s. 159–164)" },
   { id: "k15", kategori: "sikkerhet",
     sporsmal: "Hva skal skje hvis elektrisitet har forårsaket en personskade?",
     alternativer: [
@@ -471,7 +471,7 @@ window.SPORSMAL = [
       "Det holder å skrive det i en logg for anlegget",
       "Det meldes bare hvis noen dør, og da etter utredning",
       "Det meldes til NEK, som gir tillatelse til å bruke anlegget igjen"], riktig: 0,
-    forklaring: "Det gjelder også skade på anlegg eller eiendom forårsaket av elektrisitet. (FEL § 15 og FSE § 8)" },
+    forklaring: "Personskade som elektrisitet har forårsaket skal meldes til tilsynsmyndigheten (DSB) snarest mulig. Det gjelder også skade på anlegg eller eiendom forårsaket av elektrisitet. (FEL § 15 og FSE § 8)" },
   { id: "k16", kategori: "sikkerhet",
     sporsmal: "Hvilke tre arbeidsmetoder beskriver FSE?",
     alternativer: [
@@ -479,7 +479,7 @@ window.SPORSMAL = [
       "Arbeid med og uten hansker, og arbeid i høyden eller i trange rom under spenning",
       "Dagarbeid, nattarbeid og helgearbeid, der arbeidstid og bemanning avgjør hvilken metode som brukes",
       "Montasje, kontroll, feilsøking og fakturering av anlegg som allerede er i drift"], riktig: 0,
-    forklaring: "Valg av arbeidsmetode gjøres ut fra risikovurderingen før jobben. (FSE kapittel IV)" },
+    forklaring: "FSE beskriver tre arbeidsmetoder: arbeid på frakoblet anlegg, arbeid under spenning (AUS) og arbeid nær ved spenningssatte deler. Valg av arbeidsmetode gjøres ut fra risikovurderingen før jobben. (FSE kapittel IV)" },
   { id: "k17", kategori: "sikkerhet",
     sporsmal: "Hva skal minst avgjøres ut fra risikovurderingen før et arbeid starter?",
     alternativer: [
@@ -487,7 +487,7 @@ window.SPORSMAL = [
       "Hvem som skal kjøre bilen til og fra jobben, og hvilket firma som har tatt jobben",
       "Pris, tidsbruk og hvilken leverandør som skal levere materiellet til jobben",
       "Ikke noe, risikovurderingen er frivillig og kan gjøres etter at arbeidet er ferdig og fakturert"], riktig: 0,
-    forklaring: "Først hentes nødvendige opplysninger om anlegget, så gjøres risikovurderingen. (FSE § 10)" },
+    forklaring: "Risikovurderingen skal minst avgjøre arbeidsmetode, nødvendig utstyr, verneutstyr og hvilke personer som velges og instrueres. Først hentes nødvendige opplysninger om anlegget, så gjøres risikovurderingen. (FSE § 10)" },
   { id: "k18", kategori: "sikkerhet",
     sporsmal: "Hvilke sikkerhetstiltak skal etableres ved arbeid nær ved spenningssatte deler?",
     alternativer: [
@@ -495,7 +495,7 @@ window.SPORSMAL = [
       "Vernebriller og isolerende hansker, og at arbeidet utføres raskt",
       "Ikke noe, hvis man er forsiktig og jobber rolig og konsentrert",
       "Jording av hele anlegget, og at isolasjonen måles før arbeidet starter"], riktig: 0,
-    forklaring: "Kan tiltakene ikke gjennomføres fullt ut, må en annen arbeidsmetode velges. (FSE § 17)" },
+    forklaring: "Sikkerhetsavstanden skal markeres, og arbeidet skal avskjermes og/eller avsperres, så ingen kommer for nær de spenningssatte delene. Kan tiltakene ikke gjennomføres fullt ut, må en annen arbeidsmetode velges. (FSE § 17)" },
   { id: "k19", kategori: "sikkerhet",
     sporsmal: "Er jording og kortslutning et absolutt krav ved arbeid på frakoblet lavspenningsanlegg?",
     alternativer: [
@@ -503,7 +503,7 @@ window.SPORSMAL = [
       "Ja, jording og kortslutning skal gjøres i lavspenning, og i høyspenning er det et valgfritt råd",
       "Ja, i lavspenningsanlegg over 50 V, og det gjelder også for korte måleoppdrag og enkle kurser",
       "Ja, i boliger er jording og kortslutning et krav uavhengig av risikovurderingen"], riktig: 0,
-    forklaring: "Rekkefølgen er: frakoble, sikre mot innkobling, kontrollere spenningsløshet, vurdere jording/kortslutning og beskytte mot nærliggende spenningssatte deler. (FSE § 14)" },
+    forklaring: "Nei, i lavspenning avgjøres behovet for jording og kortslutning av risikovurderingen, mens i høyspenning er det et absolutt krav. Rekkefølgen er: frakoble, sikre mot innkobling, kontrollere spenningsløshet, vurdere jording/kortslutning og beskytte mot nærliggende spenningssatte deler. (FSE § 14)" },
   { id: "k20", kategori: "sikkerhet",
     sporsmal: "Hva heter personen som har ansvar for drift og vedlikehold av et lavspenningsanlegg etter FSE?",
     alternativer: [
@@ -601,7 +601,7 @@ window.SPORSMAL = [
       "Dobbelt så mye som laststrømmen, fordi strømmen går både i fase og nøytral og legges sammen",
       "Spenningen på kursen, altså omtrent 230 V mellom fase og nøytral i tavla",
       "Isolasjonsresistansen mellom fase og nøytral, som må være minst 1 MΩ"], riktig: 0,
-    forklaring: "Legg tangen rundt én leder. Viser den noe rundt hele kabelen, er det en lekkasjestrøm. Det er det samme prinsippet som jordfeilbryteren bruker." },
+    forklaring: "Strømmen går ut i fasen og tilbake i nøytralen i motsatt retning, så de to opphever hverandre og tangen viser omtrent 0 A. Legg tangen rundt én leder. Viser den noe rundt hele kabelen, er det en lekkasjestrøm. Det er det samme prinsippet som jordfeilbryteren bruker." },
   { id: "e7", kategori: "maling", bilde: "egen-tavle-jfb-og-f.jpg",
     sporsmal: "Hvorfor er alle vernene i tavla merket med nummer (F101, J.F.B. 203 osv.)?",
     alternativer: [
@@ -663,7 +663,7 @@ window.SPORSMAL = [
       "Kontakten er lukket i hvilestilling og åpner når den påvirkes",
       "Kontakten er åpen i hvilestilling og åpner også når den påvirkes",
       "Kontakten veksler mellom to kretser når den påvirkes"], riktig: 0,
-    forklaring: "NO = normally open (sluttekontakt). NC = normally closed (brytekontakt)." },
+    forklaring: "NO betyr åpen i hvilestilling, så kontakten slutter kretsen først når den blir påvirket. NO = normally open (sluttekontakt). NC = normally closed (brytekontakt)." },
   { id: "sym1", kategori: "symboler", figur: "bryter-1p",
     sporsmal: "Hva betyr dette installasjonssymbolet?",
     alternativer: [
@@ -743,7 +743,7 @@ window.SPORSMAL = [
       "Belysningsregulator (dimmer) for trinnløs styring av lysstyrken",
       "Bryter, enpolet, med fast stilling og manuell av/på-funksjon",
       "Dobbeltpolet bryter med tidsbegrenset innkobling (trappeautomat)"], riktig: 0,
-    forklaring: "«t» viser tidsfunksjon: lyset slukker av seg selv etter en innstilt tid." },
+    forklaring: "Det er en enpolet bryter, og «t» gjør at den er tidsbegrenset, altså en trappeautomat. «t» viser tidsfunksjon: lyset slukker av seg selv etter en innstilt tid." },
   { id: "sym11", kategori: "symboler", figur: "trykknapp",
     sporsmal: "Hva betyr dette installasjonssymbolet?",
     alternativer: [
@@ -759,7 +759,7 @@ window.SPORSMAL = [
       "Trykknapp (én stabil stilling)",
       "Trykknappbryter",
       "Belysningsregulator (dimmer)"], riktig: 0,
-    forklaring: "Krysset i sirkelen er tegnet for lampe." },
+    forklaring: "Sirkelen er en trykknapp, og krysset i den viser at den har en indikatorlampe. Krysset i sirkelen er tegnet for lampe." },
   { id: "sym13", kategori: "symboler", figur: "stikk-uten-jord",
     sporsmal: "Hva betyr dette installasjonssymbolet?",
     alternativer: [
@@ -827,7 +827,7 @@ window.SPORSMAL = [
       "For å sjekke bryteevnen til vernet, som må være høyere enn største kortslutningsstrøm på kursen",
       "For å finne samtidighetsfaktoren for alle kursene i tavla, og dermed belastningen",
       "For å velge IP-grad på kabelen og sikre at den tåler fukt og støv i miljøet"], riktig: 0,
-    forklaring: "Lang kabel gir høy impedans og liten feilstrøm. For en B16 må minste kortslutningsstrøm være over ca. 80 A (5 × In). (NEK 400-4-43 fra s. 124 og 4-41 fra s. 96)" },
+    forklaring: "Strømmen må være stor nok til at vernet løser ut raskt, f.eks. momentant for en automatsikring, og lange kurser gir liten feilstrøm. Lang kabel gir høy impedans og liten feilstrøm. For en B16 må minste kortslutningsstrøm være over ca. 80 A (5 × In). (NEK 400-4-43 fra s. 124 og 4-41 fra s. 96)" },
   { id: "d6", kategori: "dimensjonering",
     sporsmal: "Hva er minste kortslutningsstrøm en C16 automatsikring trenger for sikker momentan utløsning?",
     alternativer: ["Ca. 160 A (10 × In)", "Ca. 80 A (5 × In)", "Ca. 48 A (3 × In)", "Ca. 16 A (1 × In)"], riktig: 0,
@@ -859,7 +859,7 @@ window.SPORSMAL = [
       "I = P · cos φ / (√3 · U)",
       "I = P / (U · cos φ)",
       "I = P · √3 / (U · cos φ)"], riktig: 0,
-    forklaring: "U er linjespenningen (400 V i TN 400/230 V, 230 V i IT 230 V)." },
+    forklaring: "Effekten er P = √3 · U · I · cos φ, og om du deler på √3 · U · cos φ får du strømmen I. U er linjespenningen (400 V i TN 400/230 V, 230 V i IT 230 V)." },
   { id: "fp1", kategori: "fagprove",
     sporsmal: "Hva er det første du bør gjøre i en fagprøvebesvarelse før du regner på kurser?",
     alternativer: [
@@ -875,7 +875,7 @@ window.SPORSMAL = [
       "Arbeid under spenning, FSE § 16, som er vanlig i nye boliger fordi anlegget er åpent",
       "Arbeid nær ved spenningssatte deler, FSE § 17, med avstandskrav og skjerming",
       "Det trengs ikke en arbeidsmetode i nye anlegg, siden spenningen ikke er koblet inn foreløpig"], riktig: 0,
-    forklaring: "Ved avvikling skal alle som er berørt varsles, og alle skal ha forlatt anlegget før det kobles inn igjen. (FSE § 14 og § 15)" },
+    forklaring: "I en ny bolig er anlegget normalt ikke spenningssatt ennå, så man arbeider på frakoblet anlegg. Ved avvikling skal alle som er berørt varsles, og alle skal ha forlatt anlegget før det kobles inn igjen. (FSE § 14 og § 15)" },
   { id: "fp3", kategori: "fagprove",
     sporsmal: "Hva er «5 sikre»?",
     alternativer: [
@@ -895,7 +895,7 @@ window.SPORSMAL = [
       "Minst halvparten av største faseleder i installasjonen, minst 10 mm² Cu, men trenger ikke være over 35 mm² Cu",
       "Minst 10 mm² Cu, uavhengig av største PE-leder i installasjonen, men trenger ikke være over 16 mm² Cu",
       "Samme tverrsnitt som største faseleder, og minst 2,5 mm² Cu i fast installasjon"], riktig: 0,
-    forklaring: "Alternativer til kobber: minst 16 mm² aluminium eller 50 mm² stål. (NEK 400-5-54, 544.1 s. 295)" },
+    forklaring: "Den skal være minst halvparten av største PE-leder og minst 6 mm² kobber, men trenger ikke være over 25 mm² kobber. Alternativer til kobber: minst 16 mm² aluminium eller 50 mm² stål. (NEK 400-5-54, 544.1 s. 295)" },
   { id: "fp6", kategori: "fagprove",
     sporsmal: "Hvilke ledere skal kobles til hovedjordskinnen?",
     alternativer: [
@@ -903,7 +903,7 @@ window.SPORSMAL = [
       "Nøytrallederen, fordi den er forbundet direkte til jordskinnen i hver kurs",
       "Faseledere, også L1, L2 og L3 fra kursene i hele anlegget",
       "Jordelektroden, som skal kobles direkte til hver stikkontakt og bryter i hele boligen, også i tavla"], riktig: 0,
-    forklaring: "Hver PE trenger ikke gå direkte til skinnen hvis den er forbundet via andre PE-ledere. (NEK 400-5-54, 542.4 s. 289)" },
+    forklaring: "Hovedjordskinnen er samlepunktet for jordingen, og der kobles utjevningsledere, jordingsledere, beskyttelsesledere og eventuelle funksjonsjordledere. Hver PE trenger ikke gå direkte til skinnen hvis den er forbundet via andre PE-ledere. (NEK 400-5-54, 542.4 s. 289)" },
   { id: "fp7", kategori: "fagprove",
     sporsmal: "Hvilken type jordfeilvern er IKKE tillatt brukt i Norge?",
     alternativer: [
@@ -943,7 +943,7 @@ window.SPORSMAL = [
       "Spenningen i kursen, og at den er lik nettspenningen på hvert uttak i boligen",
       "Temperaturen i gulvet og kabelen, målt med termometer etter at gulvet er støpt",
       "Ikke noe, kabelen er testet på fabrikken og trenger ikke måling etter legging"], riktig: 0,
-    forklaring: "Da oppdager du om kabelen er skadet under leggingen før gulvet er ferdig. Resultatene hører med i dokumentasjonen, sammen med tegning av hvor kabelen og føleren ligger. Målingene før og etter legging er god praksis. (NEK 400-6, 6.4.3.2 og 6.4.3.3 s. 332 og NEK 400-7-753 s. 486–487)" },
+    forklaring: "Mål lederresistansen (sammenlign med produktbladet) og isolasjonsresistansen. Da oppdager du om kabelen er skadet under leggingen før gulvet er ferdig. Resultatene hører med i dokumentasjonen, sammen med tegning av hvor kabelen og føleren ligger. Målingene før og etter legging er god praksis. (NEK 400-6, 6.4.3.2 og 6.4.3.3 s. 332 og NEK 400-7-753 s. 486–487)" },
   { id: "fp13", kategori: "fagprove",
     sporsmal: "Hvorfor skal det planlegges varmefrie områder når du legger varmekabel?",
     alternativer: [
@@ -951,7 +951,7 @@ window.SPORSMAL = [
       "For å spare kabel, slik at varmekabelen kan legges tettere i hele rommet uten å ta hensyn til møbler og sluk",
       "Fordi varmekabel ikke kan ligge under fliser eller parkett, og fordi den må ligge tett under inventaret",
       "Det er ikke nødvendig å planlegge noe, siden kabelen kan legges tilfeldig uten krav til avstand"], riktig: 0,
-    forklaring: "Typiske varmefrie områder er under toalett, baderomsinnredning og ved sluk. (NEK 400-7-753, 753.520.4.101 s. 486)" },
+    forklaring: "Varmefrie områder gjør at fast inventar kan festes uten å skade kabelen, og at inventaret ikke hindrer varmeavgivelsen. Typiske varmefrie områder er under toalett, baderomsinnredning og ved sluk. (NEK 400-7-753, 753.520.4.101 s. 486)" },
   { id: "fp14", kategori: "fagprove",
     sporsmal: "Hvilken dokumentasjon av gulvvarme skal eieren få?",
     alternativer: [
@@ -959,7 +959,7 @@ window.SPORSMAL = [
       "Kvitteringen for kabelen og et bilde av termostaten, siden resten er skjult under gulvet",
       "Ikke noe, det er skjult under gulvet, og dokumentasjon av varmekabelen er ikke påkrevd etter installasjon i boligen",
       "Et bilde av termostaten på veggen, med angivelse av hvilket rom den styrer og hva den er innstilt på"], riktig: 0,
-    forklaring: "Både 7-753 (tillegg 753A) og 8-823 krever dokumentasjon av plassering og utforming av gulv- og takvarme." },
+    forklaring: "Eieren skal få en beskrivelse av systemet og tegninger som viser varmekursene, effekten og hvor varmeenhetene og følerne ligger, fordi plassering og utforming må dokumenteres. Både 7-753 (tillegg 753A) og 8-823 krever dokumentasjon av plassering og utforming av gulv- og takvarme." },
   { id: "fp15", kategori: "fagprove",
     sporsmal: "Hva kreves for et boblebadekar (klasse I) på bad?",
     alternativer: [
@@ -967,7 +967,7 @@ window.SPORSMAL = [
       "Det kan settes i en vanlig stikkontakt i sone 1, med en kurs uten jordfeilvern",
       "Det trenger ikke jordfeilvern, siden det er en fast tilkobling og dermed sikkert å bruke i sone 1",
       "Det skal kobles til 400 V med tre faser, og bryteren skal stå i sone 0 over badekaret"], riktig: 0,
-    forklaring: "Bryteren plasseres i samsvar med sonekravene. Det samme gjelder steamdusjer. (NEK 400-7-701, 701.537.3.1.101 s. 348)" },
+    forklaring: "Boblebadet skal være fast tilkoblet med en forankoblet allpolig bryter, så det kan kobles fra ved vedlikehold. Bryteren plasseres i samsvar med sonekravene. Det samme gjelder steamdusjer. (NEK 400-7-701, 701.537.3.1.101 s. 348)" },
   { id: "fp16", kategori: "fagprove",
     sporsmal: "Lyset i en gang skal kunne slås av og på fra to steder. Hva bruker du?",
     alternativer: [
@@ -975,7 +975,7 @@ window.SPORSMAL = [
       "To serievendere (tidligere mellombrytere)",
       "En kryssvender alene i stedet for to brytere",
       "To enpolede brytere i parallell over gangen"], riktig: 0,
-    forklaring: "Fra tre steder eller flere settes én eller flere kryssvendere mellom de to vekselvenderne." },
+    forklaring: "Fra to steder bruker man to vekselvendere, fordi hver av dem kan slå lyset av eller på. Fra tre steder eller flere settes én eller flere kryssvendere mellom de to vekselvenderne." },
   { id: "fp17", kategori: "fagprove",
     sporsmal: "Et IT-anlegg (230 V) forsynes fra en trafo på 150 kVA. Omtrent hvor stor er minste jordfeilstrøm ved første jordfeil etter hjelperegelen i NEK 400?",
     alternativer: ["Ca. 75 mA", "Ca. 300 mA", "Ca. 15 mA", "Ca. 1,5 A"], riktig: 0,
@@ -999,7 +999,7 @@ window.SPORSMAL = [
       "Boligkravet I2 ≤ Iz gjelder for ledere i hele boligen",
       "Ekstra krav gjelder ledere over 4 mm² av aluminium",
       "IB ≤ In og In ≤ 0,8 · Iz, uten krav til I2"], riktig: 0,
-    forklaring: "Boligkravet I2 ≤ Iz gjelder bare ledere ≤ 4 mm² Cu. (NEK 400-8-823, 823.431.3.1 s. 506 og NEK 400-5-53, 533.2 s. 240)" },
+    forklaring: "Kabelen er 6 mm², og boligkravet gjelder bare ledere opp til 4 mm², så de generelle kravene gjelder her. Boligkravet I2 ≤ Iz gjelder bare ledere ≤ 4 mm² Cu. (NEK 400-8-823, 823.431.3.1 s. 506 og NEK 400-5-53, 533.2 s. 240)" },
   { id: "fp21", kategori: "fagprove",
     sporsmal: "Hvordan kontrollerer du at en C15 automatsikring løser ut momentant ved kortslutning ytterst på kursen?",
     alternativer: [
@@ -1007,7 +1007,7 @@ window.SPORSMAL = [
       "Måle isolasjonen med 500 V mellom fase og PE, og kontrollere at verdien er over 1 MΩ",
       "Teste jordfeilbryteren med prøveknappen og kontrollere at den løser ut ved 30 mA på kursen",
       "Sjekke at kabelen er 2,5 mm² og at den har tilstrekkelig bæreevne for kursen i henhold til tabell"], riktig: 0,
-    forklaring: "Målingen eller beregningen gjøres ytterst på kursen, der feilstrømmen er minst. 10 × In er øvre grense for momentan utløsning med C-karakteristikk. For B-karakteristikk er grensen 5 × In (produktstandarden for automatsikringer)." },
+    forklaring: "Den minste kortslutningsstrømmen ytterst på kursen må være over 10 × In, altså 150 A for C15, for at vernet skal løse ut momentant. Målingen eller beregningen gjøres ytterst på kursen, der feilstrømmen er minst. 10 × In er øvre grense for momentan utløsning med C-karakteristikk. For B-karakteristikk er grensen 5 × In (produktstandarden for automatsikringer)." },
   { id: "fp22", kategori: "fagprove",
     sporsmal: "Hvordan regnes spenningsfall i volt på en 1-fase kurs (rent resistiv last)?",
     alternativer: [
@@ -1023,7 +1023,7 @@ window.SPORSMAL = [
       "Direkte i kursvernet, og etter NEK 400 uten samarbeid med nettselskapet",
       "I stikkontakten nærmest døra, der det er lettest tilgang for installatøren og kunden",
       "NEK 144, og tilknytningsskapet monteres av brukeren selv på veggen i boligen"], riktig: 0,
-    forklaring: "Nettselskapet bestemmer målerplassering og må ha tilgang til måleren. Overspenningsvernet sitter ofte i tilknytningsskapet. Da kreves det i bolig et signal når det er defekt (NEK 400-8-823, 823.534 s. 507)." },
+    forklaring: "Inntakskabelen tilknyttes i tilknytningsskapet etter NEK 399, i samarbeid med nettselskapet, som bestemmer hvor måleren står. Nettselskapet bestemmer målerplassering og må ha tilgang til måleren. Overspenningsvernet sitter ofte i tilknytningsskapet. Da kreves det i bolig et signal når det er defekt (NEK 400-8-823, 823.534 s. 507)." },
   { id: "fp24", kategori: "fagprove",
     sporsmal: "Hvorfor tar mange med en reserve (f.eks. 20–30 %) når de velger overbelastningsvernet for inntaket (OV)?",
     alternativer: [
@@ -1031,7 +1031,7 @@ window.SPORSMAL = [
       "Fordi NEK krever at OV er dobbelt så stort som summen av kursene",
       "For å redusere spenningsfallet til null",
       "Fordi kunden betaler mer"], riktig: 0,
-    forklaring: "Det er en faglig vurdering som skal begrunnes. Tavla i bolig skal i tillegg ha minst 30 % reserveplass (NEK 400-8-823, 823.810.512.301 s. 509)." },
+    forklaring: "Reserven gir rom for å legge til utstyr senere, og den kommer i tillegg til samtidighetsfaktoren. Det er en faglig vurdering som skal begrunnes. Tavla i bolig skal i tillegg ha minst 30 % reserveplass (NEK 400-8-823, 823.810.512.301 s. 509)." },
   { id: "fp25", kategori: "fagprove",
     sporsmal: "En lader for elbil skal installeres i en ny bolig. Hva er riktig løsning?",
     alternativer: [
@@ -1039,7 +1039,7 @@ window.SPORSMAL = [
       "En vanlig stikkontakt på stikkontaktkursen i garasjen, med 16 A overstrømsvern og vanlig jordfeilvern type AC",
       "Skjøteledning fra kjøkkenet over til bilen, koblet til en vanlig stikkontakt med 10 A sikring, og en adapter til bilens lader",
       "En mode 2-kabel fast montert i veggen på egen kurs med vanlig jordfeilvern type AC og uten overspenningsvern"], riktig: 0,
-    forklaring: "En vanlig stikkontakt er ikke et godkjent tilkoblingspunkt for bil etter 7-722 i 2022-utgaven. Ladepunktet skal også ha overspenningsvern. (NEK 400-7-722 fra s. 463)" },
+    forklaring: "Fast ladestasjon er riktig, fordi den er et godkjent tilkoblingspunkt for bil, med egen kurs, eget vern og jordfeilvern. En vanlig stikkontakt er ikke et godkjent tilkoblingspunkt for bil etter 7-722 i 2022-utgaven. Ladepunktet skal også ha overspenningsvern. (NEK 400-7-722 fra s. 463)" },
   { id: "fp26", kategori: "fagprove",
     sporsmal: "Hva skal en motorvarmer- eller kupévarmerkontakt i en carport ha?",
     alternativer: [
@@ -1055,7 +1055,7 @@ window.SPORSMAL = [
       "Stikkontakten sitter for høyt over gulvet, og det er for få uttak i rommet",
       "Flexrør er ikke tillatt i noen installasjoner, og det må brukes stiv rørtype",
       "Ingenting, dette er riktig utført, og boksen og rørene er montert i henhold til NEK"], riktig: 0,
-    forklaring: "Isolerte ledere uten kappe i fast installasjon skal ligge i rør eller kanal helt fram til utstyret. Ødelagt vegg og boks må også utbedres. (NEK 400-5-52, 521.10 s. 176)" },
+    forklaring: "Feilen er at rørene ikke går helt inn i boksen, og isolerte ledere uten kappe skal ligge i rør helt fram til utstyret. Isolerte ledere uten kappe i fast installasjon skal ligge i rør eller kanal helt fram til utstyret. Ødelagt vegg og boks må også utbedres. (NEK 400-5-52, 521.10 s. 176)" },
   { id: "e19", kategori: "fagprove", bilde: "egen-koblingsboks-tvunnet.jpg",
     sporsmal: "Hva er feil i koblingsboksen?",
     alternativer: [
@@ -1125,7 +1125,7 @@ window.SPORSMAL = [
       "Et metallrør fra vannverket som kommer inn i bygget, og som er en utsatt ledende del i de fleste boliger",
       "En faseleder uten isolasjon, som er spenningsførende også når anlegget er frakoblet fra nettet",
       "En jordleder i veggen som kobler utstyret til nøytralen i tavla, og som kan berøres"], riktig: 0,
-    forklaring: "Eksempel: metallkapslingen på en komfyr. Den skal kobles til PE. Et vannrør som kommer utenfra kalles en annen ledende del (tidligere «fremmed ledende del»). (NEK 400-2 fra s. 14 og 4-41 fra s. 96)" },
+    forklaring: "Den er utsatt fordi den kan berøres og bli spenningsførende hvis isolasjonen feiler. Eksempel: metallkapslingen på en komfyr. Den skal kobles til PE. Et vannrør som kommer utenfra kalles en annen ledende del (tidligere «fremmed ledende del»). (NEK 400-2 fra s. 14 og 4-41 fra s. 96)" },
   { id: "n41-9", kategori: "nek-sjokk",
     sporsmal: "Hvilke stikkontakter skal etter de generelle reglene ha tilleggsbeskyttelse med 30 mA jordfeilvern?",
     alternativer: [
@@ -1133,7 +1133,7 @@ window.SPORSMAL = [
       "Stikkontakter over 63 A, og stikkontakter inntil 32 A i boliger er unntatt kravet, siden de har egen kurs og vern",
       "Stikkontakter til motorer og varmepumper i boliger, med egen kurs og vern på hver",
       "Stikkontakter over 32 A utendørs, og stikkontakter inntil 63 A innendørs til fast tilkoblet utstyr"], riktig: 0,
-    forklaring: "Det er hovedregelen i 4-41. I boliger er kravet strengere: alle forbrukerkurser skal ha 30 mA jordfeilvern (8-823 fra s. 504). Del 7 har egne krav for bad, landbruk, elbil osv. (NEK 400-4-41, 411.3.3 s. 100)" },
+    forklaring: "Etter hovedregelen skal stikkontakter inntil 20 A for allmenn bruk, og utendørs stikkontakter og flyttbart utstyr inntil 32 A, ha 30 mA vern. Det er hovedregelen i 4-41. I boliger er kravet strengere: alle forbrukerkurser skal ha 30 mA jordfeilvern (8-823 fra s. 504). Del 7 har egne krav for bad, landbruk, elbil osv. (NEK 400-4-41, 411.3.3 s. 100)" },
   { id: "n41-10", kategori: "nek-sjokk",
     sporsmal: "Kan en 30 mA jordfeilbryter brukes som eneste beskyttelse mot elektrisk sjokk?",
     alternativer: [
@@ -1149,7 +1149,7 @@ window.SPORSMAL = [
       "Utstyret kobles til en egen jordelektrode, og sekundærsiden jordes for at en jordfeil skal gi høy strøm som løser ut vernet raskt",
       "Fase og nøytral legges i separate kabler, og utstyret jordes via nøytralen for at vernet skal løse ut raskere",
       "Utstyret har to jordfeilvern i serie, og begge må løse ut ved første jordfeil for at strømmen skal kobles fra helt, uansett hvor feilen er"], riktig: 0,
-    forklaring: "Uten jordforbindelse på sekundærsiden finnes ingen returvei via jord. Metoden brukes normalt for ett enkelt forbruksapparat. (NEK 400-4-41, 413 s. 104)" },
+    forklaring: "Sekundærsiden er ikke jordet, så en jordfeil får ingen returvei via jord, og da går det ikke strøm gjennom kroppen. Uten jordforbindelse på sekundærsiden finnes ingen returvei via jord. Metoden brukes normalt for ett enkelt forbruksapparat. (NEK 400-4-41, 413 s. 104)" },
   { id: "n41-12", kategori: "nek-sjokk",
     sporsmal: "I et TT-anlegg skal IΔn ≤ 50 V / RA. Hva er største tillatte RA når jordfeilvernet er på 300 mA?",
     alternativer: ["Ca. 167 Ω", "Ca. 1 667 Ω", "Ca. 15 Ω", "Ca. 6 Ω"], riktig: 0,
@@ -1169,7 +1169,7 @@ window.SPORSMAL = [
       "Å øke spenningen i anlegget der det er mange kurser, slik at utstyret får nok spenning på hvert punkt",
       "Å erstatte hovedjordskinnen i tavla, slik at man slipper å koble kurser og utsatte deler til PE hver for seg i hele anlegget",
       "Å koble nøytrallederen til jord i hvert rom, slik at stikkontakter får samme potensial som PE-lederen"], riktig: 0,
-    forklaring: "Tilleggsutjevning brukes lokalt som tilleggsbeskyttelse, eller når kravene til utkobling er vanskelige å oppfylle. (NEK 400-4-41, 415.2 s. 106)" },
+    forklaring: "Den kobler sammen deler som kan berøres samtidig, så det ikke oppstår farlig spenning mellom dem. Tilleggsutjevning brukes lokalt som tilleggsbeskyttelse, eller når kravene til utkobling er vanskelige å oppfylle. (NEK 400-4-41, 415.2 s. 106)" },
   { id: "n41-15", kategori: "nek-sjokk",
     sporsmal: "I en installasjon tilknyttet et allment IT-distribusjonsnett: hva gjelder for forbrukerkurser ved første jordfeil?",
     alternativer: [
@@ -1189,7 +1189,7 @@ window.SPORSMAL = [
       "230 V AC (400 V DC)",
       "25 V AC (60 V DC)",
       "12 V AC (30 V DC)"], riktig: 0,
-    forklaring: "Er spenningen på utsatte deler høyere ved første feil, må den kobles ut. (NEK 400-4-41, 411.6.5 s. 102)" },
+    forklaring: "Opp til 50 V AC (120 V DC) kan godtas ved første feil uten utkobling, og høyere spenning må kobles ut. Er spenningen på utsatte deler høyere ved første feil, må den kobles ut. (NEK 400-4-41, 411.6.5 s. 102)" },
 
   // ===== NEK 400-4-43: Overstrømsvern =====
   { id: "n43-1", kategori: "nek-overstrom",
@@ -1207,7 +1207,7 @@ window.SPORSMAL = [
       "Kortslutningsstrømmen i kursen, som er lik den nominelle strømmen",
       "Strømmen i nøytrallederen ved symmetrisk last, altså ingen strøm",
       "Startstrømmen til en motor, som er ca. 6 ganger merkestrømmen"], riktig: 0,
-    forklaring: "For automatsikringer etter produktstandarden er kravet automatisk oppfylt når In ≤ IZ. I2 kan også stå som If eller It i datablad. (NEK 400-5-53, 533.2 s. 240)" },
+    forklaring: "I2 er strømmen som får vernet til å løse ut innen fastsatt tid, og den skal være høyst 1,45 · IZ. For automatsikringer etter produktstandarden er kravet automatisk oppfylt når In ≤ IZ. I2 kan også stå som If eller It i datablad. (NEK 400-5-53, 533.2 s. 240)" },
   { id: "n43-3", kategori: "nek-overstrom",
     sporsmal: "En kurs i et næringsbygg har belastning IB = 13 A, og kabelen har IZ = 17 A etter korreksjon. Hvilken automatsikring passer?",
     alternativer: ["16 A", "20 A", "10 A", "25 A"], riktig: 0,
@@ -1227,7 +1227,7 @@ window.SPORSMAL = [
       "At spenningsfallet er lite nok, altså under 3 % for lys",
       "At jordfeilvernet løser ut innen 0,4 sekunder i TN-systemet",
       "At kabelen tåler belastningsstrømmen i normal drift og er tilkoblet riktig"], riktig: 0,
-    forklaring: "k er en materialfaktor (115 for kobber med PVC, 143 for kobber med PEX), S er tverrsnittet. Ved svært raske vern (under 0,1 s) sammenlignes gjennomsluppet energi I²t med k²S². (NEK 400-5-53, 533.3 s. 241)" },
+    forklaring: "Uttrykket sjekker om vernet bryter kortslutningen raskt nok til at isolasjonen ikke blir for varm. k er en materialfaktor (115 for kobber med PVC, 143 for kobber med PEX), S er tverrsnittet. Ved svært raske vern (under 0,1 s) sammenlignes gjennomsluppet energi I²t med k²S². (NEK 400-5-53, 533.3 s. 241)" },
   { id: "n43-6", kategori: "nek-overstrom",
     sporsmal: "En 2,5 mm² kobberleder med PVC (k = 115) får en kortslutningsstrøm på 1 000 A. Omtrent hvor lang tid tåler den?",
     alternativer: ["Ca. 0,08 s", "Ca. 0,8 s", "Ca. 8 s", "Ca. 0,008 s"], riktig: 0,
@@ -1239,7 +1239,7 @@ window.SPORSMAL = [
       "Når kabelen er kort og tilgjengelig, slik at det er enkelt å bytte sikringen ved overlast",
       "I alle boliger der det er installert jordfeilbryter og overspenningsvern på hver kurs",
       "Når kursen har jordfeilvern og er beregnet for tilkobling av stikkontakter i kjøkkenet"], riktig: 0,
-    forklaring: "Da kreves andre tiltak: kabelen skal være jord- og kortslutningssikkert forlagt, sannsynligheten for overstrøm skal begrenses, og det bør være overstrømsalarm. (NEK 400-4-43 fra s. 124)" },
+    forklaring: "Når en utkobling gir større fare, for eksempel for løftemagneter, skal strømmen ikke kobles ut automatisk. Da kreves andre tiltak: kabelen skal være jord- og kortslutningssikkert forlagt, sannsynligheten for overstrøm skal begrenses, og det bør være overstrømsalarm. (NEK 400-4-43 fra s. 124)" },
   { id: "n43-8", kategori: "nek-overstrom",
     sporsmal: "Hva betyr betegnelsen gG på en smeltesikring?",
     alternativer: [
@@ -1263,7 +1263,7 @@ window.SPORSMAL = [
       "Alltid ved enden av kursen, der kabelen er lengst og strømmen er størst, slik at vernet ser hele kabelen",
       "Midt på kabelen, slik at det er enklest å komme til vernet ved kontroll og utskifting",
       "Hvor som helst på kursen, så lenge det er tilgjengelig og merket i kursfortegnelsen"], riktig: 0,
-    forklaring: "Vern mot kortslutning skal derimot alltid sitte i begynnelsen av kursen. (NEK 400-5-53, 533.4 s. 243)" },
+    forklaring: "Overbelastningsvernet kan sitte lenger ut, så lenge det ikke er avgreninger eller stikkontakter før vernet. Vern mot kortslutning skal derimot alltid sitte i begynnelsen av kursen. (NEK 400-5-53, 533.4 s. 243)" },
   { id: "n43-11", kategori: "nek-overstrom",
     sporsmal: "Hva menes med kombinert kortslutningsbeskyttelse (back-up)?",
     alternativer: [
@@ -1271,7 +1271,7 @@ window.SPORSMAL = [
       "To vern løser ut samtidig for sikkerhets skyld, og begge skal ha samme merkestrøm",
       "Et ekstra vern i reserve på lager, som settes inn av montøren hvis hovedvernet løser ut ofte",
       "At jordfeilvernet beskytter automatsikringen mot kortslutning, og dermed erstatter bryteevnen"], riktig: 0,
-    forklaring: "Det er tillatt når vernene er koordinert etter produsentens anvisninger, slik at verken det nedre vernet eller lederne skades. (NEK 400-4-43, 431.5.3.2 s. 128 og 5-53, 533.3 s. 241)" },
+    forklaring: "Det øvre vernet har høy nok bryteevne og hjelper til å bryte kortslutningen når det nedre vernet ikke klarer det alene. Det er tillatt når vernene er koordinert etter produsentens anvisninger, slik at verken det nedre vernet eller lederne skades. (NEK 400-4-43, 431.5.3.2 s. 128 og 5-53, 533.3 s. 241)" },
   { id: "n43-12", kategori: "nek-overstrom",
     sporsmal: "Når velger man ofte C-karakteristikk i stedet for B på en automatsikring?",
     alternativer: [
@@ -1307,7 +1307,7 @@ window.SPORSMAL = [
       "Ved lite last i kursen, også når nøytrallederen har samme tverrsnitt som fasene",
       "Ikke i det hele tatt, fordi nøytrallederen ikke kan overbelastes, selv om det er store harmoniske strømmer i kursen",
       "I IT-system, der nøytrallederen er koblet direkte til jord i hver underfordeling"], riktig: 0,
-    forklaring: "Ved deteksjon skal fasene kobles ut, men ikke nødvendigvis nøytrallederen. (NEK 400-4-43, 431.3.2 s. 125)" },
+    forklaring: "Nøytrallederen må ha egen deteksjon når den har mindre tverrsnitt enn fasene, eller kan få større strøm enn fasene. Ved deteksjon skal fasene kobles ut, men ikke nødvendigvis nøytrallederen. (NEK 400-4-43, 431.3.2 s. 125)" },
   { id: "e20", kategori: "nek-overstrom", bilde: "egen-tavle-c60h.jpg",
     sporsmal: "Automatsikringene C60H B16 er merket «10000» i en firkant. Hva betyr det?",
     alternativer: [
@@ -1315,7 +1315,7 @@ window.SPORSMAL = [
       "Vernet tåler 10 000 koblinger før det må skiftes ut, og det gjelder for både automatikken og kontakten i tavla",
       "Vernet løser ut ved 10 000 mA, og er laget for å beskytte mot jordfeil i våtrom og garasjer",
       "Tallet er produksjonsnummer, og vernet er merket med serienummer 10 000 på fabrikken"], riktig: 0,
-    forklaring: "Hvis bryteevnen er for lav, kan et vern foran som er koordinert med det gi kombinert kortslutningsbeskyttelse. (NEK 400-5-53, 533.3 s. 241)" },
+    forklaring: "Tallet er bryteevnen, 10 000 A (10 kA), som må være minst like stor som største kortslutningsstrøm der vernet står. Hvis bryteevnen er for lav, kan et vern foran som er koordinert med det gi kombinert kortslutningsbeskyttelse. (NEK 400-5-53, 533.3 s. 241)" },
 
   // ===== NEK 400-5-52: Kabler og forlegning =====
   { id: "n52-1", kategori: "nek-kabler",
@@ -1329,7 +1329,7 @@ window.SPORSMAL = [
       "4 % for belysning og 5 % for annen bruk",
       "10 % for belysning og 15 % for annen bruk",
       "1 % for belysning og 2 % for annen bruk"], riktig: 0,
-    forklaring: "Regnet fra leveringspunktet til utstyret. Ved privat forsyning er de veiledende grensene 6 % og 8 %. Tabellen er informativ (veiledende). (NEK 400-5-52, 525 s. 185 og tillegg 52F s. 228)" },
+    forklaring: "Grensene er veiledende for anlegg på det allmenne nettet, og lys har lavere grense (3 %) enn annen bruk (5 %). Regnet fra leveringspunktet til utstyret. Ved privat forsyning er de veiledende grensene 6 % og 8 %. Tabellen er informativ (veiledende). (NEK 400-5-52, 525 s. 185 og tillegg 52F s. 228)" },
   { id: "n52-3", kategori: "nek-kabler",
     sporsmal: "Hvilken forlegning gir normalt lavest strømføringsevne for en kabel?",
     alternativer: [
@@ -1365,7 +1365,7 @@ window.SPORSMAL = [
       "Ingenting, kabelen er brannsikker og kan føres gjennom veggen uten tetting",
       "Kabelen må skjøtes på hver side av veggen, og skjøten må ligge i røret",
       "Hullet må være minst dobbelt så stort som kabelen, og det brukes ikke tetting"], riktig: 0,
-    forklaring: "Ved endringsarbeid skal tettingen settes tilbake så snart som mulig. (NEK 400-5-52, 527.2 s. 186)" },
+    forklaring: "Gjennomføringen tettes, fordi veggens brannmotstand må opprettholdes. Ved endringsarbeid skal tettingen settes tilbake så snart som mulig. (NEK 400-5-52, 527.2 s. 186)" },
   { id: "n52-9", kategori: "nek-kabler",
     sporsmal: "Kan ledere fra kurser med ulik spenning ligge i samme kabel eller rør?",
     alternativer: [
@@ -1393,7 +1393,7 @@ window.SPORSMAL = [
       "Med maling på selve kabelkappen",
       "Den trenger ikke merkes i det hele tatt",
       "Med en ekstra kabel lagt i samme grøft"], riktig: 0,
-    forklaring: "Kabelen skal også beskyttes mot mekanisk skade, eller legges så dypt at risikoen blir minimal (f.eks. rør, armert kabel eller dekkplater). (NEK 400-5-52, 522.8 s. 179)" },
+    forklaring: "Kabelplater eller merkebånd viser hvor kabelen ligger, så den ikke blir skadet ved senere graving. Kabelen skal også beskyttes mot mekanisk skade, eller legges så dypt at risikoen blir minimal (f.eks. rør, armert kabel eller dekkplater). (NEK 400-5-52, 522.8 s. 179)" },
   { id: "n52-13", kategori: "nek-kabler",
     sporsmal: "Hva skjer med strømføringsevnen hvis en kabel er helt omsluttet av varmeisolasjon over en lengre strekning?",
     alternativer: [
@@ -1401,7 +1401,7 @@ window.SPORSMAL = [
       "Den øker",
       "Den er uendret",
       "Kabelen blir bedre beskyttet og tåler mer"], riktig: 0,
-    forklaring: "Kabler bør ikke legges inne i isolasjon. Hvis det ikke kan unngås, må strømføringsevnen reduseres. (NEK 400-5-52, 523 s. 182 og tillegg 52B)" },
+    forklaring: "Den reduseres, fordi varmen ikke får slippe ut fra kabelen. Kabler bør ikke legges inne i isolasjon. Hvis det ikke kan unngås, må strømføringsevnen reduseres. (NEK 400-5-52, 523 s. 182 og tillegg 52B)" },
   { id: "n52-14", kategori: "nek-kabler",
     sporsmal: "Hvilken resistivitet for kobber bruker NEK 400 når spenningsfall beregnes ved normal drift?",
     alternativer: ["0,0225 Ω·mm²/m", "0,0175 Ω·mm²/m", "0,036 Ω·mm²/m", "0,0100 Ω·mm²/m"], riktig: 0,
@@ -1417,11 +1417,11 @@ window.SPORSMAL = [
   { id: "n52-16", kategori: "nek-kabler",
     sporsmal: "Hvilket minste tverrsnitt anbefales for en skjøteledning til en 16 A stikkontakt (lengde over 2 m)?",
     alternativer: ["1,5 mm² Cu", "0,5 mm² Cu", "0,75 mm² Cu", "6 mm² Cu"], riktig: 0,
-    forklaring: "Skjøteledninger kortere enn 2 m kan ha 1 mm². Utendørs bør skjøteledningen være beregnet for det. (NEK 400-5-52, 524 s. 184)" },
+    forklaring: "Over 2 m skal skjøteledningen være grovere enn 1 mm², og 1,5 mm² Cu er det som anbefales for 16 A. Skjøteledninger kortere enn 2 m kan ha 1 mm². Utendørs bør skjøteledningen være beregnet for det. (NEK 400-5-52, 524 s. 184)" },
   { id: "n52-17", kategori: "nek-kabler",
     sporsmal: "Kan flere hovedkurser dele én nøytralleder?",
     alternativer: ["Nei", "Ja, alltid", "Ja, hvis de har samme tverrsnitt", "Ja, i IT-system"], riktig: 0,
-    forklaring: "Flere hovedkurser skal ikke ha felles nøytralleder. Lederne i en kurs skal heller ikke spres på flere kabler eller rør (unntatt ved parallelle flerlederkabler). (NEK 400-5-52, 521.8 s. 176)" },
+    forklaring: "Nei, hver hovedkurs skal ha sin egen nøytralleder, og lederne i en kurs holdes samlet. Flere hovedkurser skal ikke ha felles nøytralleder. Lederne i en kurs skal heller ikke spres på flere kabler eller rør (unntatt ved parallelle flerlederkabler). (NEK 400-5-52, 521.8 s. 176)" },
   { id: "n52-18", kategori: "nek-kabler",
     sporsmal: "Hvilken ledertemperatur ved normal drift tåler en kabel med PVC-isolasjon?",
     alternativer: ["70 °C", "90 °C", "105 °C", "50 °C"], riktig: 0,
@@ -1435,7 +1435,7 @@ window.SPORSMAL = [
       "Ett år etter at den er tatt i bruk, og deretter hvert femte år",
       "Hvis kunden ber om det, eller hvis forsikringsselskapet krever det",
       "Ved salg av boligen, og da etter avtale mellom kjøper og selger"], riktig: 0,
-    forklaring: "Anlegget skal kontrolleres og dokumenteres før det settes i drift. (NEK 400 del 6 fra s. 327)" },
+    forklaring: "Kontrollen skal gjøres før anlegget tas i bruk og etter endring eller utvidelse, slik at feil oppdages før bruk. Anlegget skal kontrolleres og dokumenteres før det settes i drift. (NEK 400 del 6 fra s. 327)" },
   { id: "n6-2", kategori: "nek-kontroll",
     sporsmal: "Hvilke deler består førstegangskontrollen av?",
     alternativer: [
@@ -1451,11 +1451,11 @@ window.SPORSMAL = [
       "Fordi det er lettere å se i mørket, og fordi mørke gjør det enklere å finne feil i kablene",
       "Fordi instrumentene må varmes opp, slik at målingene blir riktige og nøyaktige",
       "Det spiller ingen rolle når den gjøres, fordi alle feil uansett blir oppdaget ved måling senere"], riktig: 0,
-    forklaring: "Mange feil kan oppdages uten måling, og bør rettes før anlegget spenningssettes. (NEK 400-6, 6.4.2.1 s. 328)" },
+    forklaring: "Synlige feil skal finnes før spenningssetting, slik at de ikke kan gi fare. Mange feil kan oppdages uten måling, og bør rettes før anlegget spenningssettes. (NEK 400-6, 6.4.2.1 s. 328)" },
   { id: "n6-4", kategori: "nek-kontroll",
     sporsmal: "Hvilken prøvespenning og minsteverdi gjelder for isolasjonsmåling av SELV- og PELV-kretser?",
     alternativer: ["250 V DC og minst 0,5 MΩ", "500 V DC og minst 1,0 MΩ", "1000 V DC og minst 1,0 MΩ", "50 V AC og minst 1 kΩ"], riktig: 0,
-    forklaring: "Lavere prøvespenning brukes for ekstra lav spenning. (NEK 400-6, 6.4.3.3 og tabell 6A s. 332)" },
+    forklaring: "SELV- og PELV-kretser er ekstra lavspent, og da er prøvespenningen lavere: 250 V DC og minst 0,5 MΩ. Lavere prøvespenning brukes for ekstra lav spenning. (NEK 400-6, 6.4.3.3 og tabell 6A s. 332)" },
   { id: "n6-5", kategori: "nek-kontroll",
     sporsmal: "Hvilken prøvespenning brukes ved isolasjonsmåling av et 690 V-anlegg?",
     alternativer: ["1000 V DC", "500 V DC", "250 V DC", "690 V AC"], riktig: 0,
@@ -1467,7 +1467,7 @@ window.SPORSMAL = [
       "Måle mellom fase og nøytral med 1000 V, også når kursen har elektronikk som tåler det",
       "Sette kursen under spenning først, og så måle mellom fase og PE med 1000 V",
       "Fjerne PE-lederen før målingen, så utstyret ikke tar skade av testspenningen"], riktig: 0,
-    forklaring: "I TN kan nøytral kobles sammen med fasene under målingen, men husk å fjerne sammenkoblingen etterpå. Kursen skal være spenningsløs. (NEK 400-6, 6.4.3.3 s. 332)" },
+    forklaring: "Elektronikken skal ikke utsettes for prøvespenningen, så du måler bare mellom sammenkoblede aktive ledere og PE, eller kobler fra utstyret. I TN kan nøytral kobles sammen med fasene under målingen, men husk å fjerne sammenkoblingen etterpå. Kursen skal være spenningsløs. (NEK 400-6, 6.4.3.3 s. 332)" },
   { id: "n6-7", kategori: "nek-kontroll",
     sporsmal: "Hva kontrolleres ved polaritetskontroll?",
     alternativer: [
@@ -1483,7 +1483,7 @@ window.SPORSMAL = [
       "Den skal ikke kontrolleres, siden vernet er produsert etter gjeldende standard",
       "Ved å se på merkingen på selve vernet og anta at det virker",
       "Ved å lage en ekte jordfeil med en ledning til PE og måle tiden til utløsning"], riktig: 0,
-    forklaring: "Ved instrumentprøving er beskyttelsen bekreftet når vernet løser ut ved en feilstrøm ≤ IΔn. Det anbefales også å sjekke utkoblingstiden. (NEK 400-6, 6.4.3.7 s. 334 og 6.4.3.8 s. 337)" },
+    forklaring: "Testknappen brukes som standard, og instrument brukes bare hvis eieren krever det. Ved instrumentprøving er beskyttelsen bekreftet når vernet løser ut ved en feilstrøm ≤ IΔn. Det anbefales også å sjekke utkoblingstiden. (NEK 400-6, 6.4.3.7 s. 334 og 6.4.3.8 s. 337)" },
   { id: "n6-9", kategori: "nek-kontroll",
     sporsmal: "Hvor lang tid kan et vanlig (ikke tidsforsinket) jordfeilvern høyst bruke på å løse ut ved IΔn?",
     alternativer: [
@@ -1499,7 +1499,7 @@ window.SPORSMAL = [
       "Nei. Ik må være over 1 000 A for at vernet skal løse ut momentant på 16 A",
       "Nei. Zs må være under 0,1 Ω, fordi B16 bare løser ut momentant over 500 A",
       "Det kan ikke avgjøres uten isolasjonsmåling og måling av jordelektrodens resistans på anlegget"], riktig: 0,
-    forklaring: "B-karakteristikk løser ut momentant ved inntil 5 × In = 80 A, langt under 0,4 s. Kravet er Ia ≤ U0 / Zs. (NEK 400-6, 6.4.3.7 s. 334–336 og 5-53, 531.2.2.1 s. 232)" },
+    forklaring: "Kravet er oppfylt, fordi 230 / 0,8 gir ca. 288 A, og det er over 80 A (5 × In) for B16. B-karakteristikk løser ut momentant ved inntil 5 × In = 80 A, langt under 0,4 s. Kravet er Ia ≤ U0 / Zs. (NEK 400-6, 6.4.3.7 s. 334–336 og 5-53, 531.2.2.1 s. 232)" },
   { id: "n6-11", kategori: "nek-kontroll",
     sporsmal: "Hvorfor kontrolleres fasefølgen i 3-fase stikkontakter?",
     alternativer: [
@@ -1547,7 +1547,7 @@ window.SPORSMAL = [
       "Bare hvilken dato anlegget ble levert og hvem som har montert det, pluss navnet på kunden",
       "Prisen på materiellet og hva kunden skal betale for kursen, samt dato for når kursen ble lagt",
       "Navnet på montøren og telefonnummeret til den som utførte arbeidet, samt garantitiden"], riktig: 0,
-    forklaring: "I tillegg skal den vise kortslutningsytelsen i fordelingen og eventuell jordelektrode og annet utstyr i fordelingen. (NEK 400-6, visuell kontroll i 6.4.2 s. 328)" },
+    forklaring: "Den skal vise hva hver kurs forsyner, med tverrsnitt, lengde, installasjonsmetode og vern, slik at kursene er dokumentert. I tillegg skal den vise kortslutningsytelsen i fordelingen og eventuell jordelektrode og annet utstyr i fordelingen. (NEK 400-6, visuell kontroll i 6.4.2 s. 328)" },
   { id: "n6-17", kategori: "nek-kontroll",
     sporsmal: "Hva anbefales om spenningsfall når man ikke kjenner spenningsgrensene for utstyret?",
     alternativer: [
@@ -1555,7 +1555,7 @@ window.SPORSMAL = [
       "Høyst 10 % fra leveringspunktet til utstyret",
       "Høyst 1 % fra leveringspunktet til utstyret",
       "Ingen anbefaling for spenningsfall i normen"], riktig: 0,
-    forklaring: "Det er en anbefaling i verifikasjonsdelen, for når du ikke vet hvor mye spenningsfall utstyret tåler. Ved prosjektering brukes i tillegg de veiledende tabellverdiene i 5-52: 3 % for lys og 5 % for annen bruk. Holder du deg under 3 % for lys og 4 % for annet, oppfyller du begge. (NEK 400-6, 6.4.3.10 s. 337)" },
+    forklaring: "Når utstyrets grense er ukjent, holdes spenningsfallet høyst 4 % fra leveringspunktet. Det er en anbefaling i verifikasjonsdelen, for når du ikke vet hvor mye spenningsfall utstyret tåler. Ved prosjektering brukes i tillegg de veiledende tabellverdiene i 5-52: 3 % for lys og 5 % for annen bruk. Holder du deg under 3 % for lys og 4 % for annet, oppfyller du begge. (NEK 400-6, 6.4.3.10 s. 337)" },
   { id: "n6-18", kategori: "nek-kontroll",
     sporsmal: "Hva gjelder for nøytrallederen under isolasjonsmåling?",
     alternativer: [
@@ -1571,7 +1571,7 @@ window.SPORSMAL = [
       "Det høyeste måleresultatet (beste)",
       "Gjennomsnittet av målingene i anlegget",
       "Det første måleresultatet som ble tatt"], riktig: 0,
-    forklaring: "Det gir grunnlag for å sammenligne ved senere kontroller. (NEK 400-6, 6.4.3.3 s. 332)" },
+    forklaring: "Det laveste tallet dokumenteres fordi det viser det dårligste punktet, og det brukes til å sammenligne ved senere kontroller. Det gir grunnlag for å sammenligne ved senere kontroller. (NEK 400-6, 6.4.3.3 s. 332)" },
   { id: "e8", kategori: "nek-kontroll", bilde: "egen-maling-zline.jpg",
     sporsmal: "Instrumentet viser Ik = 174 A på en C16-kurs, og grensen er satt til 160 A. Hvorfor viser det godkjent?",
     alternativer: [
@@ -1587,7 +1587,7 @@ window.SPORSMAL = [
       "Nei, den skal løse ut ved nøyaktig 30 mA, og bare da, fordi alt under 30 mA er en feil i vernet",
       "Nei, den løste ut for sent, fordi tidsgrensen for 30 mA-vern er 1 sekund",
       "Nei, den skal ikke løse ut under 50 mA, fordi vernet er laget for høyere strøm"], riktig: 0,
-    forklaring: "Produktstandarden krever utløsning et sted mellom 0,5 × IΔn og IΔn. Krever eieren instrumentprøving, er beskyttelsen bekreftet når vernet løser ut ved ≤ IΔn. (NEK 400-6, 6.4.3.7 s. 334)" },
+    forklaring: "Utløsning ved 19,5 mA er mellom 0,5 × IΔn og IΔn, og 13 ms er godt innenfor tidsgrensen. Produktstandarden krever utløsning et sted mellom 0,5 × IΔn og IΔn. Krever eieren instrumentprøving, er beskyttelsen bekreftet når vernet løser ut ved ≤ IΔn. (NEK 400-6, 6.4.3.7 s. 334)" },
   { id: "e10", kategori: "nek-kontroll", bilde: "egen-maling-rcd.jpg",
     sporsmal: "Instrumentet er stilt inn på «Type AC». Hva bør du tenke på?",
     alternativer: [
@@ -1595,7 +1595,7 @@ window.SPORSMAL = [
       "Testtypen kan stå på AC, siden type AC-vern er vanlig i tavla, også vern med elektronikk",
       "Type AC betyr at testen gjøres med likestrøm, så instrumentet må settes til DC-test for kursene i tavla, også vern med elektronikk",
       "Type AC betyr at det er et trefaset vern som må testes med 400 V mellom fasene i anlegget"], riktig: 0,
-    forklaring: "Et type A-vern skal også løse ut ved pulserende DC-feilstrøm, og det kan instrumentet teste når det står på type A. (NEK 400-5-53, 531.2.3.3.1 s. 234)" },
+    forklaring: "Testtypen må passe til vernet som er montert, for eksempel type A, siden type A også løser ut ved pulserende DC-feil. Et type A-vern skal også løse ut ved pulserende DC-feilstrøm, og det kan instrumentet teste når det står på type A. (NEK 400-5-53, 531.2.3.3.1 s. 234)" },
   { id: "e11", kategori: "nek-kontroll", bilde: "egen-maling-isolasjon.jpg",
     sporsmal: "Isolasjonsmålingen viser over 999 MΩ med 500 V mellom L og PE. Hva er kravet for en 230 V-kurs?",
     alternativer: ["Minst 1,0 MΩ ved 500 V DC", "Minst 999 MΩ", "Minst 0,5 MΩ ved 250 V", "Under 1 Ω"], riktig: 0,
@@ -1607,7 +1607,7 @@ window.SPORSMAL = [
       "Bare at lokket lukker seg og at kontakten er tett",
       "At kontakten har 30 mA type AC jordfeilvern, og at den er koblet riktig",
       "At den er koblet til 230 V enfase, med nøytral og PE samlet i én leder"], riktig: 0,
-    forklaring: "For trefase kurser skal det verifiseres at faserekkefølgen er opprettholdt. (NEK 400-6, 6.4.3.6 s. 334)" },
+    forklaring: "Fasene må komme i riktig rekkefølge, ellers går motorer som kobles til feil vei. For trefase kurser skal det verifiseres at faserekkefølgen er opprettholdt. (NEK 400-6, 6.4.3.6 s. 334)" },
 
   // ===== NEK 400-7-701: Bad og dusj =====
   { id: "n701-1", kategori: "nek-bad",
@@ -1629,7 +1629,7 @@ window.SPORSMAL = [
   { id: "n701-4", kategori: "nek-bad",
     sporsmal: "Hvilken minste kapslingsgrad kreves for utstyr i sone 0?",
     alternativer: ["IPX7", "IPX4", "IPX2", "IP20"], riktig: 0,
-    forklaring: "Sone 0 er innsiden av badekaret. Ved dusj er sone 0 gulvet og opp til 10 cm over gulvet, innenfor 1,2 m fra vannuttaket. Utstyret må tåle å stå i vann. (NEK 400-7-701 s. 343 og 701.512.2 s. 346)" },
+    forklaring: "Utstyr i sone 0 kan stå i vann, og IPX7 tåler nedsenking, så det er minstekravet. Sone 0 er innsiden av badekaret. Ved dusj er sone 0 gulvet og opp til 10 cm over gulvet, innenfor 1,2 m fra vannuttaket. Utstyret må tåle å stå i vann. (NEK 400-7-701 s. 343 og 701.512.2 s. 346)" },
   { id: "n701-5", kategori: "nek-bad",
     sporsmal: "Hvilket utstyr kan monteres i sone 0?",
     alternativer: [
@@ -1637,7 +1637,7 @@ window.SPORSMAL = [
       "Alt utstyr med jordfeilvern og IPX4, også med vanlig 230 V-forsyning fra kursen",
       "Stikkontakter med lokk og IP44, plassert i sone 0 bak badekaret",
       "Utstyr på 50 V AC med IPX4, og fast tilkoblede apparater med vanlig 230 V-forsyning"], riktig: 0,
-    forklaring: "Utstyret skal også være beregnet for plasseringen etter produsentens anvisning. (NEK 400-7-701, 701.512.2.101.2 s. 346)" },
+    forklaring: "I sone 0 er bare svært lav spenning (SELV) trygt i vann, så bare fast tilkoblet utstyr med SELV og tett kapsling er tillatt. Utstyret skal også være beregnet for plasseringen etter produsentens anvisning. (NEK 400-7-701, 701.512.2.101.2 s. 346)" },
   { id: "n701-6", kategori: "nek-bad",
     sporsmal: "Hvilke kurser skal ha tilleggsbeskyttelse med 30 mA jordfeilvern i et rom med badekar eller dusj?",
     alternativer: [
@@ -1657,7 +1657,7 @@ window.SPORSMAL = [
       "Ingenting, siden kabelen er skjermet fra fabrikken og ikke trenger noe ekstra metall over seg",
       "Kabelen skal kobles til 400 V mellom to faser, og den skal ligge i en egen krets",
       "Kabelen må ligge i plastrør med en diameter på minst 30 mm, slik at den ikke tar skade"], riktig: 0,
-    forklaring: "Den jordede skjermen gjør at en skade på kabelen gir jordfeil og utkobling, ikke spenning i gulvet. Kurser til varmekabler skal ha jordfeilvern som ikke er tidsforsinket. (NEK 400-7-753 fra s. 484)" },
+    forklaring: "Uten jordet skjerm må det legges et metallnett over kabelen som kobles til PE, slik at det gjør samme jobb som skjermen. Den jordede skjermen gjør at en skade på kabelen gir jordfeil og utkobling, ikke spenning i gulvet. Kurser til varmekabler skal ha jordfeilvern som ikke er tidsforsinket. (NEK 400-7-753 fra s. 484)" },
   { id: "n701-9", kategori: "nek-bad",
     sporsmal: "Kan en vanlig 230 V stikkontakt monteres i sone 1 eller sone 2?",
     alternativer: [
@@ -1673,7 +1673,7 @@ window.SPORSMAL = [
       "Fordi baderom er små, og det derfor er vanskelig å holde god avstand til jordede deler",
       "Fordi det er mer utstyr på bad, som varmtvannsbereder, vaskemaskin og elektrisk gulvvarme",
       "Fordi baderom har høyere nettspenning på stikkontaktene enn resten av boligen"], riktig: 0,
-    forklaring: "Lavere motstand gir større strøm ved samme spenning. Derfor er det strenge krav til soner, IP-grad og jordfeilbryter. (NEK 400-7-701 fra s. 342)" },
+    forklaring: "Når huden er våt og føttene er bare, er motstanden i kroppen lav, og da blir en strøm gjennom kroppen farligere. Lavere motstand gir større strøm ved samme spenning. Derfor er det strenge krav til soner, IP-grad og jordfeilbryter. (NEK 400-7-701 fra s. 342)" },
   { id: "n701-11", kategori: "nek-bad",
     sporsmal: "Hvilken kapslingsgrad kreves i sone 1 og 2 der det spyles med vannstråle ved rengjøring, f.eks. i offentlige dusjer?",
     alternativer: ["IPX5", "IPX4", "IPX2", "IPX0"], riktig: 0,
@@ -1711,7 +1711,7 @@ window.SPORSMAL = [
       "Fra en vanlig stikkontaktkurs sammen med annet utstyr",
       "Fra lyskursen",
       "Fra hovedsikringen direkte uten vern"], riktig: 0,
-    forklaring: "Unntak: ved nytt ladepunkt i en eksisterende frittliggende privat garasje kan en eksisterende kurs brukes hvis eieren godtar ulempene. (NEK 400-7-722 fra s. 463)" },
+    forklaring: "Et ladepunkt trekker mye strøm over lang tid, så det skal ha egen kurs og eget vern og ikke deles med annet utstyr. Unntak: ved nytt ladepunkt i en eksisterende frittliggende privat garasje kan en eksisterende kurs brukes hvis eieren godtar ulempene. (NEK 400-7-722 fra s. 463)" },
   { id: "n722-2", kategori: "nek-elbil",
     sporsmal: "Hvilket jordfeilvern kreves for et ladepunkt?",
     alternativer: [
@@ -1751,7 +1751,7 @@ window.SPORSMAL = [
       "Lading fra vanlig stikkontakt med kontrollboks på kabelen",
       "DC-hurtiglading med høy effekt der styring og kommunikasjon ligger i kabelen",
       "Lading uten noen form for kontroll, direkte fra en 400 V-kurs uten jordfeilvern"], riktig: 0,
-    forklaring: "Mode 3 er vanlig hjemmelader. NEK 400 anbefaler ladestasjon etter NEK EN 61851 med Type 2-kontakt eller fast Type 2-kabel. (NEK EN 61851 og NEK 400-7-722 fra s. 463)" },
+    forklaring: "Lademodus 3 er en fast ladestasjon der styring og kommunikasjon med bilen ligger i laderen, ikke i kabelen. Mode 3 er vanlig hjemmelader. NEK 400 anbefaler ladestasjon etter NEK EN 61851 med Type 2-kontakt eller fast Type 2-kabel. (NEK EN 61851 og NEK 400-7-722 fra s. 463)" },
   { id: "n722-7", kategori: "nek-elbil",
     sporsmal: "Hva er lademodus 2?",
     alternativer: [
@@ -1759,7 +1759,7 @@ window.SPORSMAL = [
       "DC-hurtiglading ved veien, med kabel som er fast montert på stolpen",
       "Fast ladestasjon på veggen med Type 2-kontakt, egen kurs i tavla",
       "Trådløs lading i gulvet, uten kabel og uten noen kontrollboks eller vernboks"], riktig: 0,
-    forklaring: "En slik kabelkontrollboks er ikke beregnet for fast installasjon. Nye faste ladepunkter for bil skal ha Type 2-kontakt eller fast Type 2-kabel. (NEK EN 61851 og NEK 400-7-722 fra s. 463)" },
+    forklaring: "Lademodus 2 er lading fra vanlig stikkontakt, der en kontroll- og vernboks sitter på ladekabelen. En slik kabelkontrollboks er ikke beregnet for fast installasjon. Nye faste ladepunkter for bil skal ha Type 2-kontakt eller fast Type 2-kabel. (NEK EN 61851 og NEK 400-7-722 fra s. 463)" },
   { id: "n722-8", kategori: "nek-elbil",
     sporsmal: "Hva er lademodus 4?",
     alternativer: [
@@ -1783,7 +1783,7 @@ window.SPORSMAL = [
       "IPX0 mot vann og IP2X mot fremmedlegemer",
       "IPX2 mot vann og IP20 mot fremmedlegemer",
       "IP2X mot vann og IPX4 mot støv og sand"], riktig: 0,
-    forklaring: "På offentlige steder og parkeringsplasser skal utstyret i tillegg beskyttes mot støt, f.eks. med utstyr som tåler IK08 eller med påkjørselsvern. (NEK 400-7-722, 722.512.2 s. 465)" },
+    forklaring: "Utendørs kan regn og sprut komme på ladepunktet, og da må det være IPX4 mot vann og IP4X mot fremmedlegemer. På offentlige steder og parkeringsplasser skal utstyret i tillegg beskyttes mot støt, f.eks. med utstyr som tåler IK08 eller med påkjørselsvern. (NEK 400-7-722, 722.512.2 s. 465)" },
   { id: "n722-12", kategori: "nek-elbil",
     sporsmal: "Hva krever NEK 400:2022 om overspenningsvern for ladepunkter?",
     alternativer: [
@@ -1791,7 +1791,7 @@ window.SPORSMAL = [
       "Det er ikke tillatt å ha overspenningsvern i installasjonen",
       "Overspenningsvern kreves bare for ladepunkter med DC-lading i installasjonen",
       "Ladepunkter over 22 kW skal ha eget overspenningsvern inne i selve laderen"], riktig: 0,
-    forklaring: "Bilen og laderen har mye følsom elektronikk. (NEK 400-7-722, 722.443 s. 464)" },
+    forklaring: "Overspenning kan skade følsom elektronikk, så ladepunktet skal beskyttes av et overspenningsvern i installasjonen. Bilen og laderen har mye følsom elektronikk. (NEK 400-7-722, 722.443 s. 464)" },
   { id: "n722-13", kategori: "nek-elbil",
     sporsmal: "Hva slags tilkoblingspunkt skal brukes for AC-lading av bil?",
     alternativer: [
@@ -1803,7 +1803,7 @@ window.SPORSMAL = [
   { id: "n722-14", kategori: "nek-elbil",
     sporsmal: "Er det lov å koble en skjøteledning til et tilkoblingspunkt for elbillading?",
     alternativer: ["Nei", "Ja, hvis den er 2,5 mm²", "Ja, hvis den er under 10 m", "Ja, utendørs"], riktig: 0,
-    forklaring: "Et tilkoblingspunkt skal heller bare forsyne ett kjøretøy, og flyttbare elbilkontakter er ikke tillatt. (NEK 400-7-722, 722.55.101 s. 467)" },
+    forklaring: "Nei, en skjøteledning er en flyttbar forbindelse, og flyttbare kontakter er ikke tillatt ved et tilkoblingspunkt. Et tilkoblingspunkt skal heller bare forsyne ett kjøretøy, og flyttbare elbilkontakter er ikke tillatt. (NEK 400-7-722, 722.55.101 s. 467)" },
   { id: "n722-15", kategori: "nek-elbil",
     sporsmal: "Hva skal det være på en kurs til et ladepunkt i et IT-anlegg som ikke kobles ut ved første jordfeil?",
     alternativer: [
@@ -1821,7 +1821,7 @@ window.SPORSMAL = [
       "Med automatsikring på hver kurs, eller med vanlig kabel og vanlig stikkontakt uten ekstra vern",
       "Med 300 mA jordfeilvern på hele byggeplassen, eller med ekstra jording av stikkontaktene i stedet for vern per kurs i anlegget",
       "Det er ikke spesielle krav, så lenge stikkontaktene er merket og kursen har vanlig overstrømsvern og vanlig jording i byggeplassen"], riktig: 0,
-    forklaring: "Byggeplasser har fukt, slitt utstyr og håndverktøy, så personbeskyttelsen må være god. (NEK 400-7-704 fra s. 361)" },
+    forklaring: "Byggeplassen krever ekstra personvern, enten 30 mA jordfeilvern, SELV/PELV eller elektrisk adskillelse, for å beskytte mot støt. Byggeplasser har fukt, slitt utstyr og håndverktøy, så personbeskyttelsen må være god. (NEK 400-7-704 fra s. 361)" },
   { id: "n7-2", kategori: "nek-spesielle",
     sporsmal: "Hvilket jordfeilvern kreves for kurser nedstrøms hovedfordelingen i landbruksbygg (f.eks. fjøs)?",
     alternativer: ["Høyst 300 mA", "Høyst 3 A", "Høyst 1 A", "Det kreves ikke jordfeilvern"], riktig: 0,
@@ -1833,7 +1833,7 @@ window.SPORSMAL = [
       "Høyst 3 A, eller høyst 1 A der feilen kan oppstå i en resistiv last som et varmeelement i kjøkkenet",
       "Høyst 1 A for anlegget, også der feilen kan oppstå i en resistiv last som et varmeelement",
       "Det brukes ikke jordfeilvern mot brann, siden vernet beskytter mot støt"], riktig: 0,
-    forklaring: "En jordfeilstrøm på noen hundre milliampere kan gi nok varme til å starte brann. (NEK 400-4-42, 423 s. 115)" },
+    forklaring: "Vernet må løse ut før feilstrømmen kan starte brann, derfor høyst 300 mA, eller høyst 30 mA der feilen kan skje i en resistiv last. En jordfeilstrøm på noen hundre milliampere kan gi nok varme til å starte brann. (NEK 400-4-42, 423 s. 115)" },
   { id: "n7-4", kategori: "nek-spesielle",
     sporsmal: "Hvilket utstyr kan installeres i sone 1 i en badstue (nærmest ovnen)?",
     alternativer: [
@@ -1849,7 +1849,7 @@ window.SPORSMAL = [
       "Hver stikkontakt skal ha eget overstrømsvern, og kurser inntil 63 A skal ha 300 mA jordfeilvern",
       "Flere stikkontakter kan dele ett overstrømsvern, og kurser inntil 63 A skal ha 30 mA jordfeilvern",
       "Hver søyle skal ha ett felles overstrømsvern, og kurser inntil 63 A skal ha 30 mA jordfeilvern"], riktig: 0,
-    forklaring: "Kurser over 63 A skal ha høyst 300 mA jordfeilvern. (NEK 400-7-708 fra s. 374)" },
+    forklaring: "Hver stikkontakt skal ha eget overstrømsvern, så én feil ikke slår ut de andre, og kurser inntil 63 A skal ha 30 mA for å beskytte personer mot støt. Kurser over 63 A skal ha høyst 300 mA jordfeilvern. (NEK 400-7-708 fra s. 374)" },
   { id: "n7-6", kategori: "nek-spesielle",
     sporsmal: "Du skal bruke en håndlampe inne i en trang metalltank. Hvilken beskyttelse er riktig?",
     alternativer: [
@@ -1857,7 +1857,7 @@ window.SPORSMAL = [
       "Vanlig 230 V lampe med jordfeilvern, og tanken kobles til jord",
       "230 V lampe i klasse I med god jording, med strømkilden inne i tanken",
       "400 V lampe med 30 mA jordfeilvern og strømkilden inne i tanken, uten å bruke SELV"], riktig: 0,
-    forklaring: "Dette er et ledende område med begrenset bevegelsesfrihet: stor kontakt med jordet metall og vanskelig å komme seg unna. (NEK 400-7-706 fra s. 372)" },
+    forklaring: "I en trang metalltank er du i god kontakt med jordet metall og har vanskelig for å komme unna, så bare SELV eller elektrisk adskillelse til ett apparat, med strømkilden utenfor, er trygt. Dette er et ledende område med begrenset bevegelsesfrihet: stor kontakt med jordet metall og vanskelig å komme seg unna. (NEK 400-7-706 fra s. 372)" },
   { id: "n7-7", kategori: "nek-spesielle",
     sporsmal: "Hvilken beskyttelse er tillatt i sone 0 og 1 ved et svømmebasseng (utenom spesielle unntak)?",
     alternativer: [
@@ -1881,7 +1881,7 @@ window.SPORSMAL = [
       "Flere båter kan dele én stikkontakt med eget overstrømsvern, og stikkontakter inntil 63 A skal ha 30 mA jordfeilvern",
       "Hver søyle kan ha én felles sikring på 32 A, og stikkontakter inntil 63 A skal ha 30 mA jordfeilvern",
       "Hver stikkontakt skal ha eget overstrømsvern, og stikkontakter inntil 63 A skal ha 300 mA jordfeilvern"], riktig: 0,
-    forklaring: "En stikkontakt skal bare forsyne én båt. Over 63 A kreves høyst 300 mA. (NEK 400-7-709 fra s. 377)" },
+    forklaring: "Hver stikkontakt får eget vern og skal bare forsyne én båt, og stikkontakter inntil 63 A krever 30 mA for å beskytte personer mot støt. En stikkontakt skal bare forsyne én båt. Over 63 A kreves høyst 300 mA. (NEK 400-7-709 fra s. 377)" },
   { id: "n7-10", kategori: "nek-spesielle",
     sporsmal: "Hvor langt kan det høyst være fra stikkontakten til oppstillingsplassen på en campingplass?",
     alternativer: ["10 m", "25 m", "50 m", "2 m"], riktig: 0,
@@ -1901,7 +1901,7 @@ window.SPORSMAL = [
       "De skal være tidsforsinket type S, og kan ved behov være inntil 300 mA hvis lekkstrømmen gir utkoblingsproblemer",
       "Varmekabler trenger ikke jordfeilvern, siden lekkasjestrømmen er så liten at den ikke kan gi farlig støt",
       "De skal være tidsforsinket 1 s, og varmekablene kan samles på én kurs med 30 mA vern"], riktig: 0,
-    forklaring: "Kursene skal deles opp slik at normal lekkstrøm ikke gir uønsket utkobling. (NEK 400-7-753 s. 485)" },
+    forklaring: "Vernet på varmekabelkurser skal ikke være tidsforsinket, for å beskytte mot støt, og kan ved behov være opptil 100 mA hvis lekkstrømmen gir utkoblingsproblemer. Kursene skal deles opp slik at normal lekkstrøm ikke gir uønsket utkobling. (NEK 400-7-753 s. 485)" },
   { id: "n823-1", kategori: "nek-bolig",
     sporsmal: "Hvilke kurser i en bolig skal ha tilleggsbeskyttelse med 30 mA jordfeilvern?",
     alternativer: [
@@ -1909,7 +1909,7 @@ window.SPORSMAL = [
       "Stikkontaktkursene",
       "Kurser over 16 A",
       "Kurser til vaskerom"], riktig: 0,
-    forklaring: "Unntak gjelder kurser beskyttet med dobbel isolasjon, elektrisk adskillelse eller SELV/PELV. (NEK 400-8-823, 823.411.3.3 s. 505)" },
+    forklaring: "Hver forbrukerkurs skal ha 30 mA jordfeilvern, fordi det gir ekstra personvern mot støt. Unntak gjelder kurser beskyttet med dobbel isolasjon, elektrisk adskillelse eller SELV/PELV. (NEK 400-8-823, 823.411.3.3 s. 505)" },
   { id: "n823-2", kategori: "nek-bolig",
     sporsmal: "Hvilke to krav gjelder for overbelastningsvern i bolig når lederen er 4 mm² Cu eller mindre?",
     alternativer: [
@@ -1977,7 +1977,7 @@ window.SPORSMAL = [
       "Hvert år, og etter hver større ombygging",
       "Senest etter 30 år, og ved feil",
       "Aldri, så lenge anlegget virker"], riktig: 0,
-    forklaring: "Det samme gjelder neste kontroll etter en periodisk kontroll. (NEK 400-8-823, 823.6.4.4.4 og 823.6.5.3.4 s. 509)" },
+    forklaring: "Et anlegg kan slites eller endres over tid, så første kontroll anbefales senest etter 10 år og ved eierskifte. Det samme gjelder neste kontroll etter en periodisk kontroll. (NEK 400-8-823, 823.6.4.4.4 og 823.6.5.3.4 s. 509)" },
   { id: "n823-14", kategori: "nek-bolig",
     sporsmal: "Hva skal etableres i en bolig tilknyttet IT- eller TT-nett når det gjelder avløpsrør?",
     alternativer: [
@@ -2001,7 +2001,7 @@ window.SPORSMAL = [
       "Fakturaen og en kvittering for materialene, og en muntlig orientering om hvordan vernene fungerer",
       "Et skriftlig tilbud og en garanti for arbeidet i ti år, og en oversikt over hvem som kan kontaktes ved feil",
       "Dokumentasjonen skal lagres hos installatøren i ti år, og eieren får en muntlig orientering om hvordan anlegget fungerer og hvem som kan kontaktes"], riktig: 0,
-    forklaring: "Plassering av SELV/PELV-strømkilder og av gulv- og takvarme med følere skal også dokumenteres. (NEK 400-8-823, 823.514.5.301 s. 506)" },
+    forklaring: "Eieren skal få dokumentasjonen som trengs for å bruke og kontrollere anlegget, som rapporter, kursfortegnelse, samsvarserklæring og bruksanvisning. Plassering av SELV/PELV-strømkilder og av gulv- og takvarme med følere skal også dokumenteres. (NEK 400-8-823, 823.514.5.301 s. 506)" },
   { id: "n823-17", kategori: "nek-bolig",
     sporsmal: "Hva kreves når overspenningsvernet i en bolig sitter i tilknytningsskapet?",
     alternativer: [
@@ -2009,7 +2009,7 @@ window.SPORSMAL = [
       "Det holder med at bruksanvisningen forklarer hvordan vernet fungerer og hvor det sitter, uten egen varsling",
       "At vernet byttes hvert år, enten det har løst ut eller ikke, og at varsling i boligen er frivillig",
       "At overspenningsvernet flyttes inn i sikringsskapet, fordi det ikke er lov å ha det i tilknytningsskapet"], riktig: 0,
-    forklaring: "Bruksanvisningen skal også forklare overspenningsvernet og hva et defekt vern kan føre til. (NEK 400-8-823, 823.534 s. 507)" },
+    forklaring: "Når vernet i tilknytningsskapet ikke lenger virker, skal det gi et lyd- eller lyssignal, fordi man ellers ikke merker at beskyttelsen er borte. Bruksanvisningen skal også forklare overspenningsvernet og hva et defekt vern kan føre til. (NEK 400-8-823, 823.534 s. 507)" },
   { id: "n823-18", kategori: "nek-bolig",
     sporsmal: "Hvilket krav gjelder for vanlige stikkontakter (NEK 502) i en bolig?",
     alternativer: [
@@ -2017,7 +2017,7 @@ window.SPORSMAL = [
       "De skal ha IP68, og de kan sitte under 0,3 m over gulvet når de er montert i fuktige rom på badet",
       "De skal sitte under 0,3 m over gulvet, slik at de er enkle å nå for både barn og voksne",
       "Det holder med jord og merking, så lenge de er montert i veggen og lett synlige"], riktig: 0,
-    forklaring: "Barnesikring kalles tilleggsbeskyttelse i standarden. (NEK 400-8-823, 823.511 s. 506)" },
+    forklaring: "Små barn kan stikke noe inn i en stikkontakt og skade seg, så den må ha barnesikring, sitte høyt eller være utilgjengelig for barn. Barnesikring kalles tilleggsbeskyttelse i standarden. (NEK 400-8-823, 823.511 s. 506)" },
   { id: "n823-19", kategori: "nek-bolig",
     sporsmal: "Hvordan skal utstyr der en utkobling kan gi fare for liv og helse, forsynes i en bolig?",
     alternativer: [
@@ -2029,7 +2029,7 @@ window.SPORSMAL = [
   { id: "n823-20", kategori: "nek-bolig",
     sporsmal: "Hvor høyt kan de pålagte stikkontaktuttakene i rom som stue, kjøkken og bad høyst sitte?",
     alternativer: ["2,0 m over gulvet", "1,0 m over gulvet", "2,5 m over gulvet", "Det er ingen grense"], riktig: 0,
-    forklaring: "Uttak for belysning i tak er unntatt. (NEK 400-8-823, 823.537.301.1 s. 507)" },
+    forklaring: "Uttakene skal sitte høyst 2,0 m over gulvet for å redusere skjøteledninger, som kan gi brann ved overbelastning. Uttak for belysning i tak er unntatt. (NEK 400-8-823, 823.537.301.1 s. 507)" },
   { id: "bf8", kategori: "nek-bolig", bilde: "stikkontakt-jordet.jpg",
     sporsmal: "Stikkontakten på bildet skal monteres 30 cm over gulvet i et barnerom i en ny bolig. Hva krever NEK 400-8-823?",
     alternativer: [
@@ -2045,7 +2045,7 @@ window.SPORSMAL = [
       "Ingenting, CEE-kontakter er alltid tillatt i bolig, også uten forrigling eller spesielle tiltak for barn i garasjen eller boden",
       "Den må kobles til 400 V på egen kurs, og den kan monteres 0,5 m over gulvet i garasjen for enkel tilgang",
       "Den må ha 300 mA jordfeilvern i stedet for 30 mA, uansett hvordan den er montert i garasjen"], riktig: 0,
-    forklaring: "Industrikontakter (NEK EN 60309) i bolig skal sitte minst 1,5 m over gulvet, være utilgjengelige for barn eller være forriglet. (NEK 400-8-823, 823.511 s. 506)" },
+    forklaring: "På 0,5 m over gulvet når barn kontakten, så den må være forriglet (bare strøm når støpselet er satt inn) eller utilgjengelig for barn. Industrikontakter (NEK EN 60309) i bolig skal sitte minst 1,5 m over gulvet, være utilgjengelige for barn eller være forriglet. (NEK 400-8-823, 823.511 s. 506)" },
 
   // ---------- Runde 7: jording, PEN, frakobling/nødutkobling, brannspredning, FELV (fasit fra NEK 400:2022) ----------
   { id: "j1", kategori: "systemer",
@@ -2071,7 +2071,7 @@ window.SPORSMAL = [
       "Kobbertråd i en plastslange under bakken, siden plasten isolerer den mot jorden",
       "Gassrøret i huset, som er godkjent som jordelektrode når det er i kontakt med grunnvann i jorda rundt bygget",
       "En kobberleder lagt direkte i en innsjø eller i en dam, der den gir god kontakt med vannet"], riktig: 0,
-    forklaring: "Armering i spennbetong er unntatt. Jordelektroder skal ikke legges direkte i dam, elv eller innsjø. (NEK 400-5-54, 542.2 s. 287)" },
+    forklaring: "Fundamentjord, spyd, bånd, plater og sveiset armering som går ned i jorden kan brukes, fordi de ligger i kontakt med jorden. Armering i spennbetong er unntatt. Jordelektroder skal ikke legges direkte i dam, elv eller innsjø. (NEK 400-5-54, 542.2 s. 287)" },
   { id: "j4", kategori: "systemer",
     sporsmal: "Hvordan skal deler av en jordelektrode kobles sammen?",
     alternativer: [
@@ -2087,7 +2087,7 @@ window.SPORSMAL = [
       "At den virker i hele installasjonen, også utendørs og i uthus som får strøm herfra",
       "At den er et jordspyd på minst 6 m, valgt uten hensyn til grunnforholdene og jordtypen",
       "At den kobles til nettselskapets PEN-leder, slik at jordelektroden ikke trenger egen måling"], riktig: 1,
-    forklaring: "Jordelektroden velges ut fra grunnforholdene og overgangsresistansen som kreves, og skal legges slik at uttørking og frost påvirker den minst mulig. (NEK 400-5-54, 542.2 s. 287)" },
+    forklaring: "Jordelektroden er det som gir jordforbindelsen i IT- og TT-anlegg, så den må virke i hele anlegget, også utendørs og i uthus som får strøm herfra. Jordelektroden velges ut fra grunnforholdene og overgangsresistansen som kreves, og skal legges slik at uttørking og frost påvirker den minst mulig. (NEK 400-5-54, 542.2 s. 287)" },
   { id: "j6", kategori: "systemer",
     sporsmal: "Hvilket minste tverrsnitt skal en PEN-leder ha?",
     alternativer: [
@@ -2143,7 +2143,7 @@ window.SPORSMAL = [
       "Når utstyret er over 10 kW og står i et fast bygg i landbruk",
       "Når det er vifter og pumper i landbruk, der utstyret står i stallen",
       "Det holder med kurssikringen og en vanlig hovedbryter på veggen"], riktig: 0,
-    forklaring: "Det skal også hindres at utstyret starter utilsiktet under vedlikeholdet, for eksempel ved å låse bryteren i AV. Maskiner som omfattes av NEK EN 60204-1 følger den standarden. (NEK 400-5-53, 537.3.1 s. 268)" },
+    forklaring: "Når noen kan bli skadet under mekanisk vedlikehold, må utstyret kobles ut, og det må hindres i å starte av seg selv. Det skal også hindres at utstyret starter utilsiktet under vedlikeholdet, for eksempel ved å låse bryteren i AV. Maskiner som omfattes av NEK EN 60204-1 følger den standarden. (NEK 400-5-53, 537.3.1 s. 268)" },
   { id: "j13", kategori: "installasjon",
     sporsmal: "Hvordan kan utkoblet stilling markeres på en bryter for mekanisk vedlikehold?",
     alternativer: [
@@ -2151,7 +2151,7 @@ window.SPORSMAL = [
       "Med en grønn lampe som viser at kursen er strømførende, uten symboler",
       "Det er ikke krav til markering, men bryteren skal være plassert høyt på veggen",
       "Med symbolene «I» (utkoblet) og «O» (innkoblet), uten annen markering"], riktig: 0,
-    forklaring: "Bryteren skal være for manuell betjening og plassert og merket slik at den er lett å identifisere og betjene. (NEK 400-5-53, 537.3.2.3 s. 269 og 537.3.2.4 s. 269)" },
+    forklaring: "Bryteren merkes med «O» for utkoblet og «I» for innkoblet, så det er lett å se hvilken stilling den står i. Bryteren skal være for manuell betjening og plassert og merket slik at den er lett å identifisere og betjene. (NEK 400-5-53, 537.3.2.3 s. 269 og 537.3.2.4 s. 269)" },
   { id: "j14", kategori: "installasjon",
     sporsmal: "Hvilken farge skal betjeningen (håndtak eller trykknapp) for nødutkobling ha?",
     alternativer: [
@@ -2183,7 +2183,7 @@ window.SPORSMAL = [
       "Alle faseledere. Der det er fare for elektrisk sjokk, alle spenningsførende ledere",
       "Bare beskyttelseslederen, siden den kobler ut ved jordfeil i kursen",
       "Bare én fase, og nøytral og PE skal alltid være med i hele anlegget"], riktig: 1,
-    forklaring: "Én enkelt operasjon skal koble ut den aktuelle strømforsyningen, og nødfunksjonen skal ikke innføre nye farer. (NEK 400-5-53, 537.4.1.3–537.4.1.5 s. 269)" },
+    forklaring: "Alle faseledere må brytes, og der det er fare for støt må alle spenningsførende ledere brytes, ellers står deler av anlegget under spenning. Én enkelt operasjon skal koble ut den aktuelle strømforsyningen, og nødfunksjonen skal ikke innføre nye farer. (NEK 400-5-53, 537.4.1.3–537.4.1.5 s. 269)" },
   { id: "j18", kategori: "nek-kabler", bilde: "kabelbro-brann.jpg",
     sporsmal: "Hvilken brannklasse skal kabler i fast installasjon minst ha?",
     alternativer: [
@@ -2191,7 +2191,7 @@ window.SPORSMAL = [
       "Klasse F etter NS EN 13501-6",
       "Ingen krav, kabler velges fritt",
       "Klasse E etter NS EN 13501-6"], riktig: 0,
-    forklaring: "Kabler som ikke oppfyller Eca, kan bare brukes i korte lengder for tilkobling av utstyr, og skal aldri gå gjennom skillet mellom to brannceller. (NEK 400-5-52, 527.1 s. 186)" },
+    forklaring: "Kabler i fast anlegg må være minst Eca, fordi ledningssystemer ikke skal bidra til å spre brann. Kabler som ikke oppfyller Eca, kan bare brukes i korte lengder for tilkobling av utstyr, og skal aldri gå gjennom skillet mellom to brannceller. (NEK 400-5-52, 527.1 s. 186)" },
   { id: "j19", kategori: "nek-kabler",
     sporsmal: "Et flammehemmende installasjonsrør går gjennom en brannvegg. Når trenger røret IKKE å tettes innvendig?",
     alternativer: [
@@ -2199,7 +2199,7 @@ window.SPORSMAL = [
       "Når tverrsnittet er høyst 710 mm², og røret og termineringspunktet i én av branncellene oppfyller IP33",
       "Når røret er av metall og har tverrsnitt inntil 1000 mm², og termineringspunktet har IP20",
       "Når tverrsnittet er over 710 mm², og røret er tettet med IP33 i én av branncellene"], riktig: 1,
-    forklaring: "Ellers skal ledningssystemet tettes innvendig til samme brannmotstand som bygningsdelen, i tillegg til utvendig tetting. (NEK 400-5-52, 527.2.2 s. 187)" },
+    forklaring: "Røret slipper innvendig tetting når tverrsnittet er høyst 710 mm², og røret og termineringspunktet i én av branncellene oppfyller IP33. Ellers skal ledningssystemet tettes innvendig til samme brannmotstand som bygningsdelen, i tillegg til utvendig tetting. (NEK 400-5-52, 527.2.2 s. 187)" },
   { id: "j20", kategori: "nek-kabler",
     sporsmal: "Du skal trekke kabler gjennom en brannvegg over flere dager. Hva bør du gjøre med åpningen underveis?",
     alternativer: [
@@ -2241,7 +2241,7 @@ window.SPORSMAL = [
       "At kabelen er beregnet for jord og har tykk kappe, så den kan legges direkte i jord uten rør, merking eller annen mekanisk beskyttelse, også der det er grunt",
       "At de ligger minst 2 m dypt, uavhengig av mekanisk beskyttelse, og at merking med kabelplater er valgfritt",
       "At de er hvite eller grå, slik at de skiller seg ut fra jorda, og at de ligger over 30 cm i dybde uten noen form for merking"], riktig: 0,
-    forklaring: "Her ligger kablene grunt uten rør og merking, så en spade kan treffe dem. Mekanisk beskyttelse kan være rør beregnet for jord, armert kabel eller dekkplater. (NEK 400-5-52, 522.8 s. 179–180)" },
+    forklaring: "Kabler i jord må være beskyttet mot skade eller ligge dypt nok, og de må merkes, så ingen graver i dem ved et uhell. Her ligger kablene grunt uten rør og merking, så en spade kan treffe dem. Mekanisk beskyttelse kan være rør beregnet for jord, armert kabel eller dekkplater. (NEK 400-5-52, 522.8 s. 179–180)" },
   { id: "j25", kategori: "maling", bilde: "egen-stikkontakt-merket.jpg",
     sporsmal: "Stikkontakten er merket «UFO206-UE 12». Hvorfor merkes stikkontakter slik i et næringsbygg?",
     alternativer: [
@@ -2257,7 +2257,7 @@ window.SPORSMAL = [
       "Når kablene er merket med ulik farge, og kabelbroen er jordet",
       "Når kablene er isolert for den høyeste spenningen, er skilt med skillevegg, eller ligger i egne rør",
       "Når ekomkablene er skjermet, og skjermen er koblet til PE i begge ender"], riktig: 2,
-    forklaring: "Kravet hindrer at en feil i kraftkabelen gir farlig spenning i ekomkretsen. For ekom kan også elektromagnetisk støy kreve ekstra avstand. (NEK 400-5-52, 528.1 s. 187)" },
+    forklaring: "De kan ligge sammen hvis kablene er isolert for høyeste spenning, eller er skilt med skillevegg eller i egne rør. Kravet hindrer at en feil i kraftkabelen gir farlig spenning i ekomkretsen. For ekom kan også elektromagnetisk støy kreve ekstra avstand. (NEK 400-5-52, 528.1 s. 187)" },
   { id: "j27", kategori: "systemer", bilde: "egen-styreskap-tns.jpg",
     sporsmal: "Skapet er merket «400V TN-S». Hva forteller det?",
     alternativer: [

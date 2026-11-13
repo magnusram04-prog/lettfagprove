@@ -354,3 +354,7 @@ code, .formel { font-family: var(--mono); background: var(--flate-2); padding: 1
 .ordliste div:first-child { border-top: 0; }
 .ordliste dt { font-weight: 700; }
 .ordliste dd { margin: 2px 0 0; }
+
+/* Skriftlig prøve: klokke og lever-knapp følger med når du blar */
+.prove-topp { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; background: var(--bg); }
+.prove-topp .knapp { width: auto; margin: 0; }
