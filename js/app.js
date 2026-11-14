@@ -139,6 +139,10 @@
     document.title = tittel === INN.appNavn ? INN.appNavn + " – øv til teorieksamen i elektrikerfaget" : tittel + " – " + INN.appNavn;
   }
 
+  // Hvorfor et galt svar er galt (data/hvorfor.js), og lenke for å melde feil i et spørsmål.
+  const hvorforFeil = (id, tekst) => ((window.HVORFOR || {})[id] || {})[tekst] || "";
+  const meldFeil = (id) => `<a href="mailto:magnus@lettmateriell.no?subject=${encodeURIComponent("Feil i LettFagprøve, spørsmål " + id)}">Meld feil</a>`;
+
   // ---------- Lyd (opplesning med nettleserens norske stemme) ----------
   let lydVarslet = false;
   const kanLyd = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
@@ -417,12 +421,14 @@
       const dager = Math.max(1, Math.round((new Date(data.svar[o.s.id].neste + "T12:00") - new Date(dag() + "T12:00")) / 864e5));
       const nar = igjen ? "Kommer igjen i morgen." : !riktig ? (rep ? "Du får det én gang til om litt, og igjen i morgen." : "Kommer igjen i morgen.")
         : `Kommer igjen ${dager === 1 ? "i morgen" : `om ${dager} dager`}${data.svar[o.s.id].boks >= SITTER ? " (lært)" : ""}.`;
+      const valgtTekst = o.s.alternativer[o.rekkefolge[v]];
+      const hvorfor = riktig ? "" : hvorforFeil(o.s.id, valgtTekst);
       document.getElementById("etter").innerHTML = `
-        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}${kanLyd ? `<br><button class="lyd" id="lyd-forkl" style="margin-top:6px">Les opp forklaringen</button>` : ""}</div>
-        <p class="dempet liten" style="margin:8px 0 0">↻ ${nar} · Spørsmål ${esc(o.s.id)}</p>
+        <div class="forklaring ${riktig ? "riktig" : "feil"}" role="status"><strong>${riktig ? "Riktig!" : "Feil."}</strong> ${hvorfor ? `Du valgte «${esc(valgtTekst)}». ${esc(hvorfor)}<br><br>` : ""}Riktig svar er «${esc(o.s.alternativer[o.s.riktig])}». ${esc(o.s.forklaring)}${kanLyd ? `<br><button class="lyd" id="lyd-forkl" style="margin-top:6px">Les opp forklaringen</button>` : ""}</div>
+        <p class="dempet liten" style="margin:8px 0 0">↻ ${nar} · Spørsmål ${esc(o.s.id)} · ${meldFeil(o.s.id)}</p>
         <button class="knapp primar" id="neste">${siste ? "Se resultat" : "Neste spørsmål"}</button>`;
       const lf = document.getElementById("lyd-forkl");
-      if (lf) lf.addEventListener("click", () => snakk(`${riktig ? "Riktig." : "Feil."} Riktig svar er ${o.s.alternativer[o.s.riktig]}. ${o.s.forklaring.replace(/\((NEK|FEL|FSE)[^)]*\)/g, "")}`));
+      if (lf) lf.addEventListener("click", () => snakk(`${riktig ? "Riktig." : "Feil. " + hvorfor} Riktig svar er ${o.s.alternativer[o.s.riktig]}. ${o.s.forklaring.replace(/\((NEK|FEL|FSE)[^)]*\)/g, "")}`));
       const neste = document.getElementById("neste");
       neste.addEventListener("click", videre);
       neste.focus();
@@ -609,7 +615,7 @@
             return `<div class="rad">
               <span class="merke ${r ? "riktig" : "feil"}">${r ? "Riktig" : "Feil"}</span> <span class="spm-id">ID ${esc(o.s.id)}</span>
               ${figur(o.s, true)}<p class="sporsmal" style="font-size:1rem;margin:6px 0">${esc(o.s.sporsmal)}</p>
-              ${r ? "" : `<div class="liten">Ditt svar: ${esc(dittSvar)}</div>`}
+              ${r ? "" : `<div class="liten">Ditt svar: ${esc(dittSvar)}${valg[idx] !== null && hvorforFeil(o.s.id, dittSvar) ? ` – ${esc(hvorforFeil(o.s.id, dittSvar))}` : ""}</div>`}
               <div class="liten"><strong>Riktig:</strong> ${esc(o.s.alternativer[o.s.riktig])}</div>
               <div class="liten dempet">${esc(o.s.forklaring)}</div></div>`;
           }).join("")}
@@ -1062,7 +1068,7 @@
 
   // ---------- Om innholdet ----------
   // Faglig ansvarlig vises bare når feltene er fylt ut av den som faktisk har godkjent innholdet.
-  const FAGANSVARLIG = { navn: "", tittel: "", godkjent: "", kontakt: "" };
+  const FAGANSVARLIG = { navn: "", tittel: "", godkjent: "", kontakt: "magnus@lettmateriell.no" };
   function omSide() {
     sett("Om innholdet", true);
     const kontroll = SP.filter((s) => /NEK 400|FEL|FSE/.test(s.forklaring)).length;
