@@ -1,6 +1,6 @@
 // Service worker: gjør at appen virker uten nett etter første besøk.
 // Øk versjonsnummeret når du endrer filer, så mobilene henter den nye versjonen.
-const VERSJON = "elproven-v34";
+const VERSJON = "elproven-v35";
 const FILER = [
   "./", "index.html", "css/stil.css", "js/app.js",
   "data/innstillinger.js", "data/symboler.js", "data/bilder.js", "data/sporsmal.js", "data/regneoppgaver.js", "data/formler.js", "data/kurs.js", "personvern.html", "data/forsta.js", "data/skriftlig.js", "data/ordliste.js", "data/hvorfor.js", "fonter/ibm-plex-mono-latin-400-normal.woff2", "fonter/ibm-plex-mono-latin-600-normal.woff2", "fonter/ibm-plex-mono-latin-700-normal.woff2", "fonter/schibsted-grotesk-latin-400-normal.woff2", "fonter/schibsted-grotesk-latin-600-normal.woff2", "fonter/schibsted-grotesk-latin-700-normal.woff2", "fonter/schibsted-grotesk-latin-800-normal.woff2",

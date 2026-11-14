@@ -8,7 +8,7 @@ window.ORDLISTE = [
   { ord: "Beskyttelsesleder (PE)", tekst: "Den grønn/gule lederen. Den kobler metalldeler til jord, så en feil gir strøm i lederen og ikke gjennom deg." },
   { ord: "Bryteevne", tekst: "Den største strømmen et vern klarer å bryte uten å bli ødelagt. Den må være større enn den største kortslutningsstrømmen der vernet står." },
   { ord: "Dimensjonerende strøm (IB)", tekst: "Strømmen kursen skal bære i vanlig drift. Den regnes ut fra effekten til utstyret." },
-  { ord: "DLE", tekst: "Det lokale eltilsyn. De fører tilsyn med elektriske anlegg i området, på oppdrag fra DSB." },
+  { ord: "DLE", tekst: "Det lokale eltilsyn. De er knyttet til nettselskapet og fører tilsyn med elektriske anlegg i området, på oppdrag fra DSB." },
   { ord: "DSB", tekst: "Direktoratet for samfunnssikkerhet og beredskap. Myndigheten som har ansvaret for elsikkerhet i Norge." },
   { ord: "Effektfaktor (cos φ)", tekst: "Et tall mellom 0 og 1. Det viser hvor stor del av strømmen som gjør nyttig arbeid. Motorer har ofte 0,8–0,9, en varmeovn har 1." },
   { ord: "ELV", tekst: "Ekstra lav spenning: inntil 50 V AC eller 120 V DC. SELV og PELV er to typer ELV." },

@@ -194,6 +194,16 @@
     const d = app.querySelector("details.forsta");
     if (d) d.addEventListener("toggle", () => { data.forstaLukket = !d.open; lagre(); });
   }
+  // «Les opp siden» på teorikurs, skriftlige oppgaver og regneoppgaver: leser teksten på siden, uten knapper og felt.
+  function lesSideKnapp() {
+    if (!kanLyd || !app.firstElementChild || document.getElementById("lesside")) return;
+    app.insertAdjacentHTML("afterbegin", `<button class="lyd" id="lesside" aria-label="Les opp teksten på siden">Les opp siden</button>`);
+    document.getElementById("lesside").addEventListener("click", () => {
+      const k = app.cloneNode(true);
+      k.querySelectorAll("button, input, textarea, select, svg, script").forEach((e) => e.remove());
+      snakk(k.textContent.replace(/\s+/g, " ").trim());
+    });
+  }
   function koblLyd(o) { const b = document.getElementById("lyd"); if (b) b.addEventListener("click", () => lesOpp(o)); }
 
   // ---------- Hurtigtaster ----------
@@ -303,7 +313,7 @@
       { href: "#/kurs", navn: "Teorikurs", under: "Kort teori per tema med NEK-henvisninger, så rett til spørsmålene", hoyre: `${kursIder().filter((k) => data.lest[k]).length}/${kursIder().length} lest`, av: !kursIder().length },
       { href: "#/kategorier", navn: "Velg tema", under: "NEK 400, FEL/FSE, dimensjonering, symboler", hoyre: `${INN.kategorier.length} temaer` },
       { href: "#/regning", navn: "Regneoppgaver", under: "Skriv inn svaret, få hint og løsningen steg for steg", hoyre: `${RO.length} stk` },
-      ...(SKR.length ? [{ href: "#/skriftlig", navn: "Skriftlige oppgaver", under: "Hele oppgaver som på eksamen: dimensjonering med full utregning og løsningsforslag", hoyre: `${SKR.filter((o) => data.skriftlig[o.id] && data.skriftlig[o.id].ferdig).length}/${SKR.length} gjort` }, { href: "#/skriftligprove", navn: "Skriftlig prøve med tid", under: "Tre hele oppgaver på ca. 45 minutter, uten fasit før du leverer", hoyre: `${(data.skrProver || []).length} tatt` }] : []),
+      ...(SKR.length ? [{ href: "#/skriftlig", navn: "Skriftlige oppgaver", under: "Hele oppgaver som på eksamen: dimensjonering med full utregning og løsningsforslag", hoyre: `${SKR.filter((o) => data.skriftlig[o.id] && data.skriftlig[o.id].ferdig).length}/${SKR.length} gjort` }, { href: "#/skriftligprove", navn: "Skriftlig prøve med tid", under: "Tre hele oppgaver på 30–55 minutter, uten fasit før du leverer", hoyre: `${(data.skrProver || []).length} tatt` }] : []),
       ...((window.ORDLISTE || []).length ? [{ href: "#/ordliste", navn: "Ordliste", under: "Fagord forklart med enkle ord: kurs, forlegning, sone, momentan og mange flere", hoyre: `${window.ORDLISTE.length} ord` }] : []),
       { href: "#/formler", navn: "Formelsamling", under: "Ohms lov, effekt, spenningsfall, vern, kortslutning, motor", hoyre: `${(window.FORMLER || []).reduce((n, g) => n + g.formler.length, 0)} formler` },
       ...(SYMBOLSPM.length ? [
@@ -613,7 +623,7 @@
             const r = valg[idx] === o.riktigVisning;
             const dittSvar = valg[idx] === null ? "Ikke besvart" : o.s.alternativer[o.rekkefolge[valg[idx]]];
             return `<div class="rad">
-              <span class="merke ${r ? "riktig" : "feil"}">${r ? "Riktig" : "Feil"}</span> <span class="spm-id">ID ${esc(o.s.id)}</span>
+              <span class="merke ${r ? "riktig" : "feil"}">${r ? "Riktig" : "Feil"}</span> <span class="spm-id">ID ${esc(o.s.id)} · ${meldFeil(o.s.id)}</span>
               ${figur(o.s, true)}<p class="sporsmal" style="font-size:1rem;margin:6px 0">${esc(o.s.sporsmal)}</p>
               ${r ? "" : `<div class="liten">Ditt svar: ${esc(dittSvar)}${valg[idx] !== null && hvorforFeil(o.s.id, dittSvar) ? ` – ${esc(hvorforFeil(o.s.id, dittSvar))}` : ""}</div>`}
               <div class="liten"><strong>Riktig:</strong> ${esc(o.s.alternativer[o.s.riktig])}</div>
@@ -1001,7 +1011,7 @@
 
   // ---------- Pris og tilgang ----------
   // aktiv: false = alt er gratis (testperioden). Slå på når betalingsløsningen (Vipps/Stripe) er klar,
-  // og sett kjopUrl til betalingslenken. Kjøpskoder lages med elproven-android/HEMMELIG/lag-kjopskode.js.
+  // og sett kjopUrl til betalingslenken. Kjøpskoder lages med et eget skript som ikke ligger i appen.
   const BETALING = { aktiv: false, pris: 149, maaneder: 6, provedager: 7, kjopUrl: "" };
   // Offentlig nøkkel for å sjekke kjøpskoder. Privatnøkkelen ligger aldri i appen.
   const KODE_NOKKEL = { kty: "EC", crv: "P-256", x: "99l_ZqnNYQOfXMf7VA-JWWzSZQlr_wIgppMGxxspUOc", y: "lDDpMSGYNgNc6VG38EncmEQPPWDO2wCfJpvs1OFWTF0" };
@@ -1025,7 +1035,7 @@
     app.innerHTML = `<section class="kort">
       <h2 style="margin-top:0">${BETALING.aktiv ? `${BETALING.pris} kr – én gang, ${BETALING.maaneder} måneder` : "Gratis i testperioden"}</h2>
       <p>${BETALING.aktiv ? `Du betaler én gang og får tilgang til alt i ${BETALING.maaneder} måneder, nok til å øve fram til eksamen. Ingen abonnement som fornyes av seg selv.` : `Nå er alt gratis. Når appen lanseres, blir prisen ${BETALING.pris} kr én gang for ${BETALING.maaneder} måneder, uten abonnement. De første ${BETALING.provedager} dagene blir gratis, og fremgangen din blir med videre.`}</p>
-      <ul class="gitt"><li>Alle ${SP.length} spørsmål med forklaring og NEK-henvisning</li><li>${SKR.length} skriftlige oppgaver og skriftlig prøve med tid</li><li>Prøveeksamen, symbolprøve, teorikurs, regneoppgaver og dagsplan</li></ul>
+      <ul class="gitt"><li>Alle ${SP.length} spørsmål med forklaring, og forklaring på hvert galt svar. ${SP.filter((s) => /NEK 400/.test(s.forklaring)).length} av dem viser til NEK 400 med sidetall</li><li>${SKR.length} skriftlige oppgaver og skriftlig prøve med tid</li><li>Prøveeksamen, symbolprøve, teorikurs, regneoppgaver og dagsplan</li></ul>
       <p class="dempet liten">${BETALING.aktiv ? `De første ${BETALING.provedager} dagene er gratis.` : "Du trenger ingen kjøpskode i testperioden."}</p>
       ${t ? `<p class="forklaring riktig">Du har tilgang til og med ${esc(t.utloper.split("-").reverse().join("."))}.</p>` : ""}
       ${BETALING.aktiv && BETALING.kjopUrl ? `<a class="knapp primar" href="${esc(BETALING.kjopUrl)}" target="_blank" rel="noopener">Kjøp tilgang</a>` : ""}
@@ -1077,7 +1087,7 @@
       <section class="kort">
         <div class="etikett">Hvem som står bak</div>
         <p>LettFagprøve er laget av en elektriker, for lærlinger og praksiskandidater som skal opp til teorieksamen i elektrikerfaget.</p>
-        ${f.navn ? `<p><strong>Faglig ansvarlig:</strong> ${esc(f.navn)}${f.tittel ? `, ${esc(f.tittel)}` : ""}${f.godkjent ? `. Innholdet er gjennomgått og godkjent ${esc(f.godkjent)}.` : ""}</p>` : ""}
+        ${f.navn ? `<p><strong>Faglig ansvarlig:</strong> ${esc(f.navn)}${f.tittel ? `, ${esc(f.tittel)}` : ""}${f.godkjent ? `. Innholdet er gjennomgått og godkjent ${esc(f.godkjent)}.` : ""}</p>` : `<p><strong>Faglig ansvarlig:</strong> ikke på plass ennå. Innholdet er ikke gjennomgått av en navngitt fagperson med fagbrev. Bruk sidetallene til å sjekke selv.</p>`}
         ${f.kontakt ? `<p class="liten">Fant du en feil? Skriv til <a href="mailto:${esc(f.kontakt)}">${esc(f.kontakt)}</a> og oppgi spørsmålsnummeret (står under hvert spørsmål).</p>` : ""}
       </section>
       <section class="kort">
@@ -1092,6 +1102,7 @@
           <li><strong>11.11.2026:</strong> teorikurset for alle ${kursIder().length} temaer kontrollert mot NEK 400:2022.</li>
           <li><strong>13.11.2026:</strong> svaralternativene skrevet om, så lengden sjelden røper riktig svar. ${SKR.length} skriftlige oppgaver lagt til, med utregnede fasiter, og en ordliste med fagord forklart med enkle ord. Motsigelser mellom kurs, spørsmål og oppgaver er rettet.</li>
           <li><strong>13.11.2026 (runde 3 og 4):</strong> gale svaralternativer uten ord som «alltid» og «aldri», som kunne røpe svaret. Forklaringer skrevet om så de sier hvorfor svaret er riktig. Feil i to skriftlige oppgaver rettet, og en regel som ikke står i NEK, fjernet.</li>
+          <li><strong>14.11.2026 (runde 5):</strong> forklaring på hvorfor hvert galt svaralternativ er galt, for alle ${SP.length} spørsmål. Fem skriftlige oppgaver med tabelloppslag. Spørsmålet om fasefarger rettet etter NEK 400-3 s. 69, og de siste gale svarene med «alltid» og «aldri» skrevet om.</li>
         </ul>
         <p>${kontroll} av ${SP.length} forklaringer viser til NEK 400, FEL eller FSE. NEK-henvisningene har sidetall («s. 240»), så du kan slå opp og sjekke selv. Sidetallene gjelder NEK 400:2022 (7. utgave).</p>
         <p class="dempet liten">Teksten er skrevet med egne ord. Ingenting er kopiert fra NEK 400, fordi standarden er opphavsrettsbeskyttet. Verdier som ikke står i NEK 400 (for eksempel B 3–5 × In og C 5–10 × In), er merket med at de kommer fra produktstandarden.</p>
@@ -1272,7 +1283,7 @@
       pakkUt(tekst).catch(() => null).then((ny) => {
         if (!erObj(ny) || !erObj(ny.svar)) { melding("Koden er ikke gyldig. Sjekk at du fikk med hele koden eller lenken.", false); return; }
         if (!confirm("Erstatte fremgangen på denne enheten med fremgangen fra koden?")) return;
-        { const t = data.tilgang; data = normaliser(ny); if (t) data.tilgang = t; } lagre(); statistikk();
+        { const t = data.tilgang, f = data.forsteDag; data = normaliser(ny); delete data.tilgang; if (t) data.tilgang = t; if (f) data.forsteDag = f; } lagre(); statistikk();
         melding(`Fremgangen er hentet: ${Object.keys(data.svar).length} besvarte spørsmål og ${data.eksamener.length} prøver.`, true);
       });
     });
@@ -1311,7 +1322,7 @@
       <p>Lenken inneholder ${antall} besvarte spørsmål og ${(ny.eksamener || []).length} prøver.</p>
       <p class="dempet liten">Fremgangen på denne enheten blir erstattet.</p>
       <button class="knapp primar" id="hent">Hent fremgangen</button> <a class="knapp" href="#/">Avbryt</a></section>`;
-    document.getElementById("hent").addEventListener("click", () => { { const t = data.tilgang; data = normaliser(ny); if (t) data.tilgang = t; } lagre(); history.replaceState(null, "", "#/"); forside(); });
+    document.getElementById("hent").addEventListener("click", () => { { const t = data.tilgang, f = data.forsteDag; data = normaliser(ny); delete data.tilgang; if (t) data.tilgang = t; if (f) data.forsteDag = f; } lagre(); history.replaceState(null, "", "#/"); forside(); });
   }
 
   // ---------- Ruting ----------
@@ -1341,11 +1352,11 @@
       case "eksamen": return eksamen();
       case "symbolprove": return symbolprove();
       case "spill": return spill();
-      case "regning": return deler[1] ? regning(deler[1]) : regningListe();
+      case "regning": if (deler[1]) { regning(deler[1]); return lesSideKnapp(); } return regningListe();
       case "statistikk": return statistikk();
       case "formler": return formler();
-      case "kurs": return deler[1] ? kursSide(deler[1]) : kursListe();
-      case "skriftlig": return deler[1] ? skriftligSide(deler[1]) : skriftligListe();
+      case "kurs": if (deler[1]) { kursSide(deler[1]); return lesSideKnapp(); } return kursListe();
+      case "skriftlig": if (deler[1]) { skriftligSide(deler[1]); return lesSideKnapp(); } return skriftligListe();
       case "skriftligprove": return skriftligProve();
       case "om": return omSide();
       case "ordliste": return ordliste();
